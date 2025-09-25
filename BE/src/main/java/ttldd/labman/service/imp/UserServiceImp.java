@@ -198,6 +198,8 @@ public class UserServiceImp implements UserService {
                         + "?client_id=" + clientId
                         + "&redirect_uri=" + redirectUri
                         + "&client_secret=" + clientSecret
+                        + "&scope=" + facebookScope
+                        + "&response_type=" + responseType
                         + "&code=" + code;
 
                 System.out.println("------>" + url);
