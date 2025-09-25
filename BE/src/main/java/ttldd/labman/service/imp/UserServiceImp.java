@@ -186,63 +186,38 @@ public class UserServiceImp implements UserService {
     public Map<String, Object> authenticateAndFetchProfile(String code, String loginType) {
         RestTemplate restTemplate = new RestTemplate();
         loginType = loginType.toLowerCase();
-        String accessToken = null;
-        String userInfoUri = null;
+        String accessToken = "";
         String url = "";
-        Map<String, Object> userInfo = null;
-
+        String userInfoUri = "";
+        Map<String, Object>  userInfo = null;
         switch (loginType) {
-
             case "facebook":
                 url = tokenUri
                         + "?client_id=" + clientId
                         + "&redirect_uri=" + redirectUri
                         + "&client_secret=" + clientSecret
                         + "&code=" + code;
-
-                System.out.println("------>" + url);
-
-                // Parse JSON response
-                Map<String, Object> response = restTemplate.getForObject(url, Map.class);
-                if (response == null || response.get("access_token") == null) {
-                    throw new RuntimeException("Cannot get access_token from Facebook");
-                }
-
-                accessToken = response.get("access_token").toString();
-
-                // Lấy user info
-                userInfoUri = facebookUserInfoUri + "?access_token=" + accessToken;
+                Map<String, String> response = restTemplate.getForObject(url, Map.class);
+                accessToken = response.get("access_token");
+                userInfoUri = facebookUserInfoUri + "&access_token=" + accessToken;
                 break;
             case "google":
-                // Call Google API để lấy access token
-                Map<String, String> googleRequest = Map.of(
-                        "client_id", googleClientId,
-                        "redirect_uri", googleRedirectUri,
-                        "client_secret", googleClientSecret,
-                        "code", code,
+                // Call Google API to get user profile
+                Map<String, String> request = Map.of(
+                        "client_id", googleClientId, "redirect_uri", googleRedirectUri,
+                        "client_secret", googleClientSecret, "code", code,
                         "grant_type", "authorization_code"
                 );
+                ResponseEntity res = restTemplate.postForEntity(googleTokenUri, request, Map.class);
 
-                ResponseEntity<Map> googleRes = restTemplate.postForEntity(googleTokenUri, googleRequest, Map.class);
-                Map<String, Object> googleBody = googleRes.getBody();
-                if (googleBody == null || googleBody.get("access_token") == null) {
-                    throw new RuntimeException("Cannot get access_token from Google");
-                }
-
-                accessToken = googleBody.get("access_token").toString();
+                String body = res.getBody().toString();
+                accessToken = body.split(",")[0].replace("{access_token=", "");
                 userInfoUri = googleUserInfoUri + "?access_token=" + accessToken;
                 break;
-
             default:
-                throw new RuntimeException("Unsupported login type: " + loginType);
         }
 
-        // Lấy thông tin user từ provider
         userInfo = restTemplate.getForObject(userInfoUri, Map.class);
-        if (userInfo == null) {
-            throw new RuntimeException("Cannot fetch user info from " + loginType);
-        }
-
         return userInfo;
     }
 
