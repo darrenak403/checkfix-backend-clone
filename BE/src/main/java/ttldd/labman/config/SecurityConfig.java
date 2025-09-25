@@ -3,6 +3,7 @@ package ttldd.labman.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -57,7 +58,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:3000" ));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("Authorization"));
@@ -73,8 +74,15 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                        auth.anyRequest().permitAll()
+                .authorizeHttpRequests(auth -> {
+                            auth.requestMatchers(HttpMethod.POST,
+                                            "/api/auth/register",
+                                            "api/auth/login")
+                                    .permitAll();
+                            auth.requestMatchers(HttpMethod.GET,
+                                    "/api/auth/google/social", "/api/auth/google/social/callback")
+                            .permitAll();
+                        }
                 );
 
         return http.build();
