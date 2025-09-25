@@ -60,7 +60,7 @@ public class AuthController {
     }
 
     @GetMapping("/google/social/callback")
-    public ResponseEntity<?> authenticateAndFetchProfile(@RequestParam String code, @RequestParam String loginType) {
+    public ResponseEntity<?> authenticateAndFetchProfile(@RequestParam String code, @RequestParam String loginType) throws Exception {
         BaseResponse response = new BaseResponse();
         Map<String, Object> data = userService.authenticateAndFetchProfile(code, loginType);
         if (data == null || data.isEmpty()) {

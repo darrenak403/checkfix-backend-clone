@@ -52,7 +52,7 @@ public class UserServiceImp implements UserService {
     private String authUri;
     @Value("${spring.security.oauth2.client.registration.facebook.token-uri}")
     private String tokenUri;
-    @Value("${spring.security.oauth2.client.registration.facebook.scope}")
+    @Value("${spring.security.oauth2.client.registration.facebook.scope:email,public_profile}")
     private String facebookScope;
     @Value("${spring.security.oauth2.client.registration.facebook.user-info-uri}")
     private String facebookUserInfoUri;
@@ -189,17 +189,52 @@ public class UserServiceImp implements UserService {
         String accessToken = "";
         String url = "";
         String userInfoUri = "";
-        Map<String, Object>  userInfo = null;
+        Map<String, Object> userInfo = null;
         switch (loginType) {
             case "facebook":
+                System.out.println("Facebook OAuth code: " + code);
+                System.out.println("Facebook OAuth redirect_uri: " + redirectUri);
                 url = tokenUri
                         + "?client_id=" + clientId
                         + "&redirect_uri=" + redirectUri
                         + "&client_secret=" + clientSecret
                         + "&code=" + code;
-                Map<String, String> response = restTemplate.getForObject(url, Map.class);
-                accessToken = response.get("access_token");
-                userInfoUri = facebookUserInfoUri + "&access_token=" + accessToken;
+
+                // Gọi API lấy access_token
+                Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+                System.out.println("Facebook token response: " + response); // Add logging
+
+                if (response == null) {
+                    throw new RuntimeException("Không lấy được phản hồi từ Facebook khi lấy access_token. URL: " + url);
+                }
+                if (!response.containsKey("access_token")) {
+                    if (response.containsKey("error")) {
+                        throw new RuntimeException("Facebook token error: " + response.get("error") + ", URL: " + url);
+                    }
+                    throw new RuntimeException("Không lấy được access_token từ Facebook: " + response + ", URL: " + url);
+                }
+
+                accessToken = response.get("access_token").toString();
+                userInfoUri = "https://graph.facebook.com/v18.0/me?access_token=" + accessToken + "&fields=id,name,email,picture.type(large)";
+
+                // Lấy thông tin user từ Facebook
+                userInfo = restTemplate.getForObject(userInfoUri, Map.class);
+
+                // Xử lý trường hợp thiếu thông tin
+                if (userInfo != null) {
+                    // Đảm bảo có đủ các trường cần thiết
+                    if (!userInfo.containsKey("email") || userInfo.get("email") == null) {
+                        userInfo.put("email", userInfo.get("id") + "@facebook.com");
+                    }
+                    if (!userInfo.containsKey("sub") || userInfo.get("sub") == null) {
+                        userInfo.put("sub", userInfo.get("id"));
+                    }
+                    if (!userInfo.containsKey("name") || userInfo.get("name") == null) {
+                        userInfo.put("name", "Facebook User");
+                    }
+                } else {
+                    throw new RuntimeException("Không lấy được thông tin người dùng từ Facebook. AccessToken: " + accessToken);
+                }
                 break;
             case "google":
                 // Call Google API to get user profile
@@ -226,11 +261,11 @@ public class UserServiceImp implements UserService {
     public AuthResponse loginOrSignup(Map<String, Object> userInfo, String role) {
         UserRequest userDTO = new UserRequest();
         //Lấy email của người dùng
-        userDTO.setEmail(userInfo.get("email").toString());
+        userDTO.setEmail(userInfo.get("email") != null ? userInfo.get("email").toString() : (userInfo.get("id") + "@facebook.com"));
         //Lấy tên của người dùng
-        userDTO.setFullName(userInfo.get("name").toString());
-        //Lấy google_id của người dùng
-        userDTO.setSub(userInfo.get("sub").toString());
+        userDTO.setFullName(userInfo.get("name") != null ? userInfo.get("name").toString() : "Facebook User");
+        //Lấy google_id hoặc facebook_id của người dùng
+        userDTO.setSub(userInfo.get("sub") != null ? userInfo.get("sub").toString() : userInfo.get("id").toString());
         String accessToken = "";
         String refreshToken = "";
 
@@ -334,5 +369,3 @@ public class UserServiceImp implements UserService {
         return new AuthResponse(accessToken, refreshToken, us);
     }
 }
-
-
