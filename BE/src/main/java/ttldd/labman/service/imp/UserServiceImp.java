@@ -10,19 +10,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ttldd.labman.dto.request.AuthRequest;
+import ttldd.labman.dto.response.AuthResponse;
 import ttldd.labman.dto.request.UserRequest;
+import ttldd.labman.dto.response.UserResponse;
 import ttldd.labman.entity.Role;
 import ttldd.labman.entity.User;
 import ttldd.labman.exception.InsertException;
 import ttldd.labman.repo.RoleRepo;
 import ttldd.labman.repo.UserRepo;
 import ttldd.labman.service.UserService;
+
 import javax.crypto.SecretKey;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -42,6 +41,24 @@ public class UserServiceImp implements UserService {
     @Value("${spring.security.oauth2.client.registration.google.user-info-uri}")
     private String googleUserInfoUri;
 
+    // Facebook OAuth2 configuration
+    @Value("${spring.security.oauth2.client.registration.facebook.client-id}")
+    private String clientId;
+    @Value("${spring.security.oauth2.client.registration.facebook.client-secret}")
+    private String clientSecret;
+    @Value("${spring.security.oauth2.client.registration.facebook.redirect-uri}")
+    private String redirectUri;
+    @Value("${spring.security.oauth2.client.registration.facebook.auth-uri}")
+    private String authUri;
+    @Value("${spring.security.oauth2.client.registration.facebook.token-uri}")
+    private String tokenUri;
+    @Value("${spring.security.oauth2.client.registration.facebook.scope}")
+    private String facebookScope;
+    @Value("${spring.security.oauth2.client.registration.facebook.user-info-uri}")
+    private String facebookUserInfoUri;
+    @Value("${spring.security.oauth2.client.registration.facebook.response-type}")
+    private String responseType;
+
     @Autowired
     private UserRepo userRepo;
 
@@ -58,6 +75,8 @@ public class UserServiceImp implements UserService {
     @Override
     @Transactional
     public void registerUser(UserRequest userDTO, String role) {
+
+
         // Kiểm tra tên đăng nhập đã tồn tại chưa
         if (userRepo.existsByEmail(userDTO.getEmail())) {
             throw new InsertException("Username already exists");
@@ -72,6 +91,7 @@ public class UserServiceImp implements UserService {
             Role roles = roleRepository.findByRoleCode(role)
                     .orElseThrow(() -> new InsertException("Role not found: " + role));
 
+
             // Tạo mới user
             User user = new User();
             user.setEmail(userDTO.getEmail());
@@ -84,6 +104,7 @@ public class UserServiceImp implements UserService {
             // Lưu vào database
             userRepo.save(user);
 
+
         } catch (InsertException e) {
             throw e;
         } catch (Exception e) {
@@ -92,9 +113,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public AuthRequest loginUser(UserRequest userDTO) {
+    public AuthResponse loginUser(UserRequest userDTO) {
         String accessToken = "";
-        String refreshToken= "";
+        String refreshToken = "";
 
         // Tìm user theo email
         User userEntity = userRepo.findByEmail(userDTO.getEmail())
@@ -116,7 +137,7 @@ public class UserServiceImp implements UserService {
         accessToken = Jwts.builder()
                 .claim("userId", userEntity.getId())
                 .claim("googleID", userEntity.getGoogleId())
-                .claim("email",userEntity.getEmail())
+                .claim("email", userEntity.getEmail())
                 .claim("name", userEntity.getFullName())
                 .claim("role", userEntity.getRole().getRoleName())
                 .setIssuedAt(now)
@@ -135,7 +156,13 @@ public class UserServiceImp implements UserService {
                 .signWith(key)
                 .compact();
 
-        return new AuthRequest(accessToken, refreshToken);
+        UserResponse us = new UserResponse();
+        us.setId(userEntity.getId());
+        us.setEmail(userEntity.getEmail());
+        us.setFullName(userEntity.getFullName());
+        us.setRole(userEntity.getRole().getRoleName());
+
+        return new AuthResponse(accessToken, refreshToken, us);
     }
 
     @Override
@@ -143,6 +170,10 @@ public class UserServiceImp implements UserService {
         String url = "";
         loginType = loginType.toLowerCase();
         switch (loginType) {
+            case "facebook":
+                url = authUri + "?client_id=" + clientId + "&redirect_uri=" + redirectUri + "&scope=" + facebookScope + "&response_type=" + responseType + "&loginType=" + loginType;
+                break;
+
             case "google":
                 url = googleAuthUri + "?client_id=" + googleClientId + "&redirect_uri=" + googleRedirectUri + "&scope=email%20profile" + "&response_type=code" + "&loginType=" + loginType;
                 break;
@@ -155,34 +186,69 @@ public class UserServiceImp implements UserService {
     public Map<String, Object> authenticateAndFetchProfile(String code, String loginType) {
         RestTemplate restTemplate = new RestTemplate();
         loginType = loginType.toLowerCase();
-        String accessToken = "";
+        String accessToken = null;
+        String userInfoUri = null;
         String url = "";
-        String userInfoUri = "";
-        Map<String, Object>  userInfo = null;
+        Map<String, Object> userInfo = null;
+
         switch (loginType) {
+
+            case "facebook":
+                url = tokenUri
+                        + "?client_id=" + clientId
+                        + "&redirect_uri=" + redirectUri
+                        + "&client_secret=" + clientSecret
+                        + "&code=" + code;
+
+                System.out.println("------>" + url);
+
+                // Parse JSON response
+                Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+                if (response == null || response.get("access_token") == null) {
+                    throw new RuntimeException("Cannot get access_token from Facebook");
+                }
+
+                accessToken = response.get("access_token").toString();
+
+                // Lấy user info
+                userInfoUri = facebookUserInfoUri + "?access_token=" + accessToken;
+                break;
             case "google":
-                // Call Google API to get user profile
-                Map<String, String> request = Map.of(
-                        "client_id", googleClientId, "redirect_uri", googleRedirectUri,
-                        "client_secret", googleClientSecret, "code", code,
+                // Call Google API để lấy access token
+                Map<String, String> googleRequest = Map.of(
+                        "client_id", googleClientId,
+                        "redirect_uri", googleRedirectUri,
+                        "client_secret", googleClientSecret,
+                        "code", code,
                         "grant_type", "authorization_code"
                 );
-                ResponseEntity res = restTemplate.postForEntity(googleTokenUri, request, Map.class);
 
-                String body = res.getBody().toString();
-                accessToken = body.split(",")[0].replace("{access_token=", "");
+                ResponseEntity<Map> googleRes = restTemplate.postForEntity(googleTokenUri, googleRequest, Map.class);
+                Map<String, Object> googleBody = googleRes.getBody();
+                if (googleBody == null || googleBody.get("access_token") == null) {
+                    throw new RuntimeException("Cannot get access_token from Google");
+                }
+
+                accessToken = googleBody.get("access_token").toString();
                 userInfoUri = googleUserInfoUri + "?access_token=" + accessToken;
                 break;
+
             default:
+                throw new RuntimeException("Unsupported login type: " + loginType);
         }
 
+        // Lấy thông tin user từ provider
         userInfo = restTemplate.getForObject(userInfoUri, Map.class);
+        if (userInfo == null) {
+            throw new RuntimeException("Cannot fetch user info from " + loginType);
+        }
 
         return userInfo;
     }
 
+
     @Override
-    public AuthRequest loginOrSignup(Map<String, Object> userInfo, String role) {
+    public AuthResponse loginOrSignup(Map<String, Object> userInfo, String role) {
         UserRequest userDTO = new UserRequest();
         //Lấy email của người dùng
         userDTO.setEmail(userInfo.get("email").toString());
@@ -194,12 +260,11 @@ public class UserServiceImp implements UserService {
         String refreshToken = "";
 
 
-
         // Kiểm tra googleId có tồn tại ở database chưa
-        Optional<User> existingUserEmail =  userRepo.findByGoogleId(userDTO.getSub());
+        Optional<User> existingUserEmail = userRepo.findByGoogleId(userDTO.getSub());
 
         // Kiểm tra tên đăng nhập đã tồn tại chưa
-        if(existingUserEmail.isPresent()){
+        if (existingUserEmail.isPresent()) {
             //Login
             User userEntity = existingUserEmail.get();
 
@@ -214,7 +279,7 @@ public class UserServiceImp implements UserService {
             accessToken = Jwts.builder()
                     .claim("userId", userEntity.getId())
                     .claim("googleID", userEntity.getGoogleId())
-                    .claim("email",userEntity.getEmail())
+                    .claim("email", userEntity.getEmail())
                     .claim("name", userEntity.getFullName())
                     .claim("role", userEntity.getRole().getRoleName())
                     .setIssuedAt(now)
@@ -233,7 +298,7 @@ public class UserServiceImp implements UserService {
                     .signWith(key)
                     .compact();
 
-        }else{
+        } else {
             //Sign Up
             Role roleEntity = roleRepository.findByRoleCode(role).
                     orElseThrow(() -> new RuntimeException("Role not found: " + role));
@@ -261,7 +326,7 @@ public class UserServiceImp implements UserService {
             accessToken = Jwts.builder()
                     .claim("userId", userEntity.getId())
                     .claim("googleID", userEntity.getGoogleId())
-                    .claim("email",userEntity.getEmail())
+                    .claim("email", userEntity.getEmail())
                     .claim("name", userEntity.getFullName())
                     .claim("role", userEntity.getRole().getRoleName())
                     .setIssuedAt(now)
@@ -282,8 +347,16 @@ public class UserServiceImp implements UserService {
 
 
         }
+        User userEntity = userRepo.findByEmail(userDTO.getEmail())
+                .orElseThrow(() -> new RuntimeException("Email không tồn tại"));
 
-        return new AuthRequest(accessToken, refreshToken);
+        UserResponse us = new UserResponse();
+        us.setId(userEntity.getId());
+        us.setEmail(userEntity.getEmail());
+        us.setFullName(userEntity.getFullName());
+        us.setRole(userEntity.getRole().getRoleName());
+
+        return new AuthResponse(accessToken, refreshToken, us);
     }
 }
 

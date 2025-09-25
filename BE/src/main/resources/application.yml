@@ -4,9 +4,9 @@ spring:
 
   datasource:
 
-    url: jdbc:mysql://localhost:3306/lab_manager
+    url: jdbc:mysql://localhost:3308/lab_manager
     username: root
-    password: 123456
+    password: admin123
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -20,9 +20,19 @@ spring:
     oauth2:
       client:
         registration:
+          facebook:
+            client-id: "${FACEBOOK_CLIENT_ID:2510919139289428}"
+            client-secret: "${FACEBOOK_CLIENT_SECRET:c0daca5fb8b83a9e1b2532fb971808fb}"
+            redirect-uri: "${FACEBOOK_REDIRECT_URI:http://localhost:3000/user/auth/social/callback}"
+            auth-uri: "https://www.facebook.com/v11.0/dialog/oauth"
+            token-uri: "https://graph.facebook.com/v11.0/oauth/access_token"
+            user-info-uri: "https://graph.facebook.com/me?fields=id,name,email,picture.type(large)"
+            scope: "email%20public_profile"
+            response-type: code
+
           google:
-            client-id: "${GOOGLE_CLIENT_ID:xxxxxxxxxxxxxxx}"
-            client-secret: "${GOOGLE_CLIENT_SECRET:xxxxxxxxxxxxx}"
+            client-id: "${GOOGLE_CLIENT_ID:1061123444145-ga7gecn3snrnrvkg79fvp759n5iq8ibd.apps.googleusercontent.com}"
+            client-secret: "${GOOGLE_CLIENT_SECRET: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}"
             redirect-uri: "${GOOGLE_REDIRECT_URI:http://localhost:3000/auth/social/callback/google}"
             auth-uri: "https://accounts.google.com/o/oauth2/v2/auth"
             token-uri: "https://www.googleapis.com/oauth2/v3/token"

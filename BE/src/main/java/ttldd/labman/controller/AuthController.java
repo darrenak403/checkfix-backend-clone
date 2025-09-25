@@ -1,11 +1,11 @@
 package ttldd.labman.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ttldd.labman.dto.request.AuthRequest;
+import ttldd.labman.dto.response.AuthResponse;
 import ttldd.labman.dto.request.UserRequest;
 import ttldd.labman.response.BaseResponse;
 import ttldd.labman.service.UserService;
@@ -14,6 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
     private static final String ADMIN_ROLE = "ROLE_ADMIN";
     private static final String MANAGER_ROLE = "ROLE_MANAGER";
@@ -21,15 +22,13 @@ public class AuthController {
     private static final String LAB_USER_ROLE = "ROLE_LAB_USER";
     private static final String PATIENT_ROLE = "ROLE_PATIENT";
 
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerAccount(@Valid @RequestBody UserRequest userDTO) {
-
-        userService.registerUser(userDTO, PATIENT_ROLE);
-
         BaseResponse baseResponse = new BaseResponse();
+        userService.registerUser(userDTO, PATIENT_ROLE);
         baseResponse.setStatus(HttpStatus.CREATED.value());
         baseResponse.setMessage("Register user successfully");
         baseResponse.setData(null);
@@ -38,7 +37,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginAccount(@Valid @RequestBody UserRequest userDTO) {
-        AuthRequest token = userService.loginUser(userDTO);
+        AuthResponse token = userService.loginUser(userDTO);
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setStatus(HttpStatus.OK.value());
         baseResponse.setMessage("Login successfully");
@@ -50,7 +49,7 @@ public class AuthController {
     public ResponseEntity<?> getAuthorizationUri(@RequestParam String loginType) {
         BaseResponse baseResponse = new BaseResponse();
         String data = userService.generateAuthorizationUri(loginType);
-        if(data == null || data.isEmpty()){
+        if (data == null || data.isEmpty()) {
             baseResponse.setStatus(HttpStatus.BAD_REQUEST.value());
             baseResponse.setMessage("Failed to generate authorization uri");
             return ResponseEntity.badRequest().body(baseResponse);
@@ -64,14 +63,14 @@ public class AuthController {
     public ResponseEntity<?> authenticateAndFetchProfile(@RequestParam String code, @RequestParam String loginType) {
         BaseResponse response = new BaseResponse();
         Map<String, Object> data = userService.authenticateAndFetchProfile(code, loginType);
-        if(data == null || data.isEmpty()){
+        if (data == null || data.isEmpty()) {
             response.setMessage("Failed to authenticate and fetch profile");
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             return ResponseEntity.badRequest().body(response);
         }
 
         // RegisterOrLogin Oauth2 Google
-        AuthRequest token = userService.loginOrSignup(data, "ROLE_PATIENT");
+        AuthResponse token = userService.loginOrSignup(data, "ROLE_PATIENT");
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Login successfully");
         response.setData(token);

@@ -22,9 +22,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Email(message = "Invalid email format")
-    @NotBlank
-    @Column(nullable = false, unique = true, length = 100)
+
     private String email;
 
     @Pattern(regexp = "^0\\d{9}$", message = "Phone must be 10 digits starting with 0")

@@ -34,7 +34,7 @@ public class CentralException {
                 errors.put(error.getField(), error.getDefaultMessage()));
 
         BaseResponse response = BaseResponse.builder()
-                .status(HttpStatus.CREATED.value())
+                .status(HttpStatus.BAD_REQUEST.value())
                 .message("Validation failed")
                 .data(errors)
                 .path(request.getRequestURI())
