@@ -3,9 +3,9 @@ spring:
     name: BE
 
   datasource:
-    url: jdbc:mysql://localhost:3306/lab_manager
+    url: jdbc:mysql://localhost:3308/lab_manager
     username: root
-    password: 123456
+    password: admin123
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
