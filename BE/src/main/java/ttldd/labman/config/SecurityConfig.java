@@ -32,11 +32,6 @@ public class SecurityConfig {
             // Auth endpoints
             "/api/auth/**",
             "/api/public/**",
-            //topics endpoints
-            "/api/topics/**",
-            // Payment callbacks
-            "/api/payments/vnpay-return",
-            "/api/payments/ipn",
             // Swagger endpoints
             "/swagger-ui/**",
             "/v3/api-docs/**",
@@ -75,14 +70,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
-                            auth.requestMatchers(
-                                            "/api/auth/register",
-                                            "api/auth/login")
-                                    .permitAll();
                             auth.requestMatchers(WHITE_LIST).permitAll();
-                            auth.requestMatchers(HttpMethod.GET,
-                                    "/api/auth/google/social", "/api/auth/google/social/callback")
-                            .permitAll();
+                            auth.anyRequest().authenticated();
                         }
                 );
 

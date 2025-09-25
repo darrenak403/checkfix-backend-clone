@@ -10,8 +10,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ttldd.labman.dto.response.RestResponse;
+import ttldd.labman.response.BaseResponse;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestControllerAdvice
 @Slf4j
@@ -54,6 +58,14 @@ public class GlobalException {
                         HttpStatus.BAD_REQUEST.value(),
                         HttpStatus.BAD_REQUEST.getReasonPhrase(),
                         combinedMessage));
+    }
+
+    @ExceptionHandler({InsertException.class})
+    public ResponseEntity<?> centralLog(Exception e){
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setStatus(99);
+        baseResponse.setMessage(e.getMessage());
+        return ResponseEntity.ok(baseResponse);
     }
 }
 
