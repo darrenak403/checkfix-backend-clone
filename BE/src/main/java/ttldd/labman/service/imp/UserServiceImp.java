@@ -52,7 +52,7 @@ public class UserServiceImp implements UserService {
     private String authUri;
     @Value("${spring.security.oauth2.client.registration.facebook.token-uri}")
     private String tokenUri;
-    @Value("${spring.security.oauth2.client.registration.facebook.scope}")
+    @Value("${spring.security.oauth2.client.registration.facebook.scope:email,public_profile}")
     private String facebookScope;
     @Value("${spring.security.oauth2.client.registration.facebook.user-info-uri}")
     private String facebookUserInfoUri;
@@ -270,8 +270,6 @@ public class UserServiceImp implements UserService {
 
         // Kiểm tra tên đăng nhập đã tồn tại chưa
         if (existingUserEmail.isPresent()) {
-            //Login
-            User userEntity = existingUserEmail.get();
 
             //AccessToken
             Date now = new Date();
