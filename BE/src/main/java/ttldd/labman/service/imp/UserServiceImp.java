@@ -135,11 +135,6 @@ public class UserServiceImp implements UserService {
 
         SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
         accessToken = Jwts.builder()
-                .claim("userId", userEntity.getId())
-                .claim("googleID", userEntity.getGoogleId())
-                .claim("email", userEntity.getEmail())
-                .claim("name", userEntity.getFullName())
-                .claim("role", userEntity.getRole().getRoleName())
                 .setIssuedAt(now)
                 .setExpiration(accessExpiration)
                 .signWith(key)
@@ -287,11 +282,6 @@ public class UserServiceImp implements UserService {
 
             SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
             accessToken = Jwts.builder()
-                    .claim("userId", userEntity.getId())
-                    .claim("googleID", userEntity.getGoogleId())
-                    .claim("email", userEntity.getEmail())
-                    .claim("name", userEntity.getFullName())
-                    .claim("role", userEntity.getRole().getRoleName())
                     .setIssuedAt(now)
                     .setExpiration(accessExpiration)
                     .signWith(key)
@@ -334,11 +324,6 @@ public class UserServiceImp implements UserService {
 
             SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
             accessToken = Jwts.builder()
-                    .claim("userId", userEntity.getId())
-                    .claim("googleID", userEntity.getGoogleId())
-                    .claim("email", userEntity.getEmail())
-                    .claim("name", userEntity.getFullName())
-                    .claim("role", userEntity.getRole().getRoleName())
                     .setIssuedAt(now)
                     .setExpiration(accessExpiration)
                     .signWith(key)
