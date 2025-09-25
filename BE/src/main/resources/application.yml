@@ -16,13 +16,32 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+        
+  # Email configuration
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: codemaster3979@gmail.com
+
+    password: bnzrqpzdxjfknmxk
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+        transport:
+          protocol: smtp
+        debug: false
   security:
     oauth2:
       client:
         registration:
           facebook:
-            client-id: "${FACEBOOK_CLIENT_ID:xxxxxxx}"
-            client-secret: "${FACEBOOK_CLIENT_SECRET:xxxxxxxxx}"
+            client-id: 2510919139289428
+            client-secret: c0daca5fb8b83a9e1b2532fb971808fb
             redirect-uri: "${FACEBOOK_REDIRECT_URI:http://localhost:3000/user/auth/social/callback}"
             auth-uri: "https://www.facebook.com/v11.0/dialog/oauth"
             token-uri: "https://graph.facebook.com/v11.0/oauth/access_token"
