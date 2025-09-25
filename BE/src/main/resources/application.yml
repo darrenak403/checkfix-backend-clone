@@ -11,7 +11,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -21,8 +21,8 @@ spring:
       client:
         registration:
           facebook:
-            client-id: "${FACEBOOK_CLIENT_ID:2510919139289428}"
-            client-secret: "${FACEBOOK_CLIENT_SECRET:c0daca5fb8b83a9e1b2532fb971808fb}"
+            client-id: "${FACEBOOK_CLIENT_ID:xxxxxxx}"
+            client-secret: "${FACEBOOK_CLIENT_SECRET:xxxxxxxxx}"
             redirect-uri: "${FACEBOOK_REDIRECT_URI:http://localhost:3000/user/auth/social/callback}"
             auth-uri: "https://www.facebook.com/v11.0/dialog/oauth"
             token-uri: "https://graph.facebook.com/v11.0/oauth/access_token"
@@ -31,8 +31,8 @@ spring:
             response-type: code
 
           google:
-            client-id: "${GOOGLE_CLIENT_ID:1061123444145-ga7gecn3snrnrvkg79fvp759n5iq8ibd.apps.googleusercontent.com}"
-            client-secret: "${GOOGLE_CLIENT_SECRET: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}"
+            client-id: "${GOOGLE_CLIENT_ID:xxxxxxxxx}"
+            client-secret: "${GOOGLE_CLIENT_SECRET:xxxxxxxxxx}"
             redirect-uri: "${GOOGLE_REDIRECT_URI:http://localhost:3000/auth/social/callback/google}"
             auth-uri: "https://accounts.google.com/o/oauth2/v2/auth"
             token-uri: "https://www.googleapis.com/oauth2/v3/token"

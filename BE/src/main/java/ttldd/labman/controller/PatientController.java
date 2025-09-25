@@ -3,11 +3,13 @@ package ttldd.labman.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ttldd.labman.dto.request.PatientRequest;
 import ttldd.labman.dto.response.PatientResponse;
 import ttldd.labman.dto.response.RestResponse;
 import ttldd.labman.service.PatientService;
+import ttldd.labman.service.imp.PatientServiceImp;
 
 @RestController
 @RequestMapping("/api/patients")
@@ -17,6 +19,7 @@ public class PatientController {
     private final PatientService patientService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER') or hasRole('ROLE_DOCTOR')")
     public ResponseEntity<RestResponse<PatientResponse>> createPatient(@Valid @RequestBody PatientRequest request) {
         PatientResponse res = patientService.createPatient(request);
         RestResponse<PatientResponse> response = RestResponse.<PatientResponse>builder()
