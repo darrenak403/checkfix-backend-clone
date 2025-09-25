@@ -3,15 +3,34 @@ spring:
     name: BE
 
   datasource:
-    url: jdbc:mysql://localhost:3308/lab_manager
+
+    url: jdbc:mysql://localhost:3306/lab_manager
     username: root
-    password: admin123
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: "${GOOGLE_CLIENT_ID:xxxxxxxxxxxxxxx}"
+            client-secret: "${GOOGLE_CLIENT_SECRET:xxxxxxxxxxxxx}"
+            redirect-uri: "${GOOGLE_REDIRECT_URI:http://localhost:3000/auth/social/callback/google}"
+            auth-uri: "https://accounts.google.com/o/oauth2/v2/auth"
+            token-uri: "https://www.googleapis.com/oauth2/v3/token"
+            user-info-uri: "https://www.googleapis.com/oauth2/v3/userinfo"
+            scope:
+              - email
+              - public_profile
+
+jwt:
+  secret: nXT5iZ/lPUY/9T4pgt3zqCJkezyP0if70mQbfJlz1k8=
+  expiration: 86400
