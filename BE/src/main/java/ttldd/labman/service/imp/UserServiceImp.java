@@ -52,7 +52,7 @@ public class UserServiceImp implements UserService {
     private String authUri;
     @Value("${spring.security.oauth2.client.registration.facebook.token-uri}")
     private String tokenUri;
-    @Value("${spring.security.oauth2.client.registration.facebook.scope:email,public_profile}")
+    @Value("${spring.security.oauth2.client.registration.facebook.scope}")
     private String facebookScope;
     @Value("${spring.security.oauth2.client.registration.facebook.user-info-uri}")
     private String facebookUserInfoUri;
