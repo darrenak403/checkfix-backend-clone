@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import ttldd.labman.entity.Role;
 import ttldd.labman.service.RoleService;
+import ttldd.labman.service.imp.UserServiceImp;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -13,8 +14,19 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private UserServiceImp userService;
+
     @Override
     public void run(String... args) throws Exception {
+
+        createDefaultRoles();
+
+
+        userService.createAdminUser();
+    }
+
+    private void createDefaultRoles() {
         Role role1 = Role.builder()
                 .roleName("Administrator")
                 .roleCode("ROLE_ADMIN")

@@ -15,11 +15,9 @@ public class OtpUtils {
         return String.valueOf(otp);
     }
     
-    /**
-     * Kiểm tra tính hợp lệ của OTP
-     * @param otp mã OTP cần kiểm tra
-     * @return true nếu OTP hợp lệ (4 chữ số), false nếu không hợp lệ
-     */
+
+     // Kiểm tra tính hợp lệ của OTP
+
     public static boolean isValidOtp(String otp) {
         return otp != null && otp.matches("\\d{4}");
     }
