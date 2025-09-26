@@ -87,7 +87,7 @@ public class UserServiceImp implements UserService {
 
         // Kiểm tra tên đăng nhập đã tồn tại chưa
         if (userRepo.existsByEmail(userDTO.getEmail())) {
-            throw new InsertException("Username already exists");
+            throw new InsertException("Email already exists");
         }
 
         try {
