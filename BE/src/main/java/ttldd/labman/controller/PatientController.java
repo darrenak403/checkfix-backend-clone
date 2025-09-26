@@ -11,6 +11,8 @@ import ttldd.labman.dto.response.RestResponse;
 import ttldd.labman.service.PatientService;
 import ttldd.labman.service.imp.PatientServiceImp;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/patients")
 @RequiredArgsConstructor
@@ -30,5 +32,16 @@ public class PatientController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping
+//    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER') or hasRole('ROLE_DOCTOR')")
+    public ResponseEntity<RestResponse<List<PatientResponse>>> getPatients() {
+        List<PatientResponse> patients = patientService.getAllPatients();
+        RestResponse<List<PatientResponse>> response = RestResponse.<List<PatientResponse>>builder()
+                .statusCode(200)
+                .message("Patients retrieved successfully")
+                .data(patients)
+                .build();
+        return ResponseEntity.ok(response);
+    }
 
 }
