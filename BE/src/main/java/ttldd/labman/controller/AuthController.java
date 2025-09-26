@@ -60,7 +60,7 @@ public class AuthController {
     }
 
     @GetMapping("/google/social/callback")
-    public ResponseEntity<?> authenticateAndFetchProfile(@RequestParam String code, @RequestParam String loginType) {
+    public ResponseEntity<?> authenticateAndFetchProfile(@RequestParam String code, @RequestParam String loginType) throws Exception {
         BaseResponse response = new BaseResponse();
         Map<String, Object> data = userService.authenticateAndFetchProfile(code, loginType);
         if (data == null || data.isEmpty()) {
@@ -75,5 +75,23 @@ public class AuthController {
         response.setMessage("Login successfully");
         response.setData(token);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshAccessToken(@RequestBody Map<String, String> request){
+        String refreshToken = request.get("refreshToken");
+        String accessToken = userService.refreshAccessToken(refreshToken);
+        BaseResponse response = new BaseResponse();
+        if(accessToken == null || accessToken.isEmpty()){
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
+            response.setMessage("Invalid refresh token");
+            return ResponseEntity.badRequest().body(response);
+        } else {
+            response.setStatus(HttpStatus.OK.value());
+            response.setMessage("Refresh access token successfully");
+            response.setData(accessToken);
+            return ResponseEntity.ok(response);
+        }
+
     }
 }

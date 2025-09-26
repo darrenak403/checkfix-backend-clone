@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import ttldd.labman.repo.PatientRepo;
 import ttldd.labman.service.PatientService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PatientServiceImp implements PatientService {
@@ -29,6 +31,12 @@ public class PatientServiceImp implements PatientService {
                 .build();
         patientRepo.save(patient);
         return mapToResponse(patient);
+    }
+
+    @Override
+    public List<PatientResponse> getAllPatients() {
+        List<Patient> patients = patientRepo.findAll();
+        return patients.stream().map(this::mapToResponse).toList();
     }
 
     private PatientResponse mapToResponse(Patient patient) {

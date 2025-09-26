@@ -1,6 +1,7 @@
 package ttldd.labman.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -90,7 +91,7 @@ public class JwtHelper {
         }
 
     }
-    public Integer getUserId(String token) {
+    public Long getUserId(String token) {
         try {
             if (token.startsWith("Bearer ")) {
                 token = token.substring(7);
@@ -102,13 +103,25 @@ public class JwtHelper {
                     .parseClaimsJws(token)
                     .getBody();
 
-            return claims.get("userId", Integer.class);
+            return claims.get("userId", Long.class);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
+    public boolean validateToken(String token) {
+        try {
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+            Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
+            return true;
+        } catch (JwtException e) {
+            System.out.println("Token invalid: " + e.getMessage()); // debug
+            return false;
+        }
+    }
 
 
     public Claims getClaims(String token) {

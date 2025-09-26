@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mã OTP đặt lại mật khẩu</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f4; 
+            margin: 0; 
+            padding: 0; 
+        }
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background-color: #ffffff; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
+        .header { 
+            text-align: center; 
+            background-color: #007bff; 
+            color: white; 
+            padding: 20px; 
+            border-radius: 8px 8px 0 0; 
+            margin: -20px -20px 20px -20px; 
+        }
+        .otp-code { 
+            font-size: 32px; 
+            font-weight: bold; 
+            text-align: center; 
+            background-color: #f8f9fa; 
+            padding: 20px; 
+            border-radius: 8px; 
+            border: 2px dashed #007bff; 
+            margin: 20px 0; 
+            color: #007bff; 
+        }
+        .warning { 
+            background-color: #fff3cd; 
+            border: 1px solid #ffeaa7; 
+            padding: 15px; 
+            border-radius: 5px; 
+            margin: 15px 0; 
+            color: #856404; 
+        }
+        .footer { 
+            text-align: center; 
+            margin-top: 30px; 
+            font-size: 12px; 
+            color: #6c757d; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Lab Manager System</h1>
+            <p>Đặt lại mật khẩu</p>
+        </div>
+        
+        <h2>Xin chào!</h2>
+        <p>Bạn đã yêu cầu đặt lại mật khẩu cho tài khoản Lab Manager. Sử dụng mã OTP dưới đây để tiếp tục:</p>
+        
+        <div class="otp-code" th:text="${otp}">1234</div>
+        
+        <div class="warning">
+            <strong>⚠️ Lưu ý quan trọng:</strong>
+            <ul>
+                <li>Mã OTP này chỉ có hiệu lực trong <strong>5 phút</strong></li>
+                <li>Không chia sẻ mã này với bất kỳ ai</li>
+                <li>Nếu bạn không yêu cầu đặt lại mật khẩu, hãy bỏ qua email này</li>
+            </ul>
+        </div>
+        
+        <p>Nếu bạn gặp khó khăn, vui lòng liên hệ với bộ phận hỗ trợ của chúng tôi.</p>
+        
+        <div class="footer">
+            <p>© 2024 Lab Manager System. Mọi quyền được bảo lưu.</p>
+            <p>Email này được gửi tự động, vui lòng không trả lời.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package ttldd.labman.service.imp;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
@@ -15,10 +16,13 @@ import ttldd.labman.dto.request.UserRequest;
 import ttldd.labman.dto.response.UserResponse;
 import ttldd.labman.entity.Role;
 import ttldd.labman.entity.User;
+import ttldd.labman.exception.CentralException;
+import ttldd.labman.exception.GetException;
 import ttldd.labman.exception.InsertException;
 import ttldd.labman.repo.RoleRepo;
 import ttldd.labman.repo.UserRepo;
 import ttldd.labman.service.UserService;
+import ttldd.labman.utils.JwtHelper;
 
 import javax.crypto.SecretKey;
 import java.util.*;
@@ -26,6 +30,8 @@ import java.util.*;
 
 @Service
 public class UserServiceImp implements UserService {
+
+
 
     // Oauth2 Google
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
@@ -52,7 +58,7 @@ public class UserServiceImp implements UserService {
     private String authUri;
     @Value("${spring.security.oauth2.client.registration.facebook.token-uri}")
     private String tokenUri;
-    @Value("${spring.security.oauth2.client.registration.facebook.scope}")
+    @Value("${spring.security.oauth2.client.registration.facebook.scope:email,public_profile}")
     private String facebookScope;
     @Value("${spring.security.oauth2.client.registration.facebook.user-info-uri}")
     private String facebookUserInfoUri;
@@ -71,6 +77,9 @@ public class UserServiceImp implements UserService {
     @Value("${jwt.secret}")
     private String secret;
 
+    @Autowired
+    private JwtHelper jwtHelper;
+
 
     @Override
     @Transactional
@@ -79,7 +88,7 @@ public class UserServiceImp implements UserService {
 
         // Kiểm tra tên đăng nhập đã tồn tại chưa
         if (userRepo.existsByEmail(userDTO.getEmail())) {
-            throw new InsertException("Username already exists");
+            throw new InsertException("Email already exists");
         }
 
         try {
@@ -127,35 +136,20 @@ public class UserServiceImp implements UserService {
         }
 
         //AccessToken
+        accessToken = generateAccessToken(userEntity);
+
+        //RefreshToken
+        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
-        calendar.add(Calendar.HOUR, 1); // hết hạn sau 1 giờ
-        Date accessExpiration = calendar.getTime();
-
-        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-        accessToken = Jwts.builder()
-                .claim("userId", userEntity.getId())
-                .claim("googleID", userEntity.getGoogleId())
-                .claim("email", userEntity.getEmail())
-                .claim("name", userEntity.getFullName())
-                .claim("role", userEntity.getRole().getRoleName())
-                .setIssuedAt(now)
-                .setExpiration(accessExpiration)
-                .signWith(key)
-                .compact();
-
-        //RefreshToken
-        calendar.setTime(now);
-        calendar.add(Calendar.HOUR, 2); // hết hạn sau 1 giờ
+        calendar.add(Calendar.DAY_OF_WEEK, 7); // hết hạn sau 1 giờ
         Date refreshExpiration = calendar.getTime();
-
         refreshToken = Jwts.builder()
                 .setIssuedAt(now)
                 .setExpiration(refreshExpiration)
                 .signWith(key)
                 .compact();
-
         UserResponse us = new UserResponse();
         us.setId(userEntity.getId());
         us.setEmail(userEntity.getEmail());
@@ -186,63 +180,75 @@ public class UserServiceImp implements UserService {
     public Map<String, Object> authenticateAndFetchProfile(String code, String loginType) {
         RestTemplate restTemplate = new RestTemplate();
         loginType = loginType.toLowerCase();
-        String accessToken = null;
-        String userInfoUri = null;
+        String accessToken = "";
         String url = "";
+        String userInfoUri = "";
         Map<String, Object> userInfo = null;
-
         switch (loginType) {
-
             case "facebook":
+                System.out.println("Facebook OAuth code: " + code);
+                System.out.println("Facebook OAuth redirect_uri: " + redirectUri);
                 url = tokenUri
                         + "?client_id=" + clientId
                         + "&redirect_uri=" + redirectUri
                         + "&client_secret=" + clientSecret
+                        + "&scope=" + facebookScope
+                        + "&response_type=" + responseType
                         + "&code=" + code;
 
-                System.out.println("------>" + url);
-
-                // Parse JSON response
+                // Gọi API lấy access_token
                 Map<String, Object> response = restTemplate.getForObject(url, Map.class);
-                if (response == null || response.get("access_token") == null) {
-                    throw new RuntimeException("Cannot get access_token from Facebook");
+                System.out.println("Facebook token response: " + response); // Add logging
+
+                if (response == null) {
+                    throw new RuntimeException("Không lấy được phản hồi từ Facebook khi lấy access_token. URL: " + url);
+                }
+                if (!response.containsKey("access_token")) {
+                    if (response.containsKey("error")) {
+                        throw new RuntimeException("Facebook token error: " + response.get("error") + ", URL: " + url);
+                    }
+                    throw new RuntimeException("Không lấy được access_token từ Facebook: " + response + ", URL: " + url);
                 }
 
                 accessToken = response.get("access_token").toString();
+                userInfoUri = "https://graph.facebook.com/v18.0/me?access_token=" + accessToken + "&fields=id,name,email,picture.type(large)";
 
-                // Lấy user info
-                userInfoUri = facebookUserInfoUri + "?access_token=" + accessToken;
+                // Lấy thông tin user từ Facebook
+                userInfo = restTemplate.getForObject(userInfoUri, Map.class);
+
+                // Xử lý trường hợp thiếu thông tin
+                if (userInfo != null) {
+                    // Đảm bảo có đủ các trường cần thiết
+                    if (!userInfo.containsKey("email") || userInfo.get("email") == null) {
+                        userInfo.put("email", userInfo.get("id") + "@facebook.com");
+                    }
+                    if (!userInfo.containsKey("sub") || userInfo.get("sub") == null) {
+                        userInfo.put("sub", userInfo.get("id"));
+                    }
+                    if (!userInfo.containsKey("name") || userInfo.get("name") == null) {
+                        userInfo.put("name", "Facebook User");
+                    }
+                } else {
+                    throw new RuntimeException("Không lấy được thông tin người dùng từ Facebook. AccessToken: " + accessToken);
+                }
                 break;
             case "google":
-                // Call Google API để lấy access token
-                Map<String, String> googleRequest = Map.of(
-                        "client_id", googleClientId,
-                        "redirect_uri", googleRedirectUri,
-                        "client_secret", googleClientSecret,
-                        "code", code,
+                // Call Google API to get user profile
+                Map<String, String> request = Map.of(
+                        "client_id", googleClientId, "redirect_uri", googleRedirectUri,
+                        "client_secret", googleClientSecret, "code", code,
                         "grant_type", "authorization_code"
                 );
+                ResponseEntity res = restTemplate.postForEntity(googleTokenUri, request, Map.class);
 
-                ResponseEntity<Map> googleRes = restTemplate.postForEntity(googleTokenUri, googleRequest, Map.class);
-                Map<String, Object> googleBody = googleRes.getBody();
-                if (googleBody == null || googleBody.get("access_token") == null) {
-                    throw new RuntimeException("Cannot get access_token from Google");
-                }
-
-                accessToken = googleBody.get("access_token").toString();
+                String body = res.getBody().toString();
+                accessToken = body.split(",")[0].replace("{access_token=", "");
                 userInfoUri = googleUserInfoUri + "?access_token=" + accessToken;
                 break;
-
             default:
-                throw new RuntimeException("Unsupported login type: " + loginType);
         }
 
-        // Lấy thông tin user từ provider
         userInfo = restTemplate.getForObject(userInfoUri, Map.class);
-        if (userInfo == null) {
-            throw new RuntimeException("Cannot fetch user info from " + loginType);
-        }
-
         return userInfo;
     }
 
@@ -251,47 +257,31 @@ public class UserServiceImp implements UserService {
     public AuthResponse loginOrSignup(Map<String, Object> userInfo, String role) {
         UserRequest userDTO = new UserRequest();
         //Lấy email của người dùng
-        userDTO.setEmail(userInfo.get("email").toString());
+        userDTO.setEmail(userInfo.get("email") != null ? userInfo.get("email").toString() : (userInfo.get("id") + "@facebook.com"));
         //Lấy tên của người dùng
-        userDTO.setFullName(userInfo.get("name").toString());
-        //Lấy google_id của người dùng
-        userDTO.setSub(userInfo.get("sub").toString());
+        userDTO.setFullName(userInfo.get("name") != null ? userInfo.get("name").toString() : "Facebook User");
+        //Lấy google_id hoặc facebook_id của người dùng
+        userDTO.setSub(userInfo.get("sub") != null ? userInfo.get("sub").toString() : userInfo.get("id").toString());
         String accessToken = "";
         String refreshToken = "";
 
 
         // Kiểm tra googleId có tồn tại ở database chưa
-        Optional<User> existingUserEmail = userRepo.findByGoogleId(userDTO.getSub());
+        Optional<User> existingUser = userRepo.findByGoogleId(userDTO.getSub());
 
         // Kiểm tra tên đăng nhập đã tồn tại chưa
-        if (existingUserEmail.isPresent()) {
-            //Login
-            User userEntity = existingUserEmail.get();
+        if (existingUser.isPresent()) {
 
             //AccessToken
+            accessToken = generateAccessToken(existingUser.get());
+
+            //RefreshToken
+            SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
             Date now = new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(now);
-            calendar.add(Calendar.HOUR, 1); // hết hạn sau 1 giờ
-            Date accessExpiration = calendar.getTime();
-
-            SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-            accessToken = Jwts.builder()
-                    .claim("userId", userEntity.getId())
-                    .claim("googleID", userEntity.getGoogleId())
-                    .claim("email", userEntity.getEmail())
-                    .claim("name", userEntity.getFullName())
-                    .claim("role", userEntity.getRole().getRoleName())
-                    .setIssuedAt(now)
-                    .setExpiration(accessExpiration)
-                    .signWith(key)
-                    .compact();
-
-            //RefreshToken
-            calendar.setTime(now);
-            calendar.add(Calendar.HOUR, 2); // hết hạn sau 1 giờ
+            calendar.add(Calendar.DAY_OF_WEEK, 7); // hết hạn sau 1 giờ
             Date refreshExpiration = calendar.getTime();
-
             refreshToken = Jwts.builder()
                     .setIssuedAt(now)
                     .setExpiration(refreshExpiration)
@@ -316,48 +306,60 @@ public class UserServiceImp implements UserService {
 
 
             //AccessToken
+            accessToken = generateAccessToken(existingUser.get());
+
+            //RefreshToken
+            SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
             Date now = new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(now);
-            calendar.add(Calendar.HOUR, 1); // hết hạn sau 1 giờ
-            Date accessExpiration = calendar.getTime();
-
-            SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-            accessToken = Jwts.builder()
-                    .claim("userId", userEntity.getId())
-                    .claim("googleID", userEntity.getGoogleId())
-                    .claim("email", userEntity.getEmail())
-                    .claim("name", userEntity.getFullName())
-                    .claim("role", userEntity.getRole().getRoleName())
-                    .setIssuedAt(now)
-                    .setExpiration(accessExpiration)
-                    .signWith(key)
-                    .compact();
-
-            //RefreshToken
-            calendar.setTime(now);
-            calendar.add(Calendar.HOUR, 2); // hết hạn sau 1 giờ
+            calendar.add(Calendar.DAY_OF_WEEK, 7); // hết hạn sau 1 giờ
             Date refreshExpiration = calendar.getTime();
-
             refreshToken = Jwts.builder()
                     .setIssuedAt(now)
                     .setExpiration(refreshExpiration)
                     .signWith(key)
                     .compact();
-
-
         }
-        User userEntity = userRepo.findByEmail(userDTO.getEmail())
-                .orElseThrow(() -> new RuntimeException("Email không tồn tại"));
 
         UserResponse us = new UserResponse();
-        us.setId(userEntity.getId());
-        us.setEmail(userEntity.getEmail());
-        us.setFullName(userEntity.getFullName());
-        us.setRole(userEntity.getRole().getRoleName());
+        us.setId(existingUser.get().getId());
+        us.setEmail(existingUser.get().getEmail());
+        us.setFullName(existingUser.get().getFullName());
+        us.setRole(existingUser.get().getRole().getRoleCode());
 
         return new AuthResponse(accessToken, refreshToken, us);
     }
+
+    @Override
+    public String refreshAccessToken(String refreshToken) {
+        //1. Validate refresh token
+        if(refreshToken == null || !jwtHelper.validateToken(refreshToken)){
+            throw new RuntimeException("Refresh token không hợp lệ hoặc đã hết hạn");
+        }
+        //2. Generate new access token
+        Long userId = jwtHelper.getUserId(refreshToken);
+
+        User user = userRepo.findById(userId).orElseThrow(() -> new GetException("User not found"));
+        return generateAccessToken(user);
+    }
+
+    public String generateAccessToken(User user) {
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.add(Calendar.MINUTE, 60); // 1 giờ
+        Date refreshExpiration = calendar.getTime();
+
+        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        return Jwts.builder()
+                .claim("userId", user.getId())
+                .claim("email", user.getEmail())
+                .claim("name", user.getFullName())
+                .claim("role", user.getRole().getRoleCode())
+                .setIssuedAt(now)
+                .setExpiration(refreshExpiration)
+                .signWith(key)
+                .compact();
+    }
 }
-
-

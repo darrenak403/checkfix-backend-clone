@@ -16,23 +16,44 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+  # Email configuration
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: codemaster3979@gmail.com
+
+    password: bnzrqpzdxjfknmxk
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+        transport:
+          protocol: smtp
+        debug: false
   security:
     oauth2:
       client:
         registration:
           facebook:
-            client-id: "${FACEBOOK_CLIENT_ID:xxxxxxx}"
-            client-secret: "${FACEBOOK_CLIENT_SECRET:xxxxxxxxx}"
-            redirect-uri: "${FACEBOOK_REDIRECT_URI:http://localhost:3000/user/auth/social/callback}"
-            auth-uri: "https://www.facebook.com/v11.0/dialog/oauth"
-            token-uri: "https://graph.facebook.com/v11.0/oauth/access_token"
-            user-info-uri: "https://graph.facebook.com/me?fields=id,name,email,picture.type(large)"
-            scope: "email%20public_profile"
+            client-id: 759546253742122
+            client-secret: 42bb60889ae012a312ff70f8822290a6
+            redirect-uri: "${FACEBOOK_REDIRECT_URI:http://localhost:4300/auth/facebook/callback}" #sau khi user đăng nhập google thành công sẽ tự redirect đến trang này kèm code(của fb)
+            auth-uri: https://www.facebook.com/v21.0/dialog/oauth
+            token-uri: https://graph.facebook.com/oauth/access_token
+            user-info-uri: https://graph.facebook.com/me?fields=id,name,email,picture.type(large)
             response-type: code
+            scope:
+              - email
+              - public_profile
 
           google:
-            client-id: "${GOOGLE_CLIENT_ID:xxxxxxxxx}"
-            client-secret: "${GOOGLE_CLIENT_SECRET:xxxxxxxxxx}"
+            client-id: "${GOOGLE_CLIENT_ID:1061123444145-ga7gecn3snrnrvkg79fvp759n5iq8ibd.apps.googleusercontent.com}"
+            client-secret: "${GOOGLE_CLIENT_SECRET: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}"
             redirect-uri: "${GOOGLE_REDIRECT_URI:http://localhost:3000/auth/social/callback/google}"
             auth-uri: "https://accounts.google.com/o/oauth2/v2/auth"
             token-uri: "https://www.googleapis.com/oauth2/v3/token"
