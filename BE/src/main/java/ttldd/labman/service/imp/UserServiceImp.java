@@ -266,10 +266,10 @@ public class UserServiceImp implements UserService {
 
 
         // Kiểm tra googleId có tồn tại ở database chưa
-        Optional<User> existingUserEmail = userRepo.findByGoogleId(userDTO.getSub());
+        Optional<User> existingUser = userRepo.findByGoogleId(userDTO.getSub());
 
         // Kiểm tra tên đăng nhập đã tồn tại chưa
-        if (existingUserEmail.isPresent()) {
+        if (existingUser.isPresent()) {
 
             //AccessToken
             Date now = new Date();
@@ -340,14 +340,12 @@ public class UserServiceImp implements UserService {
 
 
         }
-        User userEntity = userRepo.findByEmail(userDTO.getEmail())
-                .orElseThrow(() -> new RuntimeException("Email không tồn tại"));
 
         UserResponse us = new UserResponse();
-        us.setId(userEntity.getId());
-        us.setEmail(userEntity.getEmail());
-        us.setFullName(userEntity.getFullName());
-        us.setRole(userEntity.getRole().getRoleName());
+        us.setId(existingUser.get().getId());
+        us.setEmail(existingUser.get().getEmail());
+        us.setFullName(existingUser.get().getFullName());
+        us.setRole(existingUser.get().getRole().getRoleName());
 
         return new AuthResponse(accessToken, refreshToken, us);
     }
