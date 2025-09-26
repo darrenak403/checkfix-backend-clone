@@ -1,4 +1,4 @@
-package ttldd.labman.service.impl;
+package ttldd.labman.service.imp;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
