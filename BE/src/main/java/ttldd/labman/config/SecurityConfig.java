@@ -86,6 +86,12 @@ public class SecurityConfig {
                             auth.requestMatchers(WHITE_LIST).permitAll();
                             auth.anyRequest().authenticated();
                         }
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt
+                                .decoder(jwtDecoder)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                        )
                 );
 
         return http.build();
