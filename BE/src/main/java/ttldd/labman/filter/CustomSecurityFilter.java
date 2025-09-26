@@ -40,7 +40,7 @@ public class CustomSecurityFilter extends OncePerRequestFilter {
                 System.out.println(role);
                 String userName = jwtHelper.getUsername(token);
                 System.out.println(userName);
-                Integer userId = jwtHelper.getUserId(token);
+                Long userId = jwtHelper.getUserId(token);
                 System.out.println(userId);
                 List<SimpleGrantedAuthority> authoritiesList = new ArrayList<>();
                 SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);

@@ -15,10 +15,13 @@ import ttldd.labman.dto.request.UserRequest;
 import ttldd.labman.dto.response.UserResponse;
 import ttldd.labman.entity.Role;
 import ttldd.labman.entity.User;
+import ttldd.labman.exception.CentralException;
+import ttldd.labman.exception.GetException;
 import ttldd.labman.exception.InsertException;
 import ttldd.labman.repo.RoleRepo;
 import ttldd.labman.repo.UserRepo;
 import ttldd.labman.service.UserService;
+import ttldd.labman.utils.JwtHelper;
 
 import javax.crypto.SecretKey;
 import java.util.*;
@@ -26,6 +29,8 @@ import java.util.*;
 
 @Service
 public class UserServiceImp implements UserService {
+
+
 
     // Oauth2 Google
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
@@ -70,6 +75,9 @@ public class UserServiceImp implements UserService {
 
     @Value("${jwt.secret}")
     private String secret;
+
+    @Autowired
+    private JwtHelper jwtHelper;
 
 
     @Override
@@ -127,30 +135,20 @@ public class UserServiceImp implements UserService {
         }
 
         //AccessToken
+        accessToken = generateAccessToken(userEntity);
+
+        //RefreshToken
+        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
-        calendar.add(Calendar.HOUR, 1); // hết hạn sau 1 giờ
-        Date accessExpiration = calendar.getTime();
-
-        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-        accessToken = Jwts.builder()
-                .setIssuedAt(now)
-                .setExpiration(accessExpiration)
-                .signWith(key)
-                .compact();
-
-        //RefreshToken
-        calendar.setTime(now);
-        calendar.add(Calendar.HOUR, 2); // hết hạn sau 1 giờ
+        calendar.add(Calendar.DAY_OF_WEEK, 7); // hết hạn sau 1 giờ
         Date refreshExpiration = calendar.getTime();
-
         refreshToken = Jwts.builder()
                 .setIssuedAt(now)
                 .setExpiration(refreshExpiration)
                 .signWith(key)
                 .compact();
-
         UserResponse us = new UserResponse();
         us.setId(userEntity.getId());
         us.setEmail(userEntity.getEmail());
@@ -272,24 +270,15 @@ public class UserServiceImp implements UserService {
         if (existingUser.isPresent()) {
 
             //AccessToken
+            accessToken = generateAccessToken(existingUser.get());
+
+            //RefreshToken
+            SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
             Date now = new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(now);
-            calendar.add(Calendar.HOUR, 1); // hết hạn sau 1 giờ
-            Date accessExpiration = calendar.getTime();
-
-            SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-            accessToken = Jwts.builder()
-                    .setIssuedAt(now)
-                    .setExpiration(accessExpiration)
-                    .signWith(key)
-                    .compact();
-
-            //RefreshToken
-            calendar.setTime(now);
-            calendar.add(Calendar.HOUR, 2); // hết hạn sau 1 giờ
+            calendar.add(Calendar.DAY_OF_WEEK, 7); // hết hạn sau 1 giờ
             Date refreshExpiration = calendar.getTime();
-
             refreshToken = Jwts.builder()
                     .setIssuedAt(now)
                     .setExpiration(refreshExpiration)
@@ -314,31 +303,20 @@ public class UserServiceImp implements UserService {
 
 
             //AccessToken
+            accessToken = generateAccessToken(existingUser.get());
+
+            //RefreshToken
+            SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
             Date now = new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(now);
-            calendar.add(Calendar.HOUR, 1); // hết hạn sau 1 giờ
-            Date accessExpiration = calendar.getTime();
-
-            SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-            accessToken = Jwts.builder()
-                    .setIssuedAt(now)
-                    .setExpiration(accessExpiration)
-                    .signWith(key)
-                    .compact();
-
-            //RefreshToken
-            calendar.setTime(now);
-            calendar.add(Calendar.HOUR, 2); // hết hạn sau 1 giờ
+            calendar.add(Calendar.DAY_OF_WEEK, 7); // hết hạn sau 1 giờ
             Date refreshExpiration = calendar.getTime();
-
             refreshToken = Jwts.builder()
                     .setIssuedAt(now)
                     .setExpiration(refreshExpiration)
                     .signWith(key)
                     .compact();
-
-
         }
 
         UserResponse us = new UserResponse();
@@ -348,5 +326,37 @@ public class UserServiceImp implements UserService {
         us.setRole(existingUser.get().getRole().getRoleName());
 
         return new AuthResponse(accessToken, refreshToken, us);
+    }
+
+    @Override
+    public String refreshAccessToken(String refreshToken) {
+        //1. Validate refresh token
+        if(refreshToken == null || !jwtHelper.validateToken(refreshToken)){
+            throw new RuntimeException("Refresh token không hợp lệ hoặc đã hết hạn");
+        }
+        //2. Generate new access token
+        Long userId = jwtHelper.getUserId(refreshToken);
+
+        User user = userRepo.findById(userId).orElseThrow(() -> new GetException("User not found"));
+        return generateAccessToken(user);
+    }
+
+    public String generateAccessToken(User user) {
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.add(Calendar.MINUTE, 60); // 1 giờ
+        Date refreshExpiration = calendar.getTime();
+
+        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        return Jwts.builder()
+                .claim("userId", user.getId())
+                .claim("email", user.getEmail())
+                .claim("name", user.getFullName())
+                .claim("role", user.getRole().getRoleName())
+                .setIssuedAt(now)
+                .setExpiration(refreshExpiration)
+                .signWith(key)
+                .compact();
     }
 }

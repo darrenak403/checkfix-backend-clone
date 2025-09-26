@@ -12,4 +12,5 @@ public interface UserService {
     String generateAuthorizationUri(String loginType);
     Map<String, Object> authenticateAndFetchProfile(String code, String loginType)throws IOException;
     AuthResponse loginOrSignup(Map<String, Object> userInfo, String role);
+    String refreshAccessToken(String refreshToken );
 }
