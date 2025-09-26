@@ -28,6 +28,8 @@ import java.util.List;
 public class SecurityConfig {
 
 
+    private final JwtDecoder jwtDecoder;
+
     private static final String[] WHITE_LIST = {
             // Auth endpoints
             "/api/auth/**",
