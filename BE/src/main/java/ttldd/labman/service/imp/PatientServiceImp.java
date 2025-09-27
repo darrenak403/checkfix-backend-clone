@@ -5,6 +5,7 @@ import ttldd.labman.dto.response.PatientResponse;
 import ttldd.labman.entity.Patient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ttldd.labman.mapper.PatientMapper;
 import ttldd.labman.repo.PatientRepo;
 import ttldd.labman.service.PatientService;
 
@@ -16,42 +17,63 @@ public class PatientServiceImp implements PatientService {
 
     private final PatientRepo patientRepo;
 
+    private final PatientMapper patientMapper;
+
     @Override
     public PatientResponse createPatient(PatientRequest patientDTO) {
-        Patient patient = Patient.builder()
-                .name(patientDTO.getFullName())
-                .yob(patientDTO.getYearOfBirth())
-                .gender(patientDTO.getGender())
-                .address(patientDTO.getAddress())
-                .phone(patientDTO.getPhone())
-                .email(patientDTO.getEmail())
-                .lastTestDate(patientDTO.getLastTestDate())
-                .lastTestType(patientDTO.getLastTestType())
-                .instrumentUsed(patientDTO.getInstrumentUsed())
-                .build();
+        Patient patient = patientMapper.toPatientEntity(patientDTO);
         patientRepo.save(patient);
-        return mapToResponse(patient);
+        return patientMapper.toPatientResponse(patient);
     }
 
     @Override
     public List<PatientResponse> getAllPatients() {
-        List<Patient> patients = patientRepo.findAll();
-        return patients.stream().map(this::mapToResponse).toList();
+        List<Patient> patients = patientRepo.findAllByDeletedFalse();
+        return patients.stream().map(patientMapper::toPatientResponse).toList();
     }
 
-    private PatientResponse mapToResponse(Patient patient) {
-        PatientResponse response = new PatientResponse();
-        response.setId(patient.getId());
-        response.setName(patient.getName());
-        response.setYob(patient.getYob());
-        response.setGender(patient.getGender());
-        response.setAddress(patient.getAddress());
-        response.setPhone(patient.getPhone());
-        response.setEmail(patient.getEmail());
-        response.setLastTestDate(patient.getLastTestDate());
-        response.setLastTestType(patient.getLastTestType());
-        response.setInstrumentUsed(patient.getInstrumentUsed());
-        return response;
+
+    @Override
+    public PatientResponse updatePatient(Long id, PatientRequest patientDTO) {
+        Patient patient = patientRepo.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
+        if (patientDTO.getFullName() != null) {
+            patient.setName(patientDTO.getFullName());
+        }
+        if (patientDTO.getYearOfBirth() != null) {
+            patient.setYob(patientDTO.getYearOfBirth());
+        }
+        if (patientDTO.getGender() != null) {
+            patient.setGender(patientDTO.getGender());
+        }
+        if (patientDTO.getAddress() != null) {
+            patient.setAddress(patientDTO.getAddress());
+        }
+        if (patientDTO.getPhone() != null) {
+            patient.setPhone(patientDTO.getPhone());
+        }
+        if (patientDTO.getEmail() != null) {
+            patient.setEmail(patientDTO.getEmail());
+        }
+        if (patientDTO.getLastTestDate() != null) {
+            patient.setLastTestDate(patientDTO.getLastTestDate());
+        }
+        if (patientDTO.getLastTestType() != null) {
+            patient.setLastTestType(patientDTO.getLastTestType());
+        }
+        if (patientDTO.getInstrumentUsed() != null) {
+            patient.setInstrumentUsed(patientDTO.getInstrumentUsed());
+        }
+        patientRepo.save(patient);
+        return patientMapper.toPatientResponse(patient);
+    }
+
+    @Override
+    public void deletePatient(Long id) {
+        Patient patient = patientRepo.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
+        patient.setDeleted(true);
+        patientRepo.save(patient);
     }
 
 

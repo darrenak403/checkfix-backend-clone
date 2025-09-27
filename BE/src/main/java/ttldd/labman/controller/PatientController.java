@@ -21,7 +21,7 @@ public class PatientController {
     private final PatientService patientService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER') or hasRole('ROLE_DOCTOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR')")
     public ResponseEntity<RestResponse<PatientResponse>> createPatient(@Valid @RequestBody PatientRequest request) {
         PatientResponse res = patientService.createPatient(request);
         RestResponse<PatientResponse> response = RestResponse.<PatientResponse>builder()
@@ -33,13 +33,37 @@ public class PatientController {
     }
 
     @GetMapping
-//    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER') or hasRole('ROLE_DOCTOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR')")
     public ResponseEntity<RestResponse<List<PatientResponse>>> getPatients() {
         List<PatientResponse> patients = patientService.getAllPatients();
         RestResponse<List<PatientResponse>> response = RestResponse.<List<PatientResponse>>builder()
                 .statusCode(200)
                 .message("Patients retrieved successfully")
                 .data(patients)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR')")
+    public ResponseEntity<RestResponse<PatientResponse>> updatePatient(@RequestParam Long id, @RequestBody PatientRequest request) {
+        PatientResponse res = patientService.updatePatient(id, request);
+        RestResponse<PatientResponse> response = RestResponse.<PatientResponse>builder()
+                .statusCode(200)
+                .message("Patient updated successfully")
+                .data(res)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    public ResponseEntity<RestResponse<Void>> deletePatient(@PathVariable Long id) {
+        patientService.deletePatient(id);
+        RestResponse<Void> response = RestResponse.<Void>builder()
+                .statusCode(200)
+                .message("Patient deleted successfully")
                 .build();
         return ResponseEntity.ok(response);
     }
