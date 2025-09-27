@@ -145,6 +145,7 @@ public class UserServiceImp implements UserService {
         calendar.add(Calendar.DAY_OF_WEEK, 7); // hết hạn sau 1 giờ
         Date refreshExpiration = calendar.getTime();
         refreshToken = Jwts.builder()
+                .claim("userId", userEntity.getId())
                 .setIssuedAt(now)
                 .setExpiration(refreshExpiration)
                 .signWith(key)
