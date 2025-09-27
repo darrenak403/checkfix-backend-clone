@@ -151,6 +151,7 @@ public class UserServiceImp implements UserService {
         calendar.add(Calendar.DAY_OF_WEEK, 7); // hết hạn sau 1 giờ
         Date refreshExpiration = calendar.getTime();
         refreshToken = Jwts.builder()
+                .claim("userId", userEntity.getId())
                 .setIssuedAt(now)
                 .setExpiration(refreshExpiration)
                 .signWith(key)
@@ -288,6 +289,7 @@ public class UserServiceImp implements UserService {
             calendar.add(Calendar.DAY_OF_WEEK, 7); // hết hạn sau 1 giờ
             Date refreshExpiration = calendar.getTime();
             refreshToken = Jwts.builder()
+                    .claim("userId", existingUser.get().getId())
                     .setIssuedAt(now)
                     .setExpiration(refreshExpiration)
                     .signWith(key)
@@ -321,6 +323,7 @@ public class UserServiceImp implements UserService {
             calendar.add(Calendar.DAY_OF_WEEK, 7); // hết hạn sau 1 giờ
             Date refreshExpiration = calendar.getTime();
             refreshToken = Jwts.builder()
+                    .claim("userId", existingUser.get().getId())
                     .setIssuedAt(now)
                     .setExpiration(refreshExpiration)
                     .signWith(key)
@@ -371,7 +374,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public String refreshAccessToken(String refreshToken) {
+    public AuthResponse refreshAccessToken(String refreshToken) {
         //1. Validate refresh token
         if(refreshToken == null || !jwtHelper.validateToken(refreshToken)){
             throw new RuntimeException("Refresh token không hợp lệ hoặc đã hết hạn");
@@ -379,8 +382,22 @@ public class UserServiceImp implements UserService {
         //2. Generate new access token
         Long userId = jwtHelper.getUserId(refreshToken);
 
+        //RefreshToken
+        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.add(Calendar.DAY_OF_WEEK, 7); // hết hạn sau 1 giờ
+        Date refreshExpiration = calendar.getTime();
+        refreshToken = Jwts.builder()
+                .claim("userId", userId)
+                .setIssuedAt(now)
+                .setExpiration(refreshExpiration)
+                .signWith(key)
+                .compact();
+
         User user = userRepo.findById(userId).orElseThrow(() -> new GetException("User not found"));
-        return generateAccessToken(user);
+        return new AuthResponse(generateAccessToken(user), refreshToken, null);
     }
 
     public String generateAccessToken(User user) {
