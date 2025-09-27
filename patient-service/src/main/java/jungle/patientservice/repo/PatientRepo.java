@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface PatientRepo extends JpaRepository<Patient, Long> {
     List<Patient> findAllByDeletedFalse();
     Optional<Patient> findByIdAndDeletedFalse(long id);
+    boolean existsByEmail(String email);
 }

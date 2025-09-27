@@ -22,7 +22,7 @@ public class PatientRequest {
     private String fullName;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate yearOfBirth;
+    private LocalDate yob;
 
     @NotBlank(message = "Gender is required")
     private String gender;

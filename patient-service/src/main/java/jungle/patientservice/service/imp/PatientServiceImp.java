@@ -21,6 +21,9 @@ public class PatientServiceImp implements PatientService {
 
     @Override
     public PatientResponse createPatient(PatientRequest patientDTO) {
+        if (patientRepo.existsByEmail(patientDTO.getEmail())) {
+            throw new RuntimeException("Email already exists: " + patientDTO.getEmail());
+        }
         Patient patient = patientMapper.toPatientEntity(patientDTO);
         patientRepo.save(patient);
         return patientMapper.toPatientResponse(patient);
@@ -38,10 +41,10 @@ public class PatientServiceImp implements PatientService {
         Patient patient = patientRepo.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
         if (patientDTO.getFullName() != null) {
-            patient.setName(patientDTO.getFullName());
+            patient.setFullName(patientDTO.getFullName());
         }
-        if (patientDTO.getYearOfBirth() != null) {
-            patient.setYob(patientDTO.getYearOfBirth());
+        if (patientDTO.getYob() != null) {
+            patient.setYob(patientDTO.getYob());
         }
         if (patientDTO.getGender() != null) {
             patient.setGender(patientDTO.getGender());

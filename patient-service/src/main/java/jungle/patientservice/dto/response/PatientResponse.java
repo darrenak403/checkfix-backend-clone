@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class PatientResponse {
     private Long id;
 
-    private String name;
+    private String fullName;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate yob;
