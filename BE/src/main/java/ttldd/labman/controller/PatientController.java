@@ -44,11 +44,7 @@ public class PatientController {
         return ResponseEntity.ok(response);
     }
 
-<<<<<<< HEAD
     @PatchMapping("/{id}")
-=======
-    @PatchMapping
->>>>>>> a46baebf7f0416d41011ef25bb7d5a36256d5562
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR')")
     public ResponseEntity<RestResponse<PatientResponse>> updatePatient(@RequestParam Long id, @RequestBody PatientRequest request) {
         PatientResponse res = patientService.updatePatient(id, request);
@@ -60,7 +56,7 @@ public class PatientController {
         return ResponseEntity.ok(response);
     }
 
-<<<<<<< HEAD
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<RestResponse<Void>> deletePatient(@PathVariable Long id) {
@@ -72,6 +68,4 @@ public class PatientController {
         return ResponseEntity.ok(response);
     }
 
-=======
->>>>>>> a46baebf7f0416d41011ef25bb7d5a36256d5562
 }
