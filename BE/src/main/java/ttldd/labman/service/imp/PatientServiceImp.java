@@ -35,7 +35,7 @@ public class PatientServiceImp implements PatientService {
 
     @Override
     public PatientResponse updatePatient(Long id, PatientRequest patientDTO) {
-        Patient patient = patientRepo.findById(id)
+        Patient patient = patientRepo.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
         if (patientDTO.getFullName() != null) {
             patient.setName(patientDTO.getFullName());
@@ -68,7 +68,13 @@ public class PatientServiceImp implements PatientService {
         return patientMapper.toPatientResponse(patient);
     }
 
-
+    @Override
+    public void deletePatient(Long id) {
+        Patient patient = patientRepo.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
+        patient.setDeleted(true);
+        patientRepo.save(patient);
+    }
 
 
 }
