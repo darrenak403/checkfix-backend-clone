@@ -3,6 +3,8 @@ package ttldd.labman.repo;
 import ttldd.labman.entity.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PatientRepo extends JpaRepository<Patient, Long> {
+import java.util.List;
 
+public interface PatientRepo extends JpaRepository<Patient, Long> {
+    List<Patient> findAllByDeletedFalse();
 }

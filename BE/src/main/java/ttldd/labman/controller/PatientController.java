@@ -21,7 +21,7 @@ public class PatientController {
     private final PatientService patientService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER') or hasRole('ROLE_DOCTOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR')")
     public ResponseEntity<RestResponse<PatientResponse>> createPatient(@Valid @RequestBody PatientRequest request) {
         PatientResponse res = patientService.createPatient(request);
         RestResponse<PatientResponse> response = RestResponse.<PatientResponse>builder()
@@ -40,6 +40,18 @@ public class PatientController {
                 .statusCode(200)
                 .message("Patients retrieved successfully")
                 .data(patients)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR')")
+    public ResponseEntity<RestResponse<PatientResponse>> updatePatient(@RequestParam Long id, @RequestBody PatientRequest request) {
+        PatientResponse res = patientService.updatePatient(id, request);
+        RestResponse<PatientResponse> response = RestResponse.<PatientResponse>builder()
+                .statusCode(200)
+                .message("Patient updated successfully")
+                .data(res)
                 .build();
         return ResponseEntity.ok(response);
     }

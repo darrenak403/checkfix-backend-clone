@@ -1,5 +1,6 @@
 package ttldd.labman.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class PatientResponse {
 
     private String name;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate yob;
 
     private String gender;
@@ -26,6 +28,7 @@ public class PatientResponse {
 
     private String email;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate lastTestDate;
 
     private String lastTestType;

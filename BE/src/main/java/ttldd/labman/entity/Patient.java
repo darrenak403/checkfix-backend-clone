@@ -40,5 +40,7 @@ public class Patient {
 
     private String instrumentUsed;
 
+    private boolean deleted = false;
+
 
 }
