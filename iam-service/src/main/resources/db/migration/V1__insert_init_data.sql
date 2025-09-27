@@ -23,4 +23,4 @@ VALUES ('Patient', 'ROLE_PATIENT', 'Patient user with permission to view their o
 
 -- User
 INSERT INTO user (email, password, role_id)
-VALUES ('admin@admin.com', '$2a$10$Dow1r0CwX7c8bFh5k7vXeOa8mQeF1ZyW8jzFh6HjK8JfYz1Kq9e6', '1');
+VALUES ('admin@admin.com', '$2a$10$ENjuWcDRZZSfbF3TWfhVBeGtz7oR9/dUO0p4NAyFA.XjWDgfnM0VC', '1');
