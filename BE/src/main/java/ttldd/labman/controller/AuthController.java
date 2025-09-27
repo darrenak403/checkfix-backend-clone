@@ -80,9 +80,9 @@ public class AuthController {
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refreshAccessToken(@RequestBody Map<String, String> request){
         String refreshToken = request.get("refreshToken");
-        String accessToken = userService.refreshAccessToken(refreshToken);
+        AuthResponse accessToken = userService.refreshAccessToken(refreshToken);
         BaseResponse response = new BaseResponse();
-        if(accessToken == null || accessToken.isEmpty()){
+        if(accessToken == null){
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             response.setMessage("Invalid refresh token");
             return ResponseEntity.badRequest().body(response);
