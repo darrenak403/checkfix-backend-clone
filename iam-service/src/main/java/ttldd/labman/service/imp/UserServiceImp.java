@@ -396,8 +396,15 @@ public class UserServiceImp implements UserService {
                 .signWith(key)
                 .compact();
 
+
         User user = userRepo.findById(userId).orElseThrow(() -> new GetException("User not found"));
-        return new AuthResponse(generateAccessToken(user), refreshToken, null);
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(user.getId());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setFullName(user.getFullName());
+        userResponse.setRole(user.getRole().getRoleCode());
+
+        return new AuthResponse(generateAccessToken(user), refreshToken, userResponse);
     }
 
     public String generateAccessToken(User user) {
