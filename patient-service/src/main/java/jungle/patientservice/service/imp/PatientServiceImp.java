@@ -8,6 +8,7 @@ import jungle.patientservice.repo.PatientRepo;
 import jungle.patientservice.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class PatientServiceImp implements PatientService {
     @Override
     public PatientResponse createPatient(PatientRequest patientDTO) {
         if (patientRepo.existsByEmail(patientDTO.getEmail())) {
-            throw new RuntimeException("Email already exists: " + patientDTO.getEmail());
+            throw new IllegalArgumentException("Email already exists: " + patientDTO.getEmail());
         }
         Patient patient = patientMapper.toPatientEntity(patientDTO);
         patientRepo.save(patient);
@@ -40,31 +41,31 @@ public class PatientServiceImp implements PatientService {
     public PatientResponse updatePatient(Long id, PatientRequest patientDTO) {
         Patient patient = patientRepo.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
-        if (patientDTO.getFullName() != null) {
+        if (StringUtils.hasText(patientDTO.getFullName())) {
             patient.setFullName(patientDTO.getFullName());
         }
         if (patientDTO.getYob() != null) {
             patient.setYob(patientDTO.getYob());
         }
-        if (patientDTO.getGender() != null) {
+        if (StringUtils.hasText(patientDTO.getGender())) {
             patient.setGender(patientDTO.getGender());
         }
-        if (patientDTO.getAddress() != null) {
+        if (StringUtils.hasText(patientDTO.getAddress())) {
             patient.setAddress(patientDTO.getAddress());
         }
-        if (patientDTO.getPhone() != null) {
+        if (StringUtils.hasText(patientDTO.getPhone())) {
             patient.setPhone(patientDTO.getPhone());
         }
-        if (patientDTO.getEmail() != null) {
+        if (StringUtils.hasText(patientDTO.getEmail())) {
             patient.setEmail(patientDTO.getEmail());
         }
         if (patientDTO.getLastTestDate() != null) {
             patient.setLastTestDate(patientDTO.getLastTestDate());
         }
-        if (patientDTO.getLastTestType() != null) {
+        if (StringUtils.hasText(patientDTO.getLastTestType())) {
             patient.setLastTestType(patientDTO.getLastTestType());
         }
-        if (patientDTO.getInstrumentUsed() != null) {
+        if (StringUtils.hasText(patientDTO.getInstrumentUsed())) {
             patient.setInstrumentUsed(patientDTO.getInstrumentUsed());
         }
         patientRepo.save(patient);
