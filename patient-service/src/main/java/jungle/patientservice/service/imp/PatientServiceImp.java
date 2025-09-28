@@ -80,5 +80,12 @@ public class PatientServiceImp implements PatientService {
         patientRepo.save(patient);
     }
 
+    @Override
+    public PatientResponse getPatient(Long id) {
+        Patient patient = patientRepo.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
+        return patientMapper.toPatientResponse(patient);
+    }
+
 
 }

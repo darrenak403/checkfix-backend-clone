@@ -13,4 +13,5 @@ public interface PatientService {
     public List<PatientResponse> getAllPatients();
     public PatientResponse updatePatient(Long id, PatientRequest patientDTO);
     public void deletePatient(Long id);
+    public PatientResponse getPatient(Long id);
 }
