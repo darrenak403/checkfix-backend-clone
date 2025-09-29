@@ -43,6 +43,18 @@ public class PatientController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR')")
+    public ResponseEntity<RestResponse<PatientResponse>> getPatient(@PathVariable Long id) {
+        PatientResponse res = patientService.getPatient(id);
+        RestResponse<PatientResponse> response = RestResponse.<PatientResponse>builder()
+                .statusCode(200)
+                .message("Patient retrieved successfully")
+                .data(res)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
     @PatchMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR')")
     public ResponseEntity<RestResponse<PatientResponse>> updatePatient(@PathVariable Long id, @RequestBody PatientRequest request) {
