@@ -37,7 +37,6 @@ public class Patient {
 
     private String instrumentUsed;
 
-    @Column(unique=true)
     private Long userId;
 
     private boolean deleted = false;
