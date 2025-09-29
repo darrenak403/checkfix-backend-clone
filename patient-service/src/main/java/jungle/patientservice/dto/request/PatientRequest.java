@@ -1,10 +1,7 @@
 package jungle.patientservice.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +14,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class PatientRequest {
+
+    @NotNull(message = "User ID is required")
+    private Long userId;
 
     @NotBlank(message = "Full name cannot be blank")
     private String fullName;

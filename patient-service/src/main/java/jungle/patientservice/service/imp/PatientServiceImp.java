@@ -32,7 +32,7 @@ public class PatientServiceImp implements PatientService {
 
     @Override
     public List<PatientResponse> getAllPatients() {
-        List<Patient> patients = patientRepo.findAllByDeletedFalse();
+        List<Patient> patients = patientRepo.findAllByDeletedFalseOrderByIdDesc();
         return patients.stream().map(patientMapper::toPatientResponse).toList();
     }
 
@@ -41,6 +41,11 @@ public class PatientServiceImp implements PatientService {
     public PatientResponse updatePatient(Long id, PatientRequest patientDTO) {
         Patient patient = patientRepo.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
+
+        if (patientDTO.getUserId() != null) {
+            patient.setUserId(patientDTO.getUserId());
+        }
+
         if (StringUtils.hasText(patientDTO.getFullName())) {
             patient.setFullName(patientDTO.getFullName());
         }

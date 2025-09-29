@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PatientRepo extends JpaRepository<Patient, Long> {
-    List<Patient> findAllByDeletedFalse();
+    List<Patient> findAllByDeletedFalseOrderByIdDesc();
     Optional<Patient> findByIdAndDeletedFalse(long id);
     boolean existsByEmail(String email);
 }

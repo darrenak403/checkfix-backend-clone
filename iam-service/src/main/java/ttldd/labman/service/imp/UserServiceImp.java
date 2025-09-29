@@ -1,7 +1,6 @@
 package ttldd.labman.service.imp;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
@@ -16,7 +15,6 @@ import ttldd.labman.dto.request.UserRequest;
 import ttldd.labman.dto.response.UserResponse;
 import ttldd.labman.entity.Role;
 import ttldd.labman.entity.User;
-import ttldd.labman.exception.CentralException;
 import ttldd.labman.exception.GetException;
 import ttldd.labman.exception.InsertException;
 import ttldd.labman.repo.RoleRepo;
@@ -30,7 +28,6 @@ import java.util.*;
 
 @Service
 public class UserServiceImp implements UserService {
-
 
 
     // Oauth2 Google
