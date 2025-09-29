@@ -1,4 +1,4 @@
-package ttldd.labman.response;
+package ttldd.labman.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
