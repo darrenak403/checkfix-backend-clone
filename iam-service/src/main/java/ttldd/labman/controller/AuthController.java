@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ttldd.labman.dto.response.AuthResponse;
 import ttldd.labman.dto.request.UserRequest;
-import ttldd.labman.response.BaseResponse;
+import ttldd.labman.dto.response.BaseResponse;
 import ttldd.labman.service.UserService;
 
 import java.util.Map;
@@ -92,6 +92,7 @@ public class AuthController {
             response.setData(accessToken);
             return ResponseEntity.ok(response);
         }
-
     }
+
+
 }

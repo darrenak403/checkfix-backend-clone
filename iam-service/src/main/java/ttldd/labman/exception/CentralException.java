@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ttldd.labman.response.BaseResponse;
+import ttldd.labman.dto.response.BaseResponse;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

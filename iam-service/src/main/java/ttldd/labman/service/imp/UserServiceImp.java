@@ -29,7 +29,7 @@ import java.util.*;
 
 
 @Service
-public class UserServiceImp implements UserService {
+public  class UserServiceImp implements UserService {
 
 
 
@@ -407,6 +407,17 @@ public class UserServiceImp implements UserService {
         return new AuthResponse(generateAccessToken(user), refreshToken, userResponse);
     }
 
+    @Override
+    public List<UserResponse> getAllUser() {
+        List<User> user = userRepo.findAll();
+        List<UserResponse> userResponses = new ArrayList<>();
+        for (User u : user) {
+            userResponses.add(convertUserToUserResponse(u));
+        }
+        return userResponses;
+
+    }
+
     public String generateAccessToken(User user) {
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -424,5 +435,17 @@ public class UserServiceImp implements UserService {
                 .setExpiration(refreshExpiration)
                 .signWith(key)
                 .compact();
+    }
+
+    private UserResponse convertUserToUserResponse(User user) {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(user.getId());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setFullName(user.getFullName());
+        userResponse.setRole(user.getRole().getRoleCode());
+        userResponse.setAddress(user.getAddress());
+        userResponse.setGender(user.getGender());
+        userResponse.setPhone(user.getPhoneNumber());
+        return userResponse;
     }
 }
