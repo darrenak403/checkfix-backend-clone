@@ -57,7 +57,7 @@ public class PatientController {
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR')")
-    public ResponseEntity<RestResponse<PatientResponse>> updatePatient(@PathVariable Long id, @RequestBody PatientRequest request) {
+    public ResponseEntity<RestResponse<PatientResponse>> updatePatient(@PathVariable Long id, @Valid @RequestBody PatientRequest request) {
         PatientResponse res = patientService.updatePatient(id, request);
         RestResponse<PatientResponse> response = RestResponse.<PatientResponse>builder()
                 .statusCode(200)
