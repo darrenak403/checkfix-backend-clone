@@ -3,7 +3,6 @@ spring:
     name: BE
 
   datasource:
-
     url: jdbc:mysql://localhost:3306/lab_manager
     username: root
     password: 123456
@@ -74,6 +73,20 @@ jwt:
   expiration: 86400
 
 admin:
-    email: admin@admin.com
-    password: Admin123
+  email: admin@admin.com
+  password: Admin123
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:admin123@localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+server:
+  port: 8082

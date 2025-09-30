@@ -1,4 +1,4 @@
-package jungle.patientservice;
+package com.microse.api_gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class PatientServiceApplication {
+public class ApiGatewayApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(PatientServiceApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(ApiGatewayApplication.class, args);
+	}
 
 }
