@@ -439,7 +439,7 @@ public  class UserServiceImp implements UserService {
         userResponse.setId(user.getId());
         userResponse.setEmail(user.getEmail());
         userResponse.setFullName(user.getFullName());
-        userResponse.setRole(user.getRole().getRoleCode());
+        userResponse.setRole(user.getRole().getRoleName());
         userResponse.setAddress(user.getAddress());
         userResponse.setGender(user.getGender());
         userResponse.setPhone(user.getPhoneNumber());
