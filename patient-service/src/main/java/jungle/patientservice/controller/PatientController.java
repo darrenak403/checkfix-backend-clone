@@ -69,7 +69,7 @@ public class PatientController {
 
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR')")
     public ResponseEntity<RestResponse<Void>> deletePatient(@PathVariable Long id) {
         patientService.deletePatient(id);
         RestResponse<Void> response = RestResponse.<Void>builder()
@@ -78,5 +78,4 @@ public class PatientController {
                 .build();
         return ResponseEntity.ok(response);
     }
-
 }
