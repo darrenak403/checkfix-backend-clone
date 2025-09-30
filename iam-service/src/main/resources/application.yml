@@ -47,8 +47,8 @@ spring:
       client:
         registration:
           facebook:
-            client-id: 4193282944223723
-            client-secret: 775ece03a76088607c5cd356eba19ced
+            client-id: 2869543906584402
+            client-secret: 8f4cab425def6bc316295848c24ae927
             redirect-uri: "${FACEBOOK_REDIRECT_URI:https://localhost:3000/auth/social/callback/facebook}"
             auth-uri: https://www.facebook.com/v21.0/dialog/oauth
             token-uri: https://graph.facebook.com/oauth/access_token
