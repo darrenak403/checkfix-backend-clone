@@ -1,0 +1,183 @@
+#server:
+#  port: 6789
+#
+#spring:
+#  application:
+#    name: api-gateway
+#    security:
+#      user:
+#        name: admin
+#        password: admin123
+#
+#  cloud:
+#    gateway:
+#      server:
+#        webflux:
+#          routes:
+#            # IAM Service - Authentication
+#            - id: iam-service
+#              uri: lb://BE
+#              predicates:
+#                - Path=/api/auth/**
+#              filters:
+#                - StripPrefix=1
+#
+#            # IAM Service - Public
+#            - id: iam-public
+#              uri: lb://BE
+#              predicates:
+#                - Path=/api/public/**
+#              filters:
+#                - StripPrefix=1
+#
+#            # IAM Service - Docs
+#            - id: iam-docs
+#              uri: lb://BE
+#              predicates:
+#                - Path=/api/iam/v3/api-docs/**
+#              filters:
+#                - StripPrefix=2
+#
+#            - id: iam-swagger
+#              uri: lb://BE
+#              predicates:
+#                - Path=/api/iam/swagger-ui/**
+#              filters:
+#                - StripPrefix=2
+#
+#            - id: iam-swagger-html
+#              uri: lb://BE
+#              predicates:
+#                - Path=/api/iam/swagger-ui.html
+#              filters:
+#                - StripPrefix=2
+#
+#            # Patient Service
+#            - id: patient-service
+#              uri: lb://PATIENT-SERVICE
+#              predicates:
+#                - Path=/api/patient/**
+#              filters:
+#                - StripPrefix=1   # ⚡ chỉnh về 1 cho đồng bộ
+#
+#            - id: patient-docs
+#              uri: lb://PATIENT-SERVICE
+#              predicates:
+#                - Path=/api/patient/v3/api-docs/**
+#              filters:
+#                - StripPrefix=2
+#
+#            - id: patient-swagger
+#              uri: lb://PATIENT-SERVICE
+#              predicates:
+#                - Path=/api/patient/swagger-ui/**
+#              filters:
+#                - StripPrefix=2
+#
+#            - id: patient-swagger-html
+#              uri: lb://PATIENT-SERVICE
+#              predicates:
+#                - Path=/api/patient/swagger-ui.html
+#              filters:
+#                - StripPrefix=2
+#
+#springdoc:
+#  swagger-ui:
+#    path: /swagger-ui/index.html
+#    urls:
+#      - name: IAM Service
+#        url: /api/iam/v3/api-docs
+#      - name: Patient Service
+#        url: /api/patient/v3/api-docs
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+#    register-with-eureka: true
+#    fetch-registry: true
+#
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#  endpoint:
+#    health:
+#      show-details: always
+server:
+  port: 6789
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+
+            - id: iam-service
+              uri: lb://BE
+              predicates:
+                - Path=/api/auth/**
+              filters:
+                - StripPrefix=1
+
+
+            - id: iam-public
+              uri: lb://BE
+              predicates:
+                - Path=/api/public/**
+              filters:
+                - StripPrefix=1
+
+
+            - id: iam-docs
+              uri: lb://BE
+              predicates:
+                - Path=/api/iam/v3/api-docs/**
+              filters:
+                - StripPrefix=2
+
+
+            - id: patient-service
+              uri: lb://PATIENT-SERVICE
+              predicates:
+                - Path=/patient/**
+              filters:
+                - StripPrefix=1
+
+            - id: patient-docs
+              uri: lb://PATIENT-SERVICE
+              predicates:
+                - Path=/patient/v3/api-docs/**
+              filters:
+                - StripPrefix=2
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui/index.html
+    urls:
+      - name: IAM Service
+        url: /api/iam/v3/api-docs
+      - name: Patient Service
+        url: /patient/v3/api-docs
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
