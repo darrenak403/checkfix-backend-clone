@@ -157,7 +157,7 @@ public  class UserServiceImp implements UserService {
         us.setId(userEntity.getId());
         us.setEmail(userEntity.getEmail());
         us.setFullName(userEntity.getFullName());
-        us.setRole(userEntity.getRole().getRoleName());
+        us.setRole(userEntity.getRole().getRoleCode());
 
         return new AuthResponse(accessToken, refreshToken, us);
     }
@@ -427,7 +427,7 @@ public  class UserServiceImp implements UserService {
                 .claim("userId", user.getId())
                 .claim("email", user.getEmail())
                 .claim("name", user.getFullName())
-                .claim("role", user.getRole().getRoleName())
+                .claim("role", user.getRole().getRoleCode())
                 .setIssuedAt(now)
                 .setExpiration(refreshExpiration)
                 .signWith(key)
