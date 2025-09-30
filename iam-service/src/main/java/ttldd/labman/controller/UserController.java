@@ -19,7 +19,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR') ")
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR')  or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> getAllUsers() {
         BaseResponse response = new BaseResponse();
         List<UserResponse> users = userService.getAllUser();

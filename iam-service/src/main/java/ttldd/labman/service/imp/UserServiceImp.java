@@ -427,7 +427,7 @@ public  class UserServiceImp implements UserService {
                 .claim("userId", user.getId())
                 .claim("email", user.getEmail())
                 .claim("name", user.getFullName())
-                .claim("role", user.getRole().getRoleCode())
+                .claim("role", user.getRole().getRoleName())
                 .setIssuedAt(now)
                 .setExpiration(refreshExpiration)
                 .signWith(key)
