@@ -50,8 +50,8 @@ public class PasswordResetServiceImpl implements PasswordResetService {
             }
             
             // Xóa tất cả OTP cũ của email này (nếu có)
-            passwordResetOtpRepo.deleteAllByEmail(request.getEmail());
-            
+//            passwordResetOtpRepo.deleteAllByEmail(request.getEmail());
+
             // Tạo mã OTP 4 chữ số
             String otp = OtpUtils.generateOtp();
             
