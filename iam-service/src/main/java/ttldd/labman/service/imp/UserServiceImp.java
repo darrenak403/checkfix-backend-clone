@@ -259,82 +259,65 @@ public  class UserServiceImp implements UserService {
     @Override
     public AuthResponse loginOrSignup(Map<String, Object> userInfo, String role) {
         UserRequest userDTO = new UserRequest();
-        //Lấy email của người dùng
+        // Lấy email của người dùng
         userDTO.setEmail(userInfo.get("email") != null ? userInfo.get("email").toString() : (userInfo.get("id") + "@facebook.com"));
-        //Lấy tên của người dùng
+        // Lấy tên của người dùng
         userDTO.setFullName(userInfo.get("name") != null ? userInfo.get("name").toString() : "Facebook User");
-        //Lấy google_id hoặc facebook_id của người dùng
+        // Lấy google_id hoặc facebook_id của người dùng
         userDTO.setSub(userInfo.get("sub") != null ? userInfo.get("sub").toString() : userInfo.get("id").toString());
-        String accessToken = "";
-        String refreshToken = "";
 
+        String accessToken;
+        String refreshToken;
 
         // Kiểm tra googleId có tồn tại ở database chưa
         Optional<User> existingUser = userRepo.findByGoogleId(userDTO.getSub());
+        User userEntity;
 
-        // Kiểm tra tên đăng nhập đã tồn tại chưa
         if (existingUser.isPresent()) {
-
-            //AccessToken
-            accessToken = generateAccessToken(existingUser.get());
-
-            //RefreshToken
-            SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-            Date now = new Date();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(now);
-            calendar.add(Calendar.DAY_OF_WEEK, 7); // hết hạn sau 1 giờ
-            Date refreshExpiration = calendar.getTime();
-            refreshToken = Jwts.builder()
-                    .claim("userId", existingUser.get().getId())
-                    .setIssuedAt(now)
-                    .setExpiration(refreshExpiration)
-                    .signWith(key)
-                    .compact();
-
+            // User đã tồn tại
+            userEntity = existingUser.get();
         } else {
-            //Sign Up
-            Role roleEntity = roleRepository.findByRoleCode(role).
-                    orElseThrow(() -> new RuntimeException("Role not found: " + role));
-
-
-            User userEntity = new User();
-
-
+            // Sign Up
+            Role roleEntity = roleRepository.findByRoleCode(role)
+                    .orElseThrow(() -> new RuntimeException("Role not found: " + role));
+            userEntity = new User();
             userEntity.setFullName(userDTO.getFullName());
             userEntity.setEmail(userDTO.getEmail());
             userEntity.setGoogleId(userDTO.getSub());
             userEntity.setRole(roleEntity);
             userEntity.setLoginProvider("google");
-            userRepo.save(userEntity);
-
-
-            //AccessToken
-            accessToken = generateAccessToken(existingUser.get());
-
-            //RefreshToken
-            SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-            Date now = new Date();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(now);
-            calendar.add(Calendar.DAY_OF_WEEK, 7); // hết hạn sau 1 giờ
-            Date refreshExpiration = calendar.getTime();
-            refreshToken = Jwts.builder()
-                    .claim("userId", existingUser.get().getId())
-                    .setIssuedAt(now)
-                    .setExpiration(refreshExpiration)
-                    .signWith(key)
-                    .compact();
+            userEntity = userRepo.save(userEntity); // Gán lại user đã lưu
         }
 
+        // AccessToken
+        accessToken = generateAccessToken(userEntity);
+
+        // RefreshToken
+        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.add(Calendar.DAY_OF_WEEK, 7); // Hết hạn sau 7 ngày
+        Date refreshExpiration = calendar.getTime();
+
+        refreshToken = Jwts.builder()
+                .claim("userId", userEntity.getId())
+                .setIssuedAt(now)
+                .setExpiration(refreshExpiration)
+                .signWith(key)
+                .compact();
+
+        // Build response
         UserResponse us = new UserResponse();
-        us.setId(existingUser.get().getId());
-        us.setEmail(existingUser.get().getEmail());
-        us.setFullName(existingUser.get().getFullName());
-        us.setRole(existingUser.get().getRole().getRoleCode());
+        us.setId(userEntity.getId());
+        us.setEmail(userEntity.getEmail());
+        us.setFullName(userEntity.getFullName());
+        us.setRole(userEntity.getRole().getRoleCode());
 
         return new AuthResponse(accessToken, refreshToken, us);
     }
+
+
     @Transactional
     public void createAdminUser() {
         try {
