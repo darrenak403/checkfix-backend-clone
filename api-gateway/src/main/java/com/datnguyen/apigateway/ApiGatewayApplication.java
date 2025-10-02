@@ -1,16 +1,13 @@
-package ttldd.labman;
-
+package com.datnguyen.apigateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
-
 @SpringBootApplication
-
-public class IAMService {
+public class ApiGatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(IAMService.class, args);
+        SpringApplication.run(ApiGatewayApplication.class, args);
     }
+
 }
