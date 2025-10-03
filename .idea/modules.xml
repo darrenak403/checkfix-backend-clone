@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/hcm_cpl_java_09_group_2.iml" filepath="$PROJECT_DIR$/.idea/hcm_cpl_java_09_group_2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testorder-services/testorder-services.iml" filepath="$PROJECT_DIR$/testorder-services/testorder-services.iml" />
     </modules>
   </component>
 </project>
