@@ -1,6 +1,7 @@
+
 spring:
   application:
-    name: BE
+    name: iam-service
 
   datasource:
 
@@ -47,9 +48,9 @@ spring:
       client:
         registration:
           facebook:
-            client-id: 1481693873036237
-            client-secret: 78eb4a354798a63dfcd3b78c2e541dc2
-            redirect-uri: "${FACEBOOK_REDIRECT_URI:https://localhost:3000/auth/social/callback/facebook}"
+            client-id: 832260309241866
+            client-secret: ca4c07eb8ab9836691880dc5dc8ffaf5
+            redirect-uri: "${FACEBOOK_REDIRECT_URI:http://localhost:3000/auth/social/callback/facebook}"
             auth-uri: https://www.facebook.com/v21.0/dialog/oauth
             token-uri: https://graph.facebook.com/oauth/access_token
             user-info-uri: https://graph.facebook.com/me?fields=id,name,email,picture.type(large)
@@ -76,18 +77,7 @@ jwt:
 admin:
   email: admin@admin.com
   password: Admin123
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://admin:admin123@localhost:8761/eureka
-    register-with-eureka: true
-    fetch-registry: true
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
 server:
-  port: 8082
+  port: 8081
+  servlet:
+      context-path: /iam
