@@ -13,7 +13,6 @@ UserRequest {
     @NotBlank
     @Column(nullable = false, unique = true, length = 100)
     private String email;
-
     private String password;
     private String sub;
     @Pattern(regexp = "^[\\p{L} ]+$", message = "Full name must contain only letters")

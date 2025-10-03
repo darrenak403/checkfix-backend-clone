@@ -78,6 +78,6 @@ admin:
   email: admin@admin.com
   password: Admin123
 server:
-  port: 8081
+  port: 8080
   servlet:
       context-path: /iam
