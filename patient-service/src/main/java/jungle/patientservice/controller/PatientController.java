@@ -55,6 +55,18 @@ public class PatientController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<RestResponse<List<PatientResponse>>> getMyProfiles() {
+        List<PatientResponse> res = patientService.getCurrentPatient();
+        RestResponse<List<PatientResponse>> response = RestResponse.<List<PatientResponse>>builder()
+                .statusCode(200)
+                .message("Patient profile retrieved successfully")
+                .data(res)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
     @PatchMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR')")
     public ResponseEntity<RestResponse<PatientResponse>> updatePatient(@PathVariable Long id, @Valid @RequestBody PatientRequest request) {

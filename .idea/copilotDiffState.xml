@@ -129,15 +129,6 @@
             </PendingDiffInfo>
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/patient-service/src/main/resources/application.yml">
-          <value>
-            <PendingDiffInfo>
-              <option name="filePath" value="$PROJECT_DIR$/patient-service/src/main/resources/application.yml" />
-              <option name="originalContent" value="server:&#10;  port: 8082&#10;&#10;spring:&#10;  application:&#10;    name: patient-service&#10;  datasource:&#10;    url: jdbc:mysql://localhost:3306/lab_manager&#10;    username: root&#10;    password: 123456&#10;    driver-class-name: com.mysql.cj.jdbc.Driver&#10;#Hibernate&#10;  jpa:&#10;    hibernate:&#10;      ddl-auto: update&#10;    show-sql: true&#10;    properties:&#10;      hibernate:&#10;        dialect: org.hibernate.dialect.MySQL8Dialect&#10;" />
-              <option name="updatedContent" value="server:&#10;  port: 8082&#10;&#10;spring:&#10;  application:&#10;    name: patient-service&#10;  datasource:&#10;    url: jdbc:mysql://localhost:3306/lab_manager&#10;    username: root&#10;    password: 123456&#10;    driver-class-name: com.mysql.cj.jdbc.Driver&#10;#Hibernate&#10;  jpa:&#10;    hibernate:&#10;      ddl-auto: update&#10;    show-sql: true&#10;    properties:&#10;      hibernate:&#10;        dialect: org.hibernate.dialect.MySQL8Dialect" />
-            </PendingDiffInfo>
-          </value>
-        </entry>
       </map>
     </option>
   </component>
