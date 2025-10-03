@@ -1,6 +1,7 @@
 app:
   prefix: /v1/api
-
+server:
+  port: 6789
 spring:
   application:
     name: api-gateway
@@ -19,6 +20,38 @@ spring:
               - Path=${app.prefix}/patient/**
             filters:
               - StripPrefix=2
+          #swagger
+          - id: iam-openapi
+            uri: http://localhost:8081
+            predicates:
+              - Path=/iam/v3/api-docs
+            filters:
+              - name: ModifyResponseBody
+                args:
+                  inClass: java.lang.String
+                  outClass: java.lang.String
+                  rewriteFunction: "#{@swaggerRewrite}"
 
-server:
-  port: 6789
+          - id: patient-openapi
+            uri: http://localhost:8082
+            predicates:
+              - Path=/patient/v3/api-docs
+            filters:
+              - StripPrefix=1
+              - name: ModifyResponseBody
+                args:
+                  inClass: java.lang.String
+                  outClass: java.lang.String
+                  rewriteFunction: "#{@swaggerRewrite}"
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: IAM Service
+        url: /iam/v3/api-docs
+      - name: Patient Service
+        url: /patient/v3/api-docs
+  api-docs:
+    enabled: true
+
+

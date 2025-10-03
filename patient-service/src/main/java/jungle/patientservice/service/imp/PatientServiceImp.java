@@ -7,6 +7,9 @@ import jungle.patientservice.mapper.PatientMapper;
 import jungle.patientservice.repo.PatientRepo;
 import jungle.patientservice.service.PatientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -92,5 +95,18 @@ public class PatientServiceImp implements PatientService {
         return patientMapper.toPatientResponse(patient);
     }
 
+    @Override
+    public List<PatientResponse> getCurrentPatient() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt principal = (Jwt) authentication.getPrincipal();
+        Long userId = principal.getClaim("userId");
+        List<Patient> patients = patientRepo.findAllByUserIdAndDeletedFalse(userId);
+        if (patients.isEmpty()) {
+            throw new IllegalArgumentException("No patient records found for userId: " + userId);
+        }
+        return patients.stream()
+                .map(patientMapper::toPatientResponse)
+                .toList();
+    }
 
 }
