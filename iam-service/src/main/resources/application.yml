@@ -73,6 +73,7 @@ spring:
 jwt:
   secret: nXT5iZ/lPUY/9T4pgt3zqCJkezyP0if70mQbfJlz1k8=
   expiration: 86400
+  refreshable-duration: 604800
 
 admin:
   email: admin@admin.com
