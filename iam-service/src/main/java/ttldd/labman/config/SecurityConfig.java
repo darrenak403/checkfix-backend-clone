@@ -34,6 +34,7 @@ public class SecurityConfig {
     // ⚡ Whitelist cho API public
     private static final String[] WHITE_LIST = {
             "/auth/**",
+            "/api/auth/**",
             "/api/public/**",
             "/swagger-ui/**",
             "/v3/api-docs/**",
