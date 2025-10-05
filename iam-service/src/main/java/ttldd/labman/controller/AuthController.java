@@ -5,9 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ttldd.labman.dto.request.IntrospectRequest;
 import ttldd.labman.dto.response.AuthResponse;
 import ttldd.labman.dto.request.UserRequest;
 import ttldd.labman.dto.response.BaseResponse;
+import ttldd.labman.dto.response.IntrospectResponse;
+import ttldd.labman.dto.response.RestResponse;
+import ttldd.labman.service.AuthService;
 import ttldd.labman.service.UserService;
 
 import java.util.Map;
@@ -24,6 +28,8 @@ public class AuthController {
 
 
     private final UserService userService;
+
+    private final AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerAccount(@Valid @RequestBody UserRequest userDTO) {
@@ -95,4 +101,15 @@ public class AuthController {
     }
 
 
+    @PostMapping("/introspect")
+    public ResponseEntity<RestResponse<IntrospectResponse>> authenticate(@RequestBody IntrospectRequest request) {
+        var result = authService.introspect(request);
+        return ResponseEntity.ok(
+                RestResponse.<IntrospectResponse>builder()
+                        .statusCode(200)
+                        .message("Introspect token successfully")
+                        .data(result)
+                        .build()
+        );
+    }
 }
