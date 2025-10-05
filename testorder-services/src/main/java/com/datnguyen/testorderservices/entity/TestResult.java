@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table (name = "test_results")
@@ -40,4 +41,7 @@ public class TestResult {
 
         if (getOrder().getCreatedAt() == null) createdAt = LocalDateTime.now();
     }
+
+    @OneToMany(mappedBy = "testResult", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 }
