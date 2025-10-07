@@ -3,12 +3,20 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
+<<<<<<< HEAD
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
       </profile>
       <profile name="Annotation profile for patient-service" enabled="true">
+=======
+<<<<<<< HEAD
+      <profile name="Annotation profile for BE" enabled="true">
+=======
+      <profile name="Annotation profile for testorder-services" enabled="true">
+>>>>>>> main
+>>>>>>> d70b9c515b2af4e3772c591e33e55a6bffc80211
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -17,8 +25,16 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
         </processorPath>
-        <module name="iam-service" />
-        <module name="patient-service" />
+        <module name="testorder-services" />
+      </profile>
+      <profile name="Annotation profile for testorder-services" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.40/lombok-1.18.40.jar" />
+        </processorPath>
+        <module name="testorder-services" />
       </profile>
       <profile name="Annotation profile for warehouse-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -31,16 +47,10 @@
         <module name="warehouse-service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="api-gataway" target="21" />
-      <module name="discovery-server" target="21" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="api-gataway" options="-parameters" />
       <module name="api-gateway" options="-parameters" />
-      <module name="discovery-server" options="-parameters" />
       <module name="iam-service" options="-parameters" />
       <module name="patient-service" options="-parameters" />
       <module name="testorder-services" options="-parameters" />
