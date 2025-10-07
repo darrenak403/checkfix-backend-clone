@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TestResultRepository extends JpaRepository<TestResult, Long> {
-//    List<TestResult> findByOrderId(Long orderId);
+    List<TestResult> findByOrderId(Long orderId);
     Optional<TestResult> findById(Long orderId);
 }

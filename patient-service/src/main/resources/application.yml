@@ -5,7 +5,7 @@ spring:
   application:
     name: patient-service
   datasource:
-    url: jdbc:mysql://localhost:3306/Patient_Service
+    url: jdbc:mysql://localhost:3306/lab_manager
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver

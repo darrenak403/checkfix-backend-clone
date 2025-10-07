@@ -12,9 +12,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 public interface PatientClient {
     @GetMapping("/patient/{id}")
-<<<<<<< HEAD
     RestResponse<PatientDTO> getById(@PathVariable Long id);
-=======
-    RestResponse<PatientDTO> getById(@PathVariable("id") Long id);
->>>>>>> main
 }

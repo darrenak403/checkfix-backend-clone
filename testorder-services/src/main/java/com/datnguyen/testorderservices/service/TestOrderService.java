@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 //package com.datnguyen.testorderservices.service;
 //
 //import com.datnguyen.testorderservices.client.PatientClient;
@@ -75,7 +75,7 @@
 //
 //        return saved;
 //    }
-=======
+
 package com.datnguyen.testorderservices.service;
 
 import com.datnguyen.testorderservices.client.PatientClient;
@@ -169,7 +169,6 @@ public class TestOrderService {
 
         return response;
     }
->>>>>>> main
 
 
       //Xem danh sách phiếu (có filter status)
@@ -243,7 +242,7 @@ public class TestOrderService {
         }
 
         // 5) Luôn trả comments
-        dto.setComments(commentRepo.findByOrderIdOrderByCreatedAtAsc(o.getId()));
+//        dto.setComments(commentRepo.findByOrderIdOrderByCreatedAtAsc(o.getId()));
 
         return dto;
     }
@@ -300,7 +299,6 @@ public class TestOrderService {
 
     // Helper: ghi audit
 
-<<<<<<< HEAD
 //    @Transactional(readOnly = true)
 //    public Page<TestOrderListItem> list(OrderStatus status, Pageable pageable) {
 //        // 1) Lấy danh sách phiếu từ DB
@@ -448,7 +446,6 @@ public class TestOrderService {
 //        catch (Exception e) { return "\"<json-error>\""; }
 //    }
 //}
-=======
     private void logAudit(Long orderId, String action, String detail, Long operatorUserId) {
         auditRepo.save(HistoryOrderAudit.builder()
                 .orderId(orderId)
@@ -464,4 +461,3 @@ public class TestOrderService {
         catch (Exception e) { return "\"<json-error>\""; }
     }
 }
->>>>>>> main
