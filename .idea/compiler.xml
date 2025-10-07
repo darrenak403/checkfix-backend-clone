@@ -22,6 +22,7 @@
       <module name="iam-service" options="-parameters" />
       <module name="patient-service" options="-parameters" />
       <module name="testorder-services" options="-parameters" />
+      <module name="warehouse-service" options="-parameters" />
     </option>
   </component>
 </project>

@@ -40,4 +40,6 @@ public class ExceptionHandlerApi {
         body.put("message", message);
         return ResponseEntity.status(status).body(body);
     }
+
+
 }
