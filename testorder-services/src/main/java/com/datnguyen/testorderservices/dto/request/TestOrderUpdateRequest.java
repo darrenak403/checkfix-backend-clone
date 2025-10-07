@@ -2,15 +2,19 @@ package com.datnguyen.testorderservices.dto.request;
 
 import com.datnguyen.testorderservices.entity.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 public class TestOrderUpdateRequest {
-    private OrderStatus status;
-    private Long runByUserId;
+    private String fullName;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate yob;
+    private String gender;
+    private String address;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime runAt;
+    @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b", message = "Phone invalid!!" )
+    private String phone;
 }
