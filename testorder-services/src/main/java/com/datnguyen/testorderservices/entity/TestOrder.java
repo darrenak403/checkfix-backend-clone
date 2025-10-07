@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table (name = "test_orders")
@@ -61,5 +62,6 @@ public class TestOrder {
         if (status == null) status = OrderStatus.PENDING;
     }
 
-
+    @OneToMany(mappedBy = "testOrder", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 }
