@@ -3,10 +3,9 @@ package ttldd.labman.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ttldd.labman.dto.response.BaseResponse;
+import ttldd.labman.dto.response.RestResponse;
 import ttldd.labman.dto.response.UserResponse;
 import ttldd.labman.service.UserService;
 
@@ -26,6 +25,18 @@ public class UserController {
         response.setStatus(200);
         response.setData(users);
         response.setMessage("Fetched all users successfully");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR')  or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> getUser(@PathVariable Long id) {
+        UserResponse user = userService.getUserById(id);
+        RestResponse<UserResponse> response = RestResponse.<UserResponse>builder()
+                .statusCode(200)
+                .message("Fetched user successfully")
+                .data(user)
+                .build();
         return ResponseEntity.ok(response);
     }
 }

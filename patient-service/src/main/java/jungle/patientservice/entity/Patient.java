@@ -19,6 +19,8 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String patientCode;
+
     private String fullName;
 
     private LocalDate yob;
@@ -38,6 +40,8 @@ public class Patient {
     private String instrumentUsed;
 
     private Long userId;
+
+    private Long createdBy;
 
     private boolean deleted = false;
 

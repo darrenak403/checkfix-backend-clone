@@ -2,6 +2,7 @@ package ttldd.labman.dto.response;
 
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -11,7 +12,7 @@ public class UserResponse {
     private Long id;
     private String role;
     private String address;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
     private String gender;
     private String phone;
 }

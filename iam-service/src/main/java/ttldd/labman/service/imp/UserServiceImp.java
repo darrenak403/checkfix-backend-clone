@@ -398,6 +398,12 @@ public  class UserServiceImp implements UserService {
 
     }
 
+    @Override
+    public UserResponse getUserById(Long id) {
+        User user = userRepo.findById(id).orElseThrow(() -> new GetException("User not found with id: " + id));
+        return convertUserToUserResponse(user);
+    }
+
     public String generateAccessToken(User user) {
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -426,6 +432,7 @@ public  class UserServiceImp implements UserService {
         userResponse.setAddress(user.getAddress());
         userResponse.setGender(user.getGender());
         userResponse.setPhone(user.getPhoneNumber());
+        userResponse.setDateOfBirth(user.getDateOfBirth());
         return userResponse;
     }
 }

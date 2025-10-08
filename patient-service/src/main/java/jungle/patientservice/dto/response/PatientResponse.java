@@ -17,6 +17,8 @@ public class PatientResponse {
 
     private Long userId;
 
+    private String patientCode;
+
     private String fullName;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
@@ -36,5 +38,7 @@ public class PatientResponse {
     private String lastTestType;
 
     private String instrumentUsed;
+
+    private Long createdBy;
 }
 

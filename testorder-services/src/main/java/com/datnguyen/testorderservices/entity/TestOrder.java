@@ -36,6 +36,9 @@ public class TestOrder {
 
     private LocalDate yob;
 
+
+    private Integer age;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private OrderStatus status;
@@ -52,9 +55,6 @@ public class TestOrder {
 
 
     private Boolean deleted = false;
-    private Long deletedByUserId;
-    private LocalDateTime deletedAt;
-
 
     @PrePersist
     void prePersist() {

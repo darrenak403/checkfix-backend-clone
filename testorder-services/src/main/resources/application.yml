@@ -3,7 +3,7 @@ spring:
     name: testorder-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/TestOrder_Service
+    url: jdbc:mysql://localhost:3306/testorder
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -20,9 +20,6 @@ server:
 app:
   patient-service:
     url: http://localhost:8082
-#clients:
-#    patient: http://localhost:8082
-#    iam: http://localhost:8081
 
 springdoc:
   swagger-ui.enabled: true

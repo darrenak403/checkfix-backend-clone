@@ -5,76 +5,103 @@ import com.datnguyen.testorderservices.dto.request.TestOrderUpdateRequest;
 import com.datnguyen.testorderservices.dto.response.RestResponse;
 import com.datnguyen.testorderservices.dto.response.TestOrderCreationResponse;
 import com.datnguyen.testorderservices.dto.response.TestOrderDetail;
-import com.datnguyen.testorderservices.dto.response.TestOrderListItem;
 import com.datnguyen.testorderservices.entity.OrderStatus;
-import com.datnguyen.testorderservices.entity.TestOrder;
 import com.datnguyen.testorderservices.service.TestOrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
-import org.springdoc.core.annotations.ParameterObject;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
+@Slf4j
 public class TestOrderController {
 
     private final TestOrderService service;
-
-
 
     @GetMapping
     public ResponseEntity<RestResponse<?>> list(
             @RequestParam(required = false) OrderStatus status,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
-) {
-        int pageIndex = page > 0 ? page - 1 : 0;
-        Pageable pageable = PageRequest.of(pageIndex, size);
-        Page<TestOrderCreationResponse> testOrderPage = service.list(status, pageable);
-        Map<String, Object> response = new HashMap<>();
-        response.put("testOrders", testOrderPage.getContent());
-        response.put("currentPage", testOrderPage.getNumber() + 1);
-        response.put("totalItems", testOrderPage.getTotalElements());
-        response.put("totalPages", testOrderPage.getTotalPages());
-        RestResponse<?> restResponse = RestResponse.success(response);
-        return ResponseEntity.ok(restResponse);
+    ) {
+        Page<TestOrderCreationResponse> testOrderPage = service.list(status, PageRequest.of(Math.max(0, page - 1), size));
+
+        return ResponseEntity.ok(RestResponse.success(Map.of(
+                "testOrders", testOrderPage.getContent(),
+                "currentPage", testOrderPage.getNumber() + 1,
+                "totalItems", testOrderPage.getTotalElements(),
+                "totalPages", testOrderPage.getTotalPages()
+        )));
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<TestOrderDetail> detail(@PathVariable Long id) {
         return ResponseEntity.ok(service.detail(id));
     }
 
+
     @PostMapping
-    public ResponseEntity<RestResponse<TestOrderCreationResponse>> create(@Valid @RequestBody TestOrderCreateRequest req) {
-        TestOrderCreationResponse response = service.create(req);
-        RestResponse<TestOrderCreationResponse> restResponse = RestResponse.success(response);
-        return ResponseEntity.ok(restResponse);
+    public ResponseEntity<RestResponse<TestOrderCreationResponse>> create(
+            @Valid @RequestBody TestOrderCreateRequest req
+    ) {
+        Long userId = getCurrentUserId(); // lấy userId từ JWT
+        log.debug("Creating test order by userId={}", userId);
+
+        // truyền userId vào service để tạo phiếu
+        TestOrderCreationResponse response = service.create(req, userId);
+        return ResponseEntity.ok(RestResponse.success(response));
     }
+
 
     @PatchMapping("/{id}")
-    public ResponseEntity<RestResponse<TestOrderCreationResponse>> update(@PathVariable Long id,
-                                            @Valid @RequestBody TestOrderUpdateRequest req) {
-        TestOrderCreationResponse testOrderCreationResponse = service.update(id, req);
-        RestResponse<TestOrderCreationResponse> restResponse = RestResponse.success(testOrderCreationResponse);
-        return ResponseEntity.ok(restResponse);
+    public ResponseEntity<RestResponse<TestOrderCreationResponse>> update(
+            @PathVariable Long id,
+            @Valid @RequestBody TestOrderUpdateRequest req
+    ) {
+        Long userId = getCurrentUserId();
+        log.debug("Updating test order id={} by userId={}", id, userId);
+
+        TestOrderCreationResponse response = service.update(id, req);
+        return ResponseEntity.ok(RestResponse.success(response));
     }
 
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id,
-                                       @RequestHeader(value = "X-User-Id", required = false) Long operatorUserId) {
-        Long op = (operatorUserId != null) ? operatorUserId : -1L;
-        service.softDelete(id, op);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        Long userId = getCurrentUserId();
+        log.debug("Soft-deleting test order id={} by userId={}", id, userId);
+
+        service.softDelete(id, userId);
+        RestResponse<?> response = RestResponse.builder()
+                .statusCode(200)
+                .message("Soft-deleted successfully")
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+
+    public Long getCurrentUserId() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            var jwt = jwtAuth.getToken();
+            Object idClaim = jwt.getClaim("userId");
+            if (idClaim != null) {
+                return Long.parseLong(idClaim.toString());
+            }
+        }
+        return null;
     }
 }
+

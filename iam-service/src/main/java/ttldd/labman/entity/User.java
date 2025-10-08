@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -42,9 +44,8 @@ public class User {
 
     private String address;
 
-    @Pattern(regexp = "^(0[1-9]|1[0-2])/(0[1-9]|[12]\\d|3[01])/\\d{4}$",
-            message = "Date of birth must be in MM/DD/YYYY format")
-    private String dateOfBirth;
+
+    private LocalDate dateOfBirth;
 
 
     private String password;
