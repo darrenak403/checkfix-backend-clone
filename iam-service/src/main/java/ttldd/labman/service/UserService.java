@@ -16,4 +16,5 @@ public interface UserService {
     AuthResponse loginOrSignup(Map<String, Object> userInfo, String role);
     AuthResponse refreshAccessToken(String refreshToken);
     List<UserResponse>  getAllUser();
+    UserResponse getUserById(Long id);
 }

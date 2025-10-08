@@ -1,4 +1,4 @@
-package ttldd.labman.dto.response;
+package jungle.patientservice.dto.response;
 
 import lombok.Data;
 

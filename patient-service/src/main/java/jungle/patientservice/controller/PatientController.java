@@ -2,6 +2,7 @@ package jungle.patientservice.controller;
 
 import jakarta.validation.Valid;
 import jungle.patientservice.dto.request.PatientRequest;
+import jungle.patientservice.dto.request.PatientUpdateRequest;
 import jungle.patientservice.dto.response.PatientResponse;
 import jungle.patientservice.dto.response.RestResponse;
 import jungle.patientservice.service.PatientService;
@@ -69,7 +70,7 @@ public class PatientController {
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR')")
-    public ResponseEntity<RestResponse<PatientResponse>> updatePatient(@PathVariable Long id, @Valid @RequestBody PatientRequest request) {
+    public ResponseEntity<RestResponse<PatientResponse>> updatePatient(@PathVariable Long id, @Valid @RequestBody PatientUpdateRequest request) {
         PatientResponse res = patientService.updatePatient(id, request);
         RestResponse<PatientResponse> response = RestResponse.<PatientResponse>builder()
                 .statusCode(200)
