@@ -1,12 +1,18 @@
 package jungle.patientservice.service.imp;
 
 import jungle.patientservice.dto.request.PatientRequest;
+import jungle.patientservice.dto.request.PatientUpdateRequest;
 import jungle.patientservice.dto.response.PatientResponse;
+import jungle.patientservice.dto.response.RestResponse;
+import jungle.patientservice.dto.response.UserResponse;
 import jungle.patientservice.entity.Patient;
 import jungle.patientservice.mapper.PatientMapper;
 import jungle.patientservice.repo.PatientRepo;
+import jungle.patientservice.repo.httpClient.UserClient;
 import jungle.patientservice.service.PatientService;
+import jungle.patientservice.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -14,23 +20,50 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PatientServiceImp implements PatientService {
 
     private final PatientRepo patientRepo;
 
     private final PatientMapper patientMapper;
 
+    private final JwtUtils jwtUtils;
+
+    private final UserClient userClient;
+
     @Override
     public PatientResponse createPatient(PatientRequest patientDTO) {
-        if (patientRepo.existsByEmail(patientDTO.getEmail())) {
-            throw new IllegalArgumentException("Email already exists: " + patientDTO.getEmail());
+        RestResponse<UserResponse> user = userClient.getUser(patientDTO.getUserId());
+        if (user.getData() == null) {
+            throw new IllegalArgumentException("UserId not found: " + patientDTO.getUserId());
         }
         Patient patient = patientMapper.toPatientEntity(patientDTO);
+        String patientCode = patientRepo.findFirstByUserIdAndDeletedFalse(patient.getUserId())
+                .map(Patient::getPatientCode)
+                .filter(StringUtils::hasText)
+                .orElseGet(this::generatePatientCode);
+
+        patient.setPatientCode(patientCode);
+        patient.setFullName(user.getData().getFullName());
+        patient.setEmail(user.getData().getEmail());
+        patient.setPhone(user.getData().getPhone());
+        patient.setGender(user.getData().getGender());
+        patient.setAddress(user.getData().getAddress());
+        patient.setYob(user.getData().getDateOfBirth());
+        patient.setCreatedBy(jwtUtils.getCurrentUserId());
+
         patientRepo.save(patient);
         return patientMapper.toPatientResponse(patient);
+    }
+
+    private String generatePatientCode(){
+        String shortUUID = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        return "PAT-2025-" + shortUUID;
     }
 
     @Override
@@ -41,7 +74,7 @@ public class PatientServiceImp implements PatientService {
 
 
     @Override
-    public PatientResponse updatePatient(Long id, PatientRequest patientDTO) {
+    public PatientResponse updatePatient(Long id, PatientUpdateRequest patientDTO) {
         Patient patient = patientRepo.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
 
