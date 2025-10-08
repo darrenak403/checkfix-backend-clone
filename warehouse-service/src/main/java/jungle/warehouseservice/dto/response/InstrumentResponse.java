@@ -1,0 +1,25 @@
+package jungle.warehouseservice.dto.response;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotBlank;
+import jungle.warehouseservice.entity.InstrumentStatus;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDateTime;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class InstrumentResponse {
+
+    String name;
+    String serialNumber;
+    InstrumentStatus status;
+    Long createdBy;
+
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    LocalDateTime createdAt;
+}
