@@ -1,7 +1,7 @@
 package com.datnguyen.testorderservices.dto.response;
 
 import com.datnguyen.testorderservices.entity.OrderStatus;
-import jakarta.persistence.Column;
+
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
@@ -30,8 +30,7 @@ public class TestOrderCreationResponse {
     private String gender;
 
     private LocalDate yob;
-
-    private int age;
+    private Integer  age;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;

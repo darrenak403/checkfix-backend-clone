@@ -8,6 +8,5 @@ public class TestOrderCreateRequest {
     @NotNull(message = "patientId is required")
     private Long patientId;
 
-    @NotNull(message = "createdByUserId is required")
-    private Long createdByUserId;
+
 }

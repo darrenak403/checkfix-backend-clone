@@ -2,8 +2,8 @@ package com.datnguyen.testorderservices.dto.response;
 
 import com.datnguyen.testorderservices.entity.Comment;
 import com.datnguyen.testorderservices.entity.OrderStatus;
-import com.datnguyen.testorderservices.entity.TestResult;
 import lombok.*;
+import org.bouncycastle.util.test.TestResult;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,7 +27,6 @@ public class TestOrderDetail {
     private Long createdByUserId;
     private Long runByUserId;
     private LocalDateTime runAt;
-
     private List<TestResult> results;
     private List<Comment> comments;
 }
