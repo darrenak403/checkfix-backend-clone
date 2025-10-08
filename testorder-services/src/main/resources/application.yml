@@ -3,7 +3,7 @@ spring:
     name: testorder-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/testorder
+    url: jdbc:mysql://localhost:3306/TestOrder_Service
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -18,8 +18,8 @@ server:
   port: 8083
 
 app:
-  services:
-    patient: http://localhost:8082
+  patient-service:
+    url: http://localhost:8082
 #clients:
 #    patient: http://localhost:8082
 #    iam: http://localhost:8081

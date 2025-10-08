@@ -4,7 +4,9 @@ package com.datnguyen.testorderservices.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table (name = "test_orders")
@@ -22,13 +24,23 @@ public class TestOrder {
     @Column(nullable = false)
     private Long patientId;
 
+    private String patientName;
+
+    private String email;
+
+    private String address;
+
+    private String phone;
+
+    private String gender;
+
+    private LocalDate yob;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private OrderStatus status;
 
     private Long createdByUserId;
-    private Long runByUserId;
 
     // time tạo phiếu xét nghiệm
     @Column(nullable = false)
@@ -50,5 +62,6 @@ public class TestOrder {
         if (status == null) status = OrderStatus.PENDING;
     }
 
-
+    @OneToMany(mappedBy = "testOrder", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 }
