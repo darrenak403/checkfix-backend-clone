@@ -110,6 +110,7 @@ public class PatientServiceImp implements PatientService {
         if (StringUtils.hasText(patientDTO.getInstrumentUsed())) {
             patient.setInstrumentUsed(patientDTO.getInstrumentUsed());
         }
+        patient.setModifiedBy(jwtUtils.getFullName());
         patientRepo.save(patient);
         return patientMapper.toPatientResponse(patient);
     }
