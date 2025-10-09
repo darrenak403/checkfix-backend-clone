@@ -56,11 +56,8 @@ public class TestOrderController {
     public ResponseEntity<RestResponse<TestOrderCreationResponse>> create(
             @Valid @RequestBody TestOrderCreateRequest req
     ) {
-        Long userId = getCurrentUserId(); // lấy userId từ JWT
-        log.debug("Creating test order by userId={}", userId);
-
         // truyền userId vào service để tạo phiếu
-        TestOrderCreationResponse response = service.create(req, userId);
+        TestOrderCreationResponse response = service.create(req);
         return ResponseEntity.ok(RestResponse.success(response));
     }
 

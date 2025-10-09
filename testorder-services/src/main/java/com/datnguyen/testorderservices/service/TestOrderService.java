@@ -2,14 +2,17 @@ package com.datnguyen.testorderservices.service;
 
 import com.datnguyen.testorderservices.client.PatientClient;
 import com.datnguyen.testorderservices.client.PatientDTO;
+import com.datnguyen.testorderservices.client.UserClient;
 import com.datnguyen.testorderservices.dto.request.TestOrderCreateRequest;
 import com.datnguyen.testorderservices.dto.request.TestOrderUpdateRequest;
 import com.datnguyen.testorderservices.dto.response.RestResponse;
 import com.datnguyen.testorderservices.dto.response.TestOrderCreationResponse;
 import com.datnguyen.testorderservices.dto.response.TestOrderDetail;
+import com.datnguyen.testorderservices.dto.response.UserResponse;
 import com.datnguyen.testorderservices.entity.*;
 import com.datnguyen.testorderservices.mapper.TestOrderMapper;
 import com.datnguyen.testorderservices.repository.*;
+import com.datnguyen.testorderservices.util.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,15 +37,17 @@ public class TestOrderService {
     private final PatientClient patientClient;
     private final TestOrderMapper mapper;
     private final ObjectMapper om = new ObjectMapper().findAndRegisterModules();
+    private final JwtUtils jwtUtils;
+    private final UserClient userClient;
 
     private static Integer ageFrom(LocalDate dob) {
         return (dob == null) ? null : Period.between(dob, LocalDate.now()).getYears();
     }
 
     @Transactional
-    public TestOrderCreationResponse create(TestOrderCreateRequest req, Long createdByUserId) {
+    public TestOrderCreationResponse create(TestOrderCreateRequest req) {
         var patientResponse = getPatient(req.getPatientId());
-
+        RestResponse<UserResponse> user = userClient.getUser(req.getRunBy());
         TestOrder order = TestOrder.builder()
                 .patientId(req.getPatientId())
                 .patientName(patientResponse.getFullName())
@@ -52,13 +57,15 @@ public class TestOrderService {
                 .yob(patientResponse.getYob())
                 .gender(patientResponse.getGender())
                 .status(OrderStatus.PENDING)
-                .createdByUserId(createdByUserId)
+                .createdBy(jwtUtils.getFullName())
+                .runBy(user.getData().getFullName())
+                .priority(req.getPriority())
                 .age(ageFrom(patientResponse.getYob()))
                 .deleted(false)
                 .build();
 
         TestOrder saved = orderRepo.save(order);
-        logAudit(saved.getId(), "CREATE", safeJson(req), createdByUserId);
+        logAudit(saved.getId(), "CREATE", safeJson(req), jwtUtils.getCurrentUserId());
         return mapper.toTestOrderCreationResponse(saved);
     }
 
@@ -96,7 +103,6 @@ public class TestOrderService {
                 .status(o.getStatus())
                 .createdAt(o.getCreatedAt())
                 .patientId(o.getPatientId())
-                .createdByUserId(o.getCreatedByUserId())
                 .runAt(o.getRunAt())
                 .comments(commentRepo.findByUserId(o.getId()))
                 .build();
@@ -153,6 +159,8 @@ public class TestOrderService {
         }
     }
 
+
+
     private void logAudit(Long orderId, String action, String detail, Long operatorUserId) {
         auditRepo.save(HistoryOrderAudit.builder()
                 .orderId(orderId)
@@ -161,6 +169,9 @@ public class TestOrderService {
                 .operatorUserId(operatorUserId)
                 .build());
     }
+
+
+    // 🛠️ Helper: convert object sang JSON an toàn
 
     private String safeJson(Object obj) {
         try {
