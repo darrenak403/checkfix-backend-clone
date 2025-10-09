@@ -2,6 +2,7 @@ package com.datnguyen.testorderservices.dto.response;
 
 import com.datnguyen.testorderservices.entity.Comment;
 import com.datnguyen.testorderservices.entity.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.bouncycastle.util.test.TestResult;
 
@@ -13,20 +14,22 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TestOrderDetail {
-    private Long id;
-    private OrderStatus status;
-    private LocalDateTime createdAt;
+public class TestOrderDetailResponse {
 
     private Long patientId;
     private String patientName;
-    private String patientGender;
-    private String patientEmail;
-    private Integer patientAge;
+    private String gender;
+    private String email;
+    private Integer age;
 
-    private Long createdByUserId;
-    private Long runByUserId;
+    private String createdBy;
+    private String runBy;
     private LocalDateTime runAt;
+    private OrderStatus status;
+
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime createdAt;
     private List<TestResult> results;
     private List<Comment> comments;
+
 }
