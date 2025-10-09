@@ -45,7 +45,7 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR')")
     public ResponseEntity<RestResponse<PatientResponse>> getPatient(@PathVariable Long id) {
         PatientResponse res = patientService.getPatient(id);
         RestResponse<PatientResponse> response = RestResponse.<PatientResponse>builder()
