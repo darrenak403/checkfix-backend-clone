@@ -23,6 +23,9 @@ public class SwaggerConfig implements RewriteFunction<String, String> {
             } else if (path.contains("/patient/")) {
                 ((com.fasterxml.jackson.databind.node.ObjectNode) root).putArray("servers")
                         .addObject().put("url", "http://localhost:6789/v1/api");
+            }else if (path.contains("/testOrder/")) {
+                ((com.fasterxml.jackson.databind.node.ObjectNode) root).putArray("servers")
+                        .addObject().put("url", "http://localhost:6789/v1/api");
             }
             return Mono.just(objectMapper.writeValueAsString(root));
         } catch (Exception e) {
