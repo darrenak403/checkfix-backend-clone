@@ -5,9 +5,10 @@ import com.datnguyen.testorderservices.client.PatientDTO;
 import com.datnguyen.testorderservices.client.UserClient;
 import com.datnguyen.testorderservices.dto.request.TestOrderCreateRequest;
 import com.datnguyen.testorderservices.dto.request.TestOrderUpdateRequest;
+import com.datnguyen.testorderservices.dto.request.TestOrderUpdateStatusRequest;
 import com.datnguyen.testorderservices.dto.response.RestResponse;
 import com.datnguyen.testorderservices.dto.response.TestOrderCreationResponse;
-import com.datnguyen.testorderservices.dto.response.TestOrderDetail;
+import com.datnguyen.testorderservices.dto.response.TestOrderDetailResponse;
 import com.datnguyen.testorderservices.dto.response.UserResponse;
 import com.datnguyen.testorderservices.entity.*;
 import com.datnguyen.testorderservices.mapper.TestOrderMapper;
@@ -75,47 +76,45 @@ public class TestOrderService {
                 ? orderRepo.findByDeletedFalse(pageable)
                 : orderRepo.findByDeletedFalseAndStatus(status, pageable);
 
-        return page.map(o -> {
-            var dto = mapper.toTestOrderCreationResponse(o);
-            try {
-                var patient = getPatient(o.getPatientId());
-                dto.setPatientName(patient.getFullName());
-                dto.setGender(patient.getGender());
-                dto.setPhone(patient.getPhone());
-                dto.setYob(patient.getYob());
-                dto.setStatus(o.getStatus() == null ? OrderStatus.PENDING : o.getStatus());
-                dto.setCreatedAt(o.getCreatedAt());
-            } catch (Exception e) {
-                log.warn("Không lấy được dữ liệu bệnh nhân ID={}", o.getPatientId());
-            }
-            return dto;
-        });
+        return page.map(mapper::toTestOrderCreationResponse);
     }
 
     @Transactional(readOnly = true)
-    public TestOrderDetail detail(Long id) {
+    public TestOrderDetailResponse detail(Long id) {
         TestOrder o = orderRepo.findById(id)
                 .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
                 .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại"));
 
-        var dto = TestOrderDetail.builder()
-                .id(o.getId())
-                .status(o.getStatus())
-                .createdAt(o.getCreatedAt())
-                .patientId(o.getPatientId())
-                .runAt(o.getRunAt())
-                .comments(commentRepo.findByUserId(o.getId()))
-                .build();
+//        var dto = TestOrderDetailResponse.builder()
+//                .id(o.getId())
+//                .status(o.getStatus())
+//                .createdAt(o.getCreatedAt())
+//                .patientId(o.getPatientId())
+//                .runAt(o.getRunAt())
+//                .comments(commentRepo.findByUserId(o.getId()))
+//                .build();
+//
+//        try {
+//            var p = getPatient(o.getPatientId());
+//            dto.setPatientName(p.getFullName());
+//            dto.setPatientGender(p.getGender());
+//            dto.setPatientEmail(p.getEmail());
+//            dto.setPatientAge(ageFrom(p.getYob()));
+//        } catch (Exception ignored) {}
 
-        try {
-            var p = getPatient(o.getPatientId());
-            dto.setPatientName(p.getFullName());
-            dto.setPatientGender(p.getGender());
-            dto.setPatientEmail(p.getEmail());
-            dto.setPatientAge(ageFrom(p.getYob()));
-        } catch (Exception ignored) {}
+        return mapper.toTestOrderDetailResponse(o);
+    }
 
-        return dto;
+    @Transactional
+    public TestOrderCreationResponse updateStatus(Long id, TestOrderUpdateStatusRequest req) {
+        TestOrder o = orderRepo.findById(id)
+                .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
+                .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại"));
+
+        if (req.getStatus() != null) o.setStatus(req.getStatus());
+        logAudit(o.getId(), "UPDATE", safeJson(o), jwtUtils.getCurrentUserId());
+        orderRepo.save(o);
+        return mapper.toTestOrderCreationResponse(o);
     }
 
     @Transactional
@@ -128,16 +127,15 @@ public class TestOrderService {
         if (StringUtils.hasText(req.getPhone())) o.setPhone(req.getPhone());
         if (StringUtils.hasText(req.getAddress())) o.setAddress(req.getAddress());
         if (req.getYob() != null) o.setYob(req.getYob());
-
+        if (StringUtils.hasText(req.getGender())) o.setGender(req.getGender());
+        o.setAge(ageFrom(req.getYob()));
+        logAudit(o.getId(), "UPDATE", safeJson(o), jwtUtils.getCurrentUserId());
         orderRepo.save(o);
         return mapper.toTestOrderCreationResponse(o);
-
-
-
     }
 
     @Transactional
-    public void softDelete(Long id, Long operatorUserId) {
+    public void softDelete(Long id) {
         TestOrder o = orderRepo.findById(id)
                 .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
                 .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại hoặc đã xoá"));
@@ -145,7 +143,7 @@ public class TestOrderService {
         o.setDeleted(true);
         orderRepo.save(o);
 
-        logAudit(o.getId(), "DELETE", safeJson(o), operatorUserId);
+        logAudit(o.getId(), "DELETE", safeJson(o), jwtUtils.getCurrentUserId());
     }
 
     private PatientDTO getPatient(Long patientId) {
