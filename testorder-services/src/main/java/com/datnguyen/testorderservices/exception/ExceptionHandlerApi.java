@@ -28,8 +28,9 @@ public class ExceptionHandlerApi {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String,Object>> handleAny(Exception ex) {
-        return error(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error");
+    public ResponseEntity<Map<String,Object>> handleAny(RuntimeException ex) {
+        // Trả về message thực tế của exception thay vì "Unexpected error"
+        return error(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
     private ResponseEntity<Map<String,Object>> error(HttpStatus status, String message) {

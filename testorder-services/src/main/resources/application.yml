@@ -3,7 +3,9 @@ spring:
     name: testorder-service
 
   datasource:
+
     url: jdbc:mysql://localhost:3306/testorder
+
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
