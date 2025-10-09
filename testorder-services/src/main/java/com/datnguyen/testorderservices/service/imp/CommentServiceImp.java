@@ -54,7 +54,7 @@ public class CommentServiceImp implements CommentService {
             // ✅ Kiểm tra user tồn tại bên patient-service
             RestResponse<PatientDTO> patientDTO = patientClient.getById(commentRequest.getUserId());
             if (patientDTO == null) {
-                log.warn("⚠️ Patient with id={} not found", commentRequest.getUserId());
+
                 throw new RuntimeException("Patient not found");
             }
 
@@ -71,28 +71,28 @@ public class CommentServiceImp implements CommentService {
 
             // ✅ Gắn với TestOrder hoặc TestResult
             if (commentRequest.getTestOrderId() != null) {
-                log.debug("🔍 Fetching TestOrder with id={}", commentRequest.getTestOrderId());
+
                 TestOrder order = testOrderRepository.findById(commentRequest.getTestOrderId())
                         .orElseThrow(() -> new IllegalArgumentException("Test Order not found"));
                 comment.setTestOrder(order);
             } else if (commentRequest.getTestResultId() != null) {
-                log.debug("🔍 Fetching TestResult with id={}", commentRequest.getTestResultId());
+
                 TestResult result = testResultRepository.findById(commentRequest.getTestResultId())
                         .orElseThrow(() -> new IllegalArgumentException("Test Result not found"));
                 comment.setTestResult(result);
             } else {
-                log.warn("⚠️ Missing testOrderId/testResultId for comment from userId={}", commentRequest.getUserId());
+
                 throw new IllegalArgumentException("Comment must be attached to either a Test Order or a Test Result.");
             }
 
-            // ✅ Lưu vào DB
+
             Comment saved = commentRepository.save(comment);
             log.info("✅ Comment saved successfully with id={}", saved.getId());
 
             return saved;
 
         } catch (Exception e) {
-            log.error("❌ Error while adding comment: {}", e.getMessage(), e);
+
             throw e; // ném lại để GlobalExceptionHandler hoặc Controller xử lý
         }
     }
@@ -137,12 +137,6 @@ public class CommentServiceImp implements CommentService {
             }
             log.info("pt name-------------->" + patientDTO.getData().getFullName());
 
-            //Cập nhật nội dung mới
-            System.out.println(comment.getUserId());
-            comment.setContent(request.getContent());
-            comment.setUpdatedBy(patientDTO.getData().getFullName());
-            comment.setUpdatedAt(LocalDateTime.now());
-
 
             //ghi vào auditLog
             AuditLogComment auditLogComment = AuditLogComment.builder()
@@ -155,7 +149,17 @@ public class CommentServiceImp implements CommentService {
                     .build();
 
             auditLogRepository.save(auditLogComment);
+
+            //Cập nhật nội dung mới
+
+            comment.setContent(request.getContent());
+            comment.setUpdatedBy(patientDTO.getData().getFullName());
+            comment.setUpdatedAt(LocalDateTime.now());
             commentRepository.save(comment);
+
+
+
+
 
             return CommentUpdateResponse.builder()
                     .id(comment.getId())
@@ -208,6 +212,7 @@ public class CommentServiceImp implements CommentService {
                 .entityType("Comment")
                 .performedBy(patientDTO.getData().getFullName())
                 .reason(commentDeleteRequest.getReason())
+                .performedAt(LocalDateTime.now())
                 .build();
 
     }
