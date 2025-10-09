@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -42,6 +43,8 @@ public class Patient {
     private Long userId;
 
     private String createdBy;
+
+    private LocalDateTime createdAt;
 
     private String modifiedBy;
 
