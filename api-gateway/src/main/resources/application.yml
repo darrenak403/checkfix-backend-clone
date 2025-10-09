@@ -20,6 +20,12 @@ spring:
               - Path=${app.prefix}/patient/**
             filters:
               - StripPrefix=2
+          - id: testOrder-service
+            uri: lb://testorder-service
+            predicates:
+              - Path=${app.prefix}/orders/**, ${app.prefix}/comments/**
+            filters:
+              - StripPrefix=2
           #swagger
           - id: iam-openapi
             uri: http://localhost:8081
@@ -43,6 +49,17 @@ spring:
                   inClass: java.lang.String
                   outClass: java.lang.String
                   rewriteFunction: "#{@swaggerRewrite}"
+          - id: testOrder-openapi
+            uri: http://localhost:8083
+            predicates:
+              - Path=/testOrder/v3/api-docs
+            filters:
+              - StripPrefix=1
+              - name: ModifyResponseBody
+                args:
+                  inClass: java.lang.String
+                  outClass: java.lang.String
+                  rewriteFunction: "#{@swaggerRewrite}"
 
 springdoc:
   swagger-ui:
@@ -51,6 +68,8 @@ springdoc:
         url: /iam/v3/api-docs
       - name: Patient Service
         url: /patient/v3/api-docs
+      - name: TestOrder Service
+        url: /testOrder/v3/api-docs
   api-docs:
     enabled: true
 

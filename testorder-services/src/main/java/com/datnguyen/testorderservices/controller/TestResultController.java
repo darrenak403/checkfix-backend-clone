@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.*;
 //        return ResponseEntity.ok("✅ HL7 results processed & saved for order " + id);
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/orders")
 @RequiredArgsConstructor
 public class TestResultController {
 
