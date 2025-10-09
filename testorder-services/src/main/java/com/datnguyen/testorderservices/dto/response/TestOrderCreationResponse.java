@@ -2,6 +2,7 @@ package com.datnguyen.testorderservices.dto.response;
 
 import com.datnguyen.testorderservices.entity.OrderStatus;
 
+import com.datnguyen.testorderservices.entity.PriorityStatus;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,14 @@ public class TestOrderCreationResponse {
     private Integer  age;
 
     @Enumerated(EnumType.STRING)
+    private PriorityStatus priority;
+
+    private String createdBy;
+
+    private String runBy;
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
 
     private LocalDateTime createdAt;
 }

@@ -1,8 +1,10 @@
 package com.datnguyen.testorderservices.controller;
 
+import com.datnguyen.testorderservices.dto.request.CommentDeleteRequest;
 import com.datnguyen.testorderservices.dto.request.CommentRequest;
 import com.datnguyen.testorderservices.dto.request.CommentUpdateRequest;
 import com.datnguyen.testorderservices.dto.response.BaseResponse;
+import com.datnguyen.testorderservices.dto.response.CommentDeleteResponse;
 import com.datnguyen.testorderservices.dto.response.CommentResponse;
 import com.datnguyen.testorderservices.dto.response.CommentUpdateResponse;
 import com.datnguyen.testorderservices.entity.Comment;
@@ -83,5 +85,22 @@ public class CommentController {
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteComment(@RequestBody CommentDeleteRequest commentRequest ) {
+        BaseResponse baseResponse = new BaseResponse();
+        CommentDeleteResponse comment = commentService.deleteComment(commentRequest);
+        if (comment != null) {
+            baseResponse.setStatus(200);
+            baseResponse.setMessage("Comment deleted successfully");
+            baseResponse.setData(comment);
+            return ResponseEntity.ok(baseResponse);
+        } else {
+            baseResponse.setStatus(400);
+            baseResponse.setMessage("Failed to delete comment");
+            baseResponse.setData(null);
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
     }
 }

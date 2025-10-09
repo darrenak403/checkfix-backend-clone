@@ -36,6 +36,9 @@ public class Comment {
     @Column(name = "updated_by")
     private String updatedBy;
 
+    @Column(name = "status")
+    private String status;
+
     @PrePersist
     void prePersist() {
         if (createdAt == null) {
