@@ -39,6 +39,7 @@ public class PatientResponse {
 
     private String instrumentUsed;
 
-    private Long createdBy;
+    private String createdBy;
+    private String modifiedBy;
 }
 

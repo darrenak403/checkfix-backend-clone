@@ -55,11 +55,12 @@ public class PatientServiceImp implements PatientService {
         patient.setGender(user.getData().getGender());
         patient.setAddress(user.getData().getAddress());
         patient.setYob(user.getData().getDateOfBirth());
-        patient.setCreatedBy(jwtUtils.getCurrentUserId());
+        patient.setCreatedBy(jwtUtils.getFullName());
 
         patientRepo.save(patient);
         return patientMapper.toPatientResponse(patient);
     }
+
 
     private String generatePatientCode(){
         String shortUUID = UUID.randomUUID().toString().substring(0, 8).toUpperCase();

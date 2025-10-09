@@ -1,11 +1,19 @@
 package jungle.patientservice.utils;
 
+import jungle.patientservice.dto.response.RestResponse;
+import jungle.patientservice.dto.response.UserResponse;
+import jungle.patientservice.repo.httpClient.UserClient;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtils {
+
+    private final UserClient userClient;
+
 
     public Long getCurrentUserId() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -18,4 +26,16 @@ public class JwtUtils {
         }
         return null;
     }
+
+    public String getFullName() {
+        Long userId = getCurrentUserId();
+        if (userId != null) {
+            var user = userClient.getUser(userId);
+            if (user != null && user.getData() != null) {
+                return user.getData().getFullName();
+            }
+        }
+        return "Unknown";
+    }
+
 }
