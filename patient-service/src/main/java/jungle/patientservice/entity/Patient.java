@@ -41,7 +41,9 @@ public class Patient {
 
     private Long userId;
 
-    private Long createdBy;
+    private String createdBy;
+
+    private String modifiedBy;
 
     private boolean deleted = false;
 
