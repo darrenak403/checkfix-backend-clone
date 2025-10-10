@@ -19,6 +19,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class TestOrderCreationResponse {
+
+    private Long id;
+
     private Long patientId;
 
     private String patientName;
