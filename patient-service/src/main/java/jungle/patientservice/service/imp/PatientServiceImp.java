@@ -2,6 +2,7 @@ package jungle.patientservice.service.imp;
 
 import jungle.patientservice.dto.request.PatientRequest;
 import jungle.patientservice.dto.request.PatientUpdateRequest;
+import jungle.patientservice.dto.response.PageResponse;
 import jungle.patientservice.dto.response.PatientResponse;
 import jungle.patientservice.dto.response.RestResponse;
 import jungle.patientservice.dto.response.UserResponse;
@@ -13,12 +14,16 @@ import jungle.patientservice.service.PatientService;
 import jungle.patientservice.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -55,11 +60,13 @@ public class PatientServiceImp implements PatientService {
         patient.setGender(user.getData().getGender());
         patient.setAddress(user.getData().getAddress());
         patient.setYob(user.getData().getDateOfBirth());
-        patient.setCreatedBy(jwtUtils.getCurrentUserId());
+        patient.setCreatedBy(jwtUtils.getFullName());
+        patient.setCreatedAt(LocalDateTime.now());
 
         patientRepo.save(patient);
         return patientMapper.toPatientResponse(patient);
     }
+
 
     private String generatePatientCode(){
         String shortUUID = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
@@ -109,6 +116,7 @@ public class PatientServiceImp implements PatientService {
         if (StringUtils.hasText(patientDTO.getInstrumentUsed())) {
             patient.setInstrumentUsed(patientDTO.getInstrumentUsed());
         }
+        patient.setModifiedBy(jwtUtils.getFullName());
         patientRepo.save(patient);
         return patientMapper.toPatientResponse(patient);
     }
@@ -140,6 +148,21 @@ public class PatientServiceImp implements PatientService {
         return patients.stream()
                 .map(patientMapper::toPatientResponse)
                 .toList();
+    }
+
+    @Override
+    public PageResponse<PatientResponse> getPatients(int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        var patientPage = patientRepo.findAllByDeletedFalse(pageable);
+
+        return PageResponse.<PatientResponse>builder()
+                .data(patientPage.getContent().stream().map(patientMapper::toPatientResponse).toList())
+                .currentPage(page)
+                .totalItems(patientPage.getTotalElements())
+                .totalPages(patientPage.getTotalPages())
+                .pageSize(size)
+                .build();
     }
 
 }
