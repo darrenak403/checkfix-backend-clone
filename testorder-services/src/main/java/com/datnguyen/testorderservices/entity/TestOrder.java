@@ -43,15 +43,21 @@ public class TestOrder {
     @Column(nullable = false, length = 20)
     private OrderStatus status;
 
-    private Long createdByUserId;
 
     // time tạo phiếu xét nghiệm
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Enumerated(EnumType.STRING)
+    private PriorityStatus priority;
+
+
 
     // xét nghiệm lúc nào
     private LocalDateTime runAt;
+    private String runBy ;
+
+    private String createdBy;
 
 
     private Boolean deleted = false;

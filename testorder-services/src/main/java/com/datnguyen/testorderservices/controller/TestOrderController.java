@@ -2,9 +2,10 @@ package com.datnguyen.testorderservices.controller;
 
 import com.datnguyen.testorderservices.dto.request.TestOrderCreateRequest;
 import com.datnguyen.testorderservices.dto.request.TestOrderUpdateRequest;
+import com.datnguyen.testorderservices.dto.request.TestOrderUpdateStatusRequest;
 import com.datnguyen.testorderservices.dto.response.RestResponse;
 import com.datnguyen.testorderservices.dto.response.TestOrderCreationResponse;
-import com.datnguyen.testorderservices.dto.response.TestOrderDetail;
+import com.datnguyen.testorderservices.dto.response.TestOrderDetailResponse;
 import com.datnguyen.testorderservices.entity.OrderStatus;
 import com.datnguyen.testorderservices.service.TestOrderService;
 import jakarta.validation.Valid;
@@ -46,21 +47,18 @@ public class TestOrderController {
     }
 
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<TestOrderDetail> detail(@PathVariable Long id) {
-//        return ResponseEntity.ok(service.detail(id));
-//    }
+    @GetMapping("/{id}")
+    public ResponseEntity<TestOrderDetailResponse> detail(@PathVariable Long id) {
+        return ResponseEntity.ok(service.detail(id));
+    }
 
 
     @PostMapping
     public ResponseEntity<RestResponse<TestOrderCreationResponse>> create(
             @Valid @RequestBody TestOrderCreateRequest req
     ) {
-        Long userId = getCurrentUserId(); // lấy userId từ JWT
-        log.debug("Creating test order by userId={}", userId);
-
         // truyền userId vào service để tạo phiếu
-        TestOrderCreationResponse response = service.create(req, userId);
+        TestOrderCreationResponse response = service.create(req);
         return ResponseEntity.ok(RestResponse.success(response));
     }
 
@@ -77,21 +75,22 @@ public class TestOrderController {
         return ResponseEntity.ok(RestResponse.success(response));
     }
 
+    @PatchMapping("/{id}/approve")
+    public ResponseEntity<RestResponse<TestOrderCreationResponse>> approve(@PathVariable Long id, @RequestBody TestOrderUpdateStatusRequest req) {
+        TestOrderCreationResponse response = service.updateStatus(id, req);
+        return ResponseEntity.ok(RestResponse.success(response));
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        Long userId = getCurrentUserId();
-        log.debug("Soft-deleting test order id={} by userId={}", id, userId);
-
-        service.softDelete(id, userId);
+        service.softDelete(id);
         RestResponse<?> response = RestResponse.builder()
                 .statusCode(200)
                 .message("Soft-deleted successfully")
                 .build();
         return ResponseEntity.ok(response);
     }
-
-
     public Long getCurrentUserId() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof JwtAuthenticationToken jwtAuth) {

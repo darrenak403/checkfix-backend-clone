@@ -1,8 +1,6 @@
-package jungle.patientservice.utils;
+package com.datnguyen.testorderservices.util;
 
-import jungle.patientservice.dto.response.RestResponse;
-import jungle.patientservice.dto.response.UserResponse;
-import jungle.patientservice.repo.httpClient.UserClient;
+import com.datnguyen.testorderservices.client.UserClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Component;
 public class JwtUtils {
 
     private final UserClient userClient;
-
 
     public Long getCurrentUserId() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -31,11 +28,11 @@ public class JwtUtils {
         Long userId = getCurrentUserId();
         if (userId != null) {
             var user = userClient.getUser(userId);
-            if (user != null && user.getData() != null) {
+            if (user != null) {
                 return user.getData().getFullName();
             }
         }
-        return "Unknown";
+        return null;
     }
 
 }
