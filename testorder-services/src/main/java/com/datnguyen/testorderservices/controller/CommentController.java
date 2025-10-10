@@ -41,8 +41,8 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getCommentByUserId(@RequestParam Long userId ) {
-        List<CommentResponse> comments = commentService.getCommentByUserId(userId);
+    public ResponseEntity<?> getCommentByDoctorId(@RequestParam Long doctorId ) {
+        List<CommentResponse> comments = commentService.getCommentByDoctorId(doctorId);
         if(comments != null){
             BaseResponse baseResponse = new BaseResponse();
             baseResponse.setStatus(200);

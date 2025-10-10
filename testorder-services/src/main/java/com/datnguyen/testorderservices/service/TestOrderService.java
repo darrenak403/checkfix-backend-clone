@@ -85,32 +85,32 @@ public class TestOrderService {
         });
     }
 
-    @Transactional(readOnly = true)
-    public TestOrderDetail detail(Long id) {
-        TestOrder o = orderRepo.findById(id)
-                .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
-                .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại"));
-
-        var dto = TestOrderDetail.builder()
-                .id(o.getId())
-                .status(o.getStatus())
-                .createdAt(o.getCreatedAt())
-                .patientId(o.getPatientId())
-                .createdByUserId(o.getCreatedByUserId())
-                .runAt(o.getRunAt())
-                .comments(commentRepo.findByUserId(o.getId()))
-                .build();
-
-        try {
-            var p = getPatient(o.getPatientId());
-            dto.setPatientName(p.getFullName());
-            dto.setPatientGender(p.getGender());
-            dto.setPatientEmail(p.getEmail());
-            dto.setPatientAge(ageFrom(p.getYob()));
-        } catch (Exception ignored) {}
-
-        return dto;
-    }
+//    @Transactional(readOnly = true)
+//    public TestOrderDetail detail(Long id) {
+//        TestOrder o = orderRepo.findById(id)
+//                .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
+//                .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại"));
+//
+//        var dto = TestOrderDetail.builder()
+//                .id(o.getId())
+//                .status(o.getStatus())
+//                .createdAt(o.getCreatedAt())
+//                .patientId(o.getPatientId())
+//                .createdByUserId(o.getCreatedByUserId())
+//                .runAt(o.getRunAt())
+//                .comments(c.findByUserId(o.getId()))
+//                .build();
+//
+//        try {
+//            var p = getPatient(o.getPatientId());
+//            dto.setPatientName(p.getFullName());
+//            dto.setPatientGender(p.getGender());
+//            dto.setPatientEmail(p.getEmail());
+//            dto.setPatientAge(ageFrom(p.getYob()));
+//        } catch (Exception ignored) {}
+//
+//        return dto;
+//    }
 
     @Transactional
     public TestOrderCreationResponse update(Long id, TestOrderUpdateRequest req) {

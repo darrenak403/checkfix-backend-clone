@@ -65,7 +65,7 @@ public class CommentServiceImp implements CommentService {
             }
 
             Comment comment = new Comment();
-            comment.setUserId(commentRequest.getUserId());
+            comment.setDoctorId(patientDTO.getData().getCreatedBy());
             comment.setContent(commentRequest.getContent());
             comment.setStatus("ACTIVE");
 
@@ -85,10 +85,7 @@ public class CommentServiceImp implements CommentService {
                 throw new IllegalArgumentException("Comment must be attached to either a Test Order or a Test Result.");
             }
 
-
             Comment saved = commentRepository.save(comment);
-            log.info("✅ Comment saved successfully with id={}", saved.getId());
-
             return saved;
 
         } catch (Exception e) {
@@ -99,20 +96,15 @@ public class CommentServiceImp implements CommentService {
 
 
     @Override
-    public List<CommentResponse> getCommentByUserId(Long userId) {
+    public List<CommentResponse> getCommentByDoctorId(Long doctorId) {
 
-        log.info("🔍 Đang truy vấn comment của userId = {}", userId);
 
-        List<Comment> comments = commentRepository.findByUserId(userId);
+
+        List<Comment> comments = commentRepository.findByDoctorId(doctorId);
         if (comments.isEmpty()) {
-            log.warn("⚠️ Không tìm thấy bình luận nào của user có id: {}", userId);
-            throw new RuntimeException("Không tìm thấy bình luận nào của user có id: " + userId);
+            throw new RuntimeException("Không tìm thấy bình luận nào của Doctor có id: " + doctorId);
         }
-
-        log.info("✅ Tìm thấy {} bình luận cho userId = {}", comments.size(), userId);
-
         return comments.stream()
-                .peek(c -> log.debug("➡️ Đang convert commentId = {}", c.getId()))
                 .map(this::convertToDto)
                 .toList();
     }
@@ -130,13 +122,10 @@ public class CommentServiceImp implements CommentService {
         //Luu nội dung cũ
         try {
             String oldContent = comment.getContent();
-            RestResponse<PatientDTO> patientDTO = patientClient.getById(comment.getUserId());
+            RestResponse<PatientDTO> patientDTO = patientClient.getById(comment.getDoctorId());
             if (patientDTO == null) {
-                log.warn("⚠️ Patient with id={} not found", comment.getUserId());
                 throw new RuntimeException("Patient not found");
             }
-            log.info("pt name-------------->" + patientDTO.getData().getFullName());
-
 
             //ghi vào auditLog
             AuditLogComment auditLogComment = AuditLogComment.builder()
@@ -225,12 +214,10 @@ public class CommentServiceImp implements CommentService {
         commentResponse.setCommentId(comment.getId());
 
         try {
-            RestResponse<PatientDTO> patientDTO = patientClient.getById(comment.getUserId());
+            RestResponse<PatientDTO> patientDTO = patientClient.getById(comment.getDoctorId());
             String userName = patientClient.getById(patientDTO.getData().getId()).getData().getFullName();
             commentResponse.setUserName(userName);
-            log.debug("👤 Lấy thông tin userName = {} cho userId = {}", userName, comment.getUserId());
         } catch (Exception e) {
-            log.error("❌ Lỗi khi gọi patientClient.getById({}): {}", comment.getUserId(), e.getMessage());
             commentResponse.setUserName("Không xác định");
         }
 

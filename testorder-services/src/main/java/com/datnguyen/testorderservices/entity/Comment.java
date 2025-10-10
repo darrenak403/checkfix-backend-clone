@@ -21,8 +21,8 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;  // ID người viết comment
+    @Column(name = "doctorId", nullable = false)
+    private Long doctorId;
 
     @Column(nullable = false, length = 1000)
     private String content;

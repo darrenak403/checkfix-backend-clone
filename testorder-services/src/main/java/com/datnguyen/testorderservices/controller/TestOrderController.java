@@ -46,10 +46,10 @@ public class TestOrderController {
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<TestOrderDetail> detail(@PathVariable Long id) {
-        return ResponseEntity.ok(service.detail(id));
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<TestOrderDetail> detail(@PathVariable Long id) {
+//        return ResponseEntity.ok(service.detail(id));
+//    }
 
 
     @PostMapping

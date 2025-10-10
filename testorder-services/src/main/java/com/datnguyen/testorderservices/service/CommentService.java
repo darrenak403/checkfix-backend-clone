@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface CommentService {
     Comment addComment(CommentRequest commentRequest);
-    List<CommentResponse> getCommentByUserId(Long CommentRequest);
+    List<CommentResponse> getCommentByDoctorId(Long CommentRequest);
     CommentUpdateResponse updateComment(CommentUpdateRequest request);
     CommentDeleteResponse deleteComment(CommentDeleteRequest commentDeleteRequest);
 }
