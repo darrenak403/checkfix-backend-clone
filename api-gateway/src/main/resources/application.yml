@@ -9,13 +9,13 @@ spring:
     gateway:
         routes:
           - id: iam-service
-            uri: http://localhost:8081
+            uri: lb://iam-service
             predicates:
-              - Path=${app.prefix}/iam/auth/**, ${app.prefix}/iam/users/**
+              - Path=${app.prefix}/iam/**
             filters:
               - StripPrefix=2
           - id: patient-service
-            uri: http://localhost:8082
+            uri: lb://patient-service
             predicates:
               - Path=${app.prefix}/patient/**
             filters:
