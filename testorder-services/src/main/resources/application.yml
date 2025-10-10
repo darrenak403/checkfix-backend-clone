@@ -20,6 +20,8 @@ server:
 app:
   patient-service:
     url: http://localhost:8082
+  user-service:
+    url: http://localhost:8081/iam
 
 springdoc:
   swagger-ui.enabled: true
