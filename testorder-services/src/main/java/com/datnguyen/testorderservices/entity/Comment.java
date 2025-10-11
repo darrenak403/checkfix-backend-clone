@@ -36,8 +36,10 @@ public class Comment {
     @Column(name = "updated_by")
     private String updatedBy;
 
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private CommentStatus status;
 
     @PrePersist
     void prePersist() {

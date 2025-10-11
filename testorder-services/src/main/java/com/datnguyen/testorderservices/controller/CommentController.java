@@ -9,8 +9,10 @@ import com.datnguyen.testorderservices.dto.response.CommentResponse;
 import com.datnguyen.testorderservices.dto.response.CommentUpdateResponse;
 import com.datnguyen.testorderservices.entity.Comment;
 import com.datnguyen.testorderservices.service.CommentService;
+import com.datnguyen.testorderservices.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,14 +23,19 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
     @PostMapping
-    public ResponseEntity<?> addComment(@RequestBody CommentRequest commentRequest ) {
-        Comment comment = commentService.addComment(commentRequest);
+    @PreAuthorize("  hasAnyAuthority('ROLE_DOCTOR')")
+    public ResponseEntity<?> addComment(@RequestBody CommentRequest commentRequest) {
+
+        CommentResponse comment = commentService.addComment(commentRequest);
         if(comment != null){
             BaseResponse baseResponse = new BaseResponse();
             baseResponse.setStatus(200);
             baseResponse.setMessage("Comment added successfully");
-            baseResponse.setData(null);
+            baseResponse.setData(comment);
             return ResponseEntity.ok(baseResponse);
         } else {
             BaseResponse baseResponse = new BaseResponse();
@@ -40,25 +47,8 @@ public class CommentController {
 
     }
 
-    @GetMapping
-    public ResponseEntity<?> getCommentByDoctorId(@RequestParam Long doctorId ) {
-        List<CommentResponse> comments = commentService.getCommentByDoctorId(doctorId);
-        if(comments != null){
-            BaseResponse baseResponse = new BaseResponse();
-            baseResponse.setStatus(200);
-            baseResponse.setMessage("Comments fetched successfully");
-            baseResponse.setData(comments);
-            return ResponseEntity.ok(baseResponse);
-        } else {
-            BaseResponse baseResponse = new BaseResponse();
-            baseResponse.setStatus(400);
-            baseResponse.setMessage("Failed to fetch comments");
-            baseResponse.setData(null);
-            return ResponseEntity.badRequest().body(baseResponse);
-        }
-    }
-
     @PutMapping("/update")
+    @PreAuthorize("  hasAnyAuthority('ROLE_DOCTOR')")
     public ResponseEntity<?> updateComment(@RequestBody CommentUpdateRequest commentRequest ) {
 
         try {
@@ -88,6 +78,7 @@ public class CommentController {
     }
 
     @DeleteMapping
+    @PreAuthorize("  hasAnyAuthority('ROLE_DOCTOR')")
     public ResponseEntity<?> deleteComment(@RequestBody CommentDeleteRequest commentRequest ) {
         BaseResponse baseResponse = new BaseResponse();
         CommentDeleteResponse comment = commentService.deleteComment(commentRequest);
