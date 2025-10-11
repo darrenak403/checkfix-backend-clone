@@ -120,13 +120,14 @@ public class TestOrderService {
         TestOrder o = orderRepo.findById(id)
                 .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
                 .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại"));
-
+        RestResponse<UserResponse> user = userClient.getUser(req.getRunBy());
         if (StringUtils.hasText(req.getFullName())) o.setPatientName(req.getFullName());
         if (StringUtils.hasText(req.getPhone())) o.setPhone(req.getPhone());
         if (StringUtils.hasText(req.getAddress())) o.setAddress(req.getAddress());
         if (req.getYob() != null) o.setYob(req.getYob());
         if (StringUtils.hasText(req.getGender())) o.setGender(req.getGender());
         o.setAge(ageFrom(req.getYob()));
+        if (req.getRunBy() != null) o.setRunBy(user.getData().getFullName());
         logAudit(o.getId(), "UPDATE", safeJson(o), jwtUtils.getCurrentUserId());
         orderRepo.save(o);
         return mapper.toTestOrderCreationResponse(o);
