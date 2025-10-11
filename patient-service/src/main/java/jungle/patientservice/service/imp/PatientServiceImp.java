@@ -2,21 +2,17 @@ package jungle.patientservice.service.imp;
 
 import jungle.patientservice.dto.request.PatientRequest;
 import jungle.patientservice.dto.request.PatientUpdateRequest;
-import jungle.patientservice.dto.response.PageResponse;
-import jungle.patientservice.dto.response.PatientResponse;
-import jungle.patientservice.dto.response.RestResponse;
-import jungle.patientservice.dto.response.UserResponse;
+import jungle.patientservice.dto.response.*;
 import jungle.patientservice.entity.Patient;
 import jungle.patientservice.mapper.PatientMapper;
 import jungle.patientservice.repo.PatientRepo;
+import jungle.patientservice.repo.httpClient.TestOrderClient;
 import jungle.patientservice.repo.httpClient.UserClient;
 import jungle.patientservice.service.PatientService;
 import jungle.patientservice.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -24,9 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +35,8 @@ public class PatientServiceImp implements PatientService {
     private final JwtUtils jwtUtils;
 
     private final UserClient userClient;
+
+    private final TestOrderClient testOrderClient;
 
     @Override
     public PatientResponse createPatient(PatientRequest patientDTO) {
@@ -141,7 +138,7 @@ public class PatientServiceImp implements PatientService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt principal = (Jwt) authentication.getPrincipal();
         Long userId = principal.getClaim("userId");
-        List<Patient> patients = patientRepo.findAllByUserIdAndDeletedFalse(userId);
+        List<Patient> patients = patientRepo.findTop1ByUserIdAndDeletedFalseOrderByCreatedAtDesc(userId);
         if (patients.isEmpty()) {
             throw new IllegalArgumentException("No patient records found for userId: " + userId);
         }
@@ -163,6 +160,42 @@ public class PatientServiceImp implements PatientService {
                 .totalPages(patientPage.getTotalPages())
                 .pageSize(size)
                 .build();
+    }
+
+    @Override
+    public PageResponse<TestOrderResponse> getTestOrdersByPatientId(int page, int size) {
+        RestResponse<List<TestOrderResponse>> ordersResponse = testOrderClient.getOrdersByPatientId(jwtUtils.getCurrentUserId());
+        List<TestOrderResponse> allOrders = ordersResponse.getData();
+        if (allOrders.isEmpty()) {
+            return PageResponse.<TestOrderResponse>builder()
+                    .currentPage(page)
+                    .pageSize(size)
+                    .totalPages(0)
+                    .totalItems(0)
+                    .data(Collections.emptyList())
+                    .build();
+        }
+        allOrders.sort(Comparator.comparing(TestOrderResponse::getCreatedAt).reversed());
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<TestOrderResponse> orderPage = getTestOrdersPage(allOrders, pageable);
+        return PageResponse.<TestOrderResponse>builder()
+                .currentPage(page)
+                .pageSize(size)
+                .totalPages(orderPage.getTotalPages())
+                .totalItems(orderPage.getTotalElements())
+                .data(orderPage.getContent())
+                .build();
+    }
+
+    private Page<TestOrderResponse> getTestOrdersPage(List<TestOrderResponse> allOrders, Pageable pageable) {
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), allOrders.size());
+
+        List<TestOrderResponse> pageContent = (startIndex > allOrders.size())
+                ? Collections.emptyList()
+                : allOrders.subList(startIndex, endIndex);
+
+        return new PageImpl<>(pageContent, pageable, allOrders.size());
     }
 
 }

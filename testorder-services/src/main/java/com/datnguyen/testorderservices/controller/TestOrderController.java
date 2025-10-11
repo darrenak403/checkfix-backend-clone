@@ -6,6 +6,7 @@ import com.datnguyen.testorderservices.dto.request.TestOrderUpdateStatusRequest;
 import com.datnguyen.testorderservices.dto.response.RestResponse;
 import com.datnguyen.testorderservices.dto.response.TestOrderCreationResponse;
 import com.datnguyen.testorderservices.dto.response.TestOrderDetailResponse;
+import com.datnguyen.testorderservices.dto.response.TestOrderResponse;
 import com.datnguyen.testorderservices.entity.OrderStatus;
 import com.datnguyen.testorderservices.service.TestOrderService;
 import jakarta.validation.Valid;
@@ -14,12 +15,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -88,6 +91,14 @@ public class TestOrderController {
                 .message("Soft-deleted successfully")
                 .build();
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/patient/{patientId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<RestResponse<?>> getOrdersByPatientId(
+            @PathVariable Long patientId) {
+        List<TestOrderResponse> orders = service.getAllOrdersByPatientId(patientId);
+        return ResponseEntity.ok(RestResponse.success(orders));
     }
 
 }
