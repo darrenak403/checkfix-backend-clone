@@ -14,7 +14,7 @@ public interface PatientRepo extends JpaRepository<Patient, Long> {
     List<Patient> findAllByDeletedFalseOrderByIdDesc();
     Page<Patient> findAllByDeletedFalse(Pageable pageable);
     Optional<Patient> findByIdAndDeletedFalse(long id);
-    List<Patient> findAllByUserIdAndDeletedFalse(Long userId);
+    List<Patient> findTop1ByUserIdAndDeletedFalseOrderByCreatedAtDesc(Long userId);
     boolean existsByPatientCode(String patientCode);
     Optional<Patient> findFirstByUserIdAndDeletedFalse(Long userId);
 }

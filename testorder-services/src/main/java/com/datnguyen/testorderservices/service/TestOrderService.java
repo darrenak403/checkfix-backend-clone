@@ -6,10 +6,7 @@ import com.datnguyen.testorderservices.client.UserClient;
 import com.datnguyen.testorderservices.dto.request.TestOrderCreateRequest;
 import com.datnguyen.testorderservices.dto.request.TestOrderUpdateRequest;
 import com.datnguyen.testorderservices.dto.request.TestOrderUpdateStatusRequest;
-import com.datnguyen.testorderservices.dto.response.RestResponse;
-import com.datnguyen.testorderservices.dto.response.TestOrderCreationResponse;
-import com.datnguyen.testorderservices.dto.response.TestOrderDetailResponse;
-import com.datnguyen.testorderservices.dto.response.UserResponse;
+import com.datnguyen.testorderservices.dto.response.*;
 import com.datnguyen.testorderservices.entity.*;
 import com.datnguyen.testorderservices.mapper.TestOrderMapper;
 import com.datnguyen.testorderservices.repository.*;
@@ -26,6 +23,7 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -155,6 +153,16 @@ public class TestOrderService {
         } catch (Exception e) {
             throw new IllegalArgumentException("Không kết nối được tới Patient Service");
         }
+    }
+
+    public List<TestOrderResponse> getAllOrdersByPatientId(Long patientId) {
+        List<TestOrder> orders = orderRepo.findByPatientIdAndDeletedFalse(patientId);
+        if (orders.isEmpty()){
+            throw new IllegalArgumentException("Không tìm thấy phiếu xét nghiệm nào cho bệnh nhân này");
+        }
+        return orders.stream()
+                .map(mapper::toTestOrderResponse)
+                .toList();
     }
 
 
