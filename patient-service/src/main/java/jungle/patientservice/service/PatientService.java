@@ -5,8 +5,6 @@ import jungle.patientservice.dto.request.PatientRequest;
 import jungle.patientservice.dto.request.PatientUpdateRequest;
 import jungle.patientservice.dto.response.PageResponse;
 import jungle.patientservice.dto.response.PatientResponse;
-import jungle.patientservice.dto.response.TestOrderResponse;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,5 +18,4 @@ public interface PatientService {
      PatientResponse getPatient(Long id);
      List<PatientResponse> getCurrentPatient();
      PageResponse<PatientResponse> getPatients(int page, int size);
-     PageResponse<TestOrderResponse> getTestOrdersByPatientId(int page, int size);
 }

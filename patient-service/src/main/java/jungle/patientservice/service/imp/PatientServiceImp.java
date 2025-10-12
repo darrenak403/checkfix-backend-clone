@@ -6,7 +6,6 @@ import jungle.patientservice.dto.response.*;
 import jungle.patientservice.entity.Patient;
 import jungle.patientservice.mapper.PatientMapper;
 import jungle.patientservice.repo.PatientRepo;
-import jungle.patientservice.repo.httpClient.TestOrderClient;
 import jungle.patientservice.repo.httpClient.UserClient;
 import jungle.patientservice.service.PatientService;
 import jungle.patientservice.utils.JwtUtils;
@@ -21,7 +20,6 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,8 +33,6 @@ public class PatientServiceImp implements PatientService {
     private final JwtUtils jwtUtils;
 
     private final UserClient userClient;
-
-    private final TestOrderClient testOrderClient;
 
     @Override
     public PatientResponse createPatient(PatientRequest patientDTO) {
@@ -104,15 +100,6 @@ public class PatientServiceImp implements PatientService {
         if (StringUtils.hasText(patientDTO.getEmail())) {
             patient.setEmail(patientDTO.getEmail());
         }
-        if (patientDTO.getLastTestDate() != null) {
-            patient.setLastTestDate(patientDTO.getLastTestDate());
-        }
-        if (StringUtils.hasText(patientDTO.getLastTestType())) {
-            patient.setLastTestType(patientDTO.getLastTestType());
-        }
-        if (StringUtils.hasText(patientDTO.getInstrumentUsed())) {
-            patient.setInstrumentUsed(patientDTO.getInstrumentUsed());
-        }
         patient.setModifiedBy(jwtUtils.getFullName());
         patientRepo.save(patient);
         return patientMapper.toPatientResponse(patient);
@@ -160,42 +147,6 @@ public class PatientServiceImp implements PatientService {
                 .totalPages(patientPage.getTotalPages())
                 .pageSize(size)
                 .build();
-    }
-
-    @Override
-    public PageResponse<TestOrderResponse> getTestOrdersByPatientId(int page, int size) {
-        RestResponse<List<TestOrderResponse>> ordersResponse = testOrderClient.getOrdersByPatientId(jwtUtils.getCurrentUserId());
-        List<TestOrderResponse> allOrders = ordersResponse.getData();
-        if (allOrders.isEmpty()) {
-            return PageResponse.<TestOrderResponse>builder()
-                    .currentPage(page)
-                    .pageSize(size)
-                    .totalPages(0)
-                    .totalItems(0)
-                    .data(Collections.emptyList())
-                    .build();
-        }
-        allOrders.sort(Comparator.comparing(TestOrderResponse::getCreatedAt).reversed());
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<TestOrderResponse> orderPage = getTestOrdersPage(allOrders, pageable);
-        return PageResponse.<TestOrderResponse>builder()
-                .currentPage(page)
-                .pageSize(size)
-                .totalPages(orderPage.getTotalPages())
-                .totalItems(orderPage.getTotalElements())
-                .data(orderPage.getContent())
-                .build();
-    }
-
-    private Page<TestOrderResponse> getTestOrdersPage(List<TestOrderResponse> allOrders, Pageable pageable) {
-        int startIndex = (int) pageable.getOffset();
-        int endIndex = Math.min(startIndex + pageable.getPageSize(), allOrders.size());
-
-        List<TestOrderResponse> pageContent = (startIndex > allOrders.size())
-                ? Collections.emptyList()
-                : allOrders.subList(startIndex, endIndex);
-
-        return new PageImpl<>(pageContent, pageable, allOrders.size());
     }
 
 }

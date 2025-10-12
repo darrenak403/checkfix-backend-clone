@@ -33,13 +33,6 @@ public class PatientResponse {
 
     private String email;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate lastTestDate;
-
-    private String lastTestType;
-
-    private String instrumentUsed;
-
     private String createdBy;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")

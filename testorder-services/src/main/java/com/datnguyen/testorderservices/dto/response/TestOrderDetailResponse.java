@@ -29,9 +29,13 @@ public class TestOrderDetailResponse {
 
     private String address;
     private String priority;
+
+    private String testType;
+
+    private String instrument;
+
     private String createdBy;
     private String runBy;
-
     private OrderStatus status;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")

@@ -40,6 +40,10 @@ public class TestOrderCreationResponse {
     @Enumerated(EnumType.STRING)
     private PriorityStatus priority;
 
+    private String testType;
+
+    private String instrument;
+
     private String createdBy;
 
     private String runBy;

@@ -15,7 +15,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -24,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +62,8 @@ public class TestOrderService {
                 .createdBy(jwtUtils.getFullName())
                 .runBy(user.getData().getFullName())
                 .priority(req.getPriority())
+                .testType(req.getTestType())
+                .instrument(req.getInstrument())
                 .age(ageFrom(patientResponse.getYob()))
                 .deleted(false)
                 .build();
@@ -156,14 +161,20 @@ public class TestOrderService {
         }
     }
 
-    public List<TestOrderResponse> getAllOrdersByPatientId(Long patientId) {
-        List<TestOrder> orders = orderRepo.findByPatientIdAndDeletedFalse(patientId);
+    public PageResponse<TestOrderResponse> getAllOrdersByPatientId(Long patientId, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        Page<TestOrder> orders = orderRepo.findByPatientIdAndDeletedFalse(patientId, pageable);
         if (orders.isEmpty()){
             throw new IllegalArgumentException("Không tìm thấy phiếu xét nghiệm nào cho bệnh nhân này");
         }
-        return orders.stream()
-                .map(mapper::toTestOrderResponse)
-                .toList();
+        return PageResponse.<TestOrderResponse>builder()
+                .currentPage(page)
+                .totalPages(orders.getTotalPages())
+                .pageSize(orders.getSize())
+                .totalItems(orders.getTotalElements())
+                .data(orders.getContent().stream().map(mapper::toTestOrderResponse).toList())
+                .build();
     }
 
 

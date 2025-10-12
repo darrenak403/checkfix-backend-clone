@@ -37,6 +37,10 @@ public class TestOrderResponse {
 
     private String priority;
 
+    private String testType;
+
+    private String instrument;
+
     private String createdBy;
 
     private String runBy;

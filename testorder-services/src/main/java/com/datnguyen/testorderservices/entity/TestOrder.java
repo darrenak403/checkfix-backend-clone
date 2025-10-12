@@ -51,7 +51,9 @@ public class TestOrder {
     @Enumerated(EnumType.STRING)
     private PriorityStatus priority;
 
+    private String testType;
 
+    private String instrument;
 
     // xét nghiệm lúc nào
     private LocalDateTime runAt;

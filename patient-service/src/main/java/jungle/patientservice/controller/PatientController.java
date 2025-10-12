@@ -6,10 +6,8 @@ import jungle.patientservice.dto.request.PatientUpdateRequest;
 import jungle.patientservice.dto.response.PageResponse;
 import jungle.patientservice.dto.response.PatientResponse;
 import jungle.patientservice.dto.response.RestResponse;
-import jungle.patientservice.dto.response.TestOrderResponse;
 import jungle.patientservice.service.PatientService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -72,18 +70,6 @@ public class PatientController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/testOrder")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<RestResponse<PageResponse<TestOrderResponse>>> getTestOrders(@RequestParam (value = "page", defaultValue = "1") int page,
-                                                                                       @RequestParam(value = "size", defaultValue = "10") int size) {
-        PageResponse<TestOrderResponse> orders = patientService.getTestOrdersByPatientId(page, size);
-        RestResponse<PageResponse<TestOrderResponse>> response = RestResponse.<PageResponse<TestOrderResponse>>builder()
-                .statusCode(200)
-                .message("Patients retrieved successfully")
-                .data(orders)
-                .build();
-        return ResponseEntity.ok(response);
-    }
     @PatchMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF')")
     public ResponseEntity<RestResponse<PatientResponse>> updatePatient(@PathVariable Long id, @Valid @RequestBody PatientUpdateRequest request) {

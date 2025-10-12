@@ -51,6 +51,7 @@ public class CentralException {
         BaseResponse response = BaseResponse.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message(ex.getMessage())
+                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
                 .path(request.getRequestURI())
                 .timestamp(LocalDateTime.now())
                 .build();

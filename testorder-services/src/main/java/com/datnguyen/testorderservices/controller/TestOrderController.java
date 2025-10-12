@@ -3,10 +3,7 @@ package com.datnguyen.testorderservices.controller;
 import com.datnguyen.testorderservices.dto.request.TestOrderCreateRequest;
 import com.datnguyen.testorderservices.dto.request.TestOrderUpdateRequest;
 import com.datnguyen.testorderservices.dto.request.TestOrderUpdateStatusRequest;
-import com.datnguyen.testorderservices.dto.response.RestResponse;
-import com.datnguyen.testorderservices.dto.response.TestOrderCreationResponse;
-import com.datnguyen.testorderservices.dto.response.TestOrderDetailResponse;
-import com.datnguyen.testorderservices.dto.response.TestOrderResponse;
+import com.datnguyen.testorderservices.dto.response.*;
 import com.datnguyen.testorderservices.entity.OrderStatus;
 import com.datnguyen.testorderservices.service.TestOrderService;
 import jakarta.validation.Valid;
@@ -96,8 +93,10 @@ public class TestOrderController {
     @GetMapping("/patient/{patientId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<RestResponse<?>> getOrdersByPatientId(
-            @PathVariable Long patientId) {
-        List<TestOrderResponse> orders = service.getAllOrdersByPatientId(patientId);
+            @PathVariable Long patientId,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size){
+        PageResponse<TestOrderResponse> orders = service.getAllOrdersByPatientId(patientId, page, size);
         return ResponseEntity.ok(RestResponse.success(orders));
     }
 
