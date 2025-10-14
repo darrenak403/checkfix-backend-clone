@@ -2,19 +2,19 @@ package com.datnguyen.testorderservices.service.imp;
 
 import com.datnguyen.testorderservices.client.PatientClient;
 import com.datnguyen.testorderservices.client.PatientDTO;
+import com.datnguyen.testorderservices.client.UserClient;
 import com.datnguyen.testorderservices.dto.request.CommentDeleteRequest;
 import com.datnguyen.testorderservices.dto.request.CommentRequest;
 import com.datnguyen.testorderservices.dto.request.CommentUpdateRequest;
-import com.datnguyen.testorderservices.dto.response.CommentDeleteResponse;
-import com.datnguyen.testorderservices.dto.response.CommentResponse;
-import com.datnguyen.testorderservices.dto.response.CommentUpdateResponse;
-import com.datnguyen.testorderservices.dto.response.RestResponse;
+import com.datnguyen.testorderservices.dto.response.*;
 import com.datnguyen.testorderservices.entity.*;
 import com.datnguyen.testorderservices.exception.DeleteException;
 import com.datnguyen.testorderservices.repository.*;
 import com.datnguyen.testorderservices.service.CommentService;
+import com.datnguyen.testorderservices.util.JwtUtils;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.Jar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +24,9 @@ import java.util.List;
 @Slf4j
 @Service
 public class CommentServiceImp implements CommentService {
+
+    @Autowired
+    private UserClient userClient;
 
     @Autowired
     private CommentRepository commentRepository;
@@ -43,79 +46,58 @@ public class CommentServiceImp implements CommentService {
     @Autowired
     private AuditDeleteCommentRepository auditDeleteCommentRepository;
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
     @Override
-    public Comment addComment(CommentRequest commentRequest) {
-        log.info("📩 Received request to add comment: userId={}, testOrderId={}, testResultId={}",
-                commentRequest.getUserId(),
-                commentRequest.getTestOrderId(),
-                commentRequest.getTestResultId());
-
+    public CommentResponse addComment(CommentRequest commentRequest) {
         try {
-            // ✅ Kiểm tra user tồn tại bên patient-service
-            RestResponse<PatientDTO> patientDTO = patientClient.getById(commentRequest.getUserId());
-            if (patientDTO == null) {
+            Long jwtDoctorId = jwtUtils.getCurrentUserId();
 
-                throw new RuntimeException("Patient not found");
+            RestResponse<UserResponse> clientUser = userClient.getUser(jwtDoctorId);
+            if (clientUser == null || clientUser.getData() == null) {
+                throw new IllegalArgumentException("Doctor not found");
             }
 
-            // ✅ Kiểm tra nội dung comment
+
             if (commentRequest.getContent() == null || commentRequest.getContent().trim().isEmpty()) {
-                log.warn("⚠️ Comment content is empty for userId={}", commentRequest.getUserId());
                 throw new IllegalArgumentException("Comment content cannot be empty.");
             }
 
             Comment comment = new Comment();
-            comment.setUserId(commentRequest.getUserId());
+            comment.setDoctorId(clientUser.getData().getId());
             comment.setContent(commentRequest.getContent());
-            comment.setStatus("ACTIVE");
+            comment.setStatus(CommentStatus.ACTIVE);
 
-            // ✅ Gắn với TestOrder hoặc TestResult
+
             if (commentRequest.getTestOrderId() != null) {
-
                 TestOrder order = testOrderRepository.findById(commentRequest.getTestOrderId())
                         .orElseThrow(() -> new IllegalArgumentException("Test Order not found"));
                 comment.setTestOrder(order);
             } else if (commentRequest.getTestResultId() != null) {
-
                 TestResult result = testResultRepository.findById(commentRequest.getTestResultId())
                         .orElseThrow(() -> new IllegalArgumentException("Test Result not found"));
                 comment.setTestResult(result);
             } else {
-
                 throw new IllegalArgumentException("Comment must be attached to either a Test Order or a Test Result.");
             }
-
-
             Comment saved = commentRepository.save(comment);
-            log.info("✅ Comment saved successfully with id={}", saved.getId());
 
-            return saved;
+
+            return CommentResponse.builder()
+                    .commentId(saved.getId())
+                    .doctorName(clientUser.getData().getFullName())
+                    .testOrderId(saved.getTestOrder() != null ? saved.getTestOrder().getId() : 0L)
+                    .testResultId(saved.getTestResult() != null ? saved.getTestResult().getId() : 0L)
+                    .commentContent(saved.getContent())
+                    .createdAt(saved.getCreatedAt())
+                    .build();
 
         } catch (Exception e) {
-
-            throw e; // ném lại để GlobalExceptionHandler hoặc Controller xử lý
+            throw e;
         }
     }
 
-
-    @Override
-    public List<CommentResponse> getCommentByUserId(Long userId) {
-
-        log.info("🔍 Đang truy vấn comment của userId = {}", userId);
-
-        List<Comment> comments = commentRepository.findByUserId(userId);
-        if (comments.isEmpty()) {
-            log.warn("⚠️ Không tìm thấy bình luận nào của user có id: {}", userId);
-            throw new RuntimeException("Không tìm thấy bình luận nào của user có id: " + userId);
-        }
-
-        log.info("✅ Tìm thấy {} bình luận cho userId = {}", comments.size(), userId);
-
-        return comments.stream()
-                .peek(c -> log.debug("➡️ Đang convert commentId = {}", c.getId()))
-                .map(this::convertToDto)
-                .toList();
-    }
 
     @Transactional
     @Override
@@ -130,19 +112,19 @@ public class CommentServiceImp implements CommentService {
         //Luu nội dung cũ
         try {
             String oldContent = comment.getContent();
-            RestResponse<PatientDTO> patientDTO = patientClient.getById(comment.getUserId());
-            if (patientDTO == null) {
-                log.warn("⚠️ Patient with id={} not found", comment.getUserId());
-                throw new RuntimeException("Patient not found");
-            }
-            log.info("pt name-------------->" + patientDTO.getData().getFullName());
 
+            //Lấy thông tin tu nguoiw sửa (Doctor)
+            Long jwtDoctorId = jwtUtils.getCurrentUserId();
+            RestResponse<UserResponse> clientUser = userClient.getUser(jwtDoctorId);
+            if (clientUser == null || clientUser.getData() == null) {
+                throw new IllegalArgumentException("Doctor not found");
+            }
 
             //ghi vào auditLog
             AuditLogComment auditLogComment = AuditLogComment.builder()
                     .action("UPDATE_COMMENT")
                     .commentId(comment.getId())
-                    .updatedBy(patientDTO.getData().getFullName())
+                    .updatedBy(clientUser.getData().getFullName())
                     .oldContent(oldContent)
                     .newContent(request.getContent())
                     .timestamp(LocalDateTime.now())
@@ -153,22 +135,18 @@ public class CommentServiceImp implements CommentService {
             //Cập nhật nội dung mới
 
             comment.setContent(request.getContent());
-            comment.setUpdatedBy(patientDTO.getData().getFullName());
+            comment.setUpdatedBy(clientUser.getData().getFullName());
             comment.setUpdatedAt(LocalDateTime.now());
             commentRepository.save(comment);
-
-
-
 
 
             return CommentUpdateResponse.builder()
                     .id(comment.getId())
                     .content(comment.getContent())
-                    .updatedBy(patientDTO.getData().getFullName())
+                    .updatedBy(clientUser.getData().getFullName())
                     .updatedAt(comment.getUpdatedAt())
                     .build();
         } catch (Exception e) {
-            log.error("❌ Error while adding comment: {}", e.getMessage(), e);
             throw e; // ném lại để GlobalExceptionHandler hoặc Controller xử lý
         }
 
@@ -177,30 +155,31 @@ public class CommentServiceImp implements CommentService {
     @Transactional
     @Override
     public CommentDeleteResponse deleteComment(CommentDeleteRequest commentDeleteRequest) {
-
+    
         //1.Tìm comment
         Comment comment = commentRepository.findById(commentDeleteRequest.getCommentId())
                 .orElseThrow(() -> new DeleteException("Comment not found with id: " + commentDeleteRequest.getCommentId()));
 
         //2.Kiểm tra status comment đã xóa chưa
-        if ("DELETED".equals(comment.getStatus())) {
+        if (comment.getStatus() == CommentStatus.DELETED) {
             throw new DeleteException("Comment with id " + comment.getId() + " is already deleted.");
         }
 
-        comment.setStatus("DELETED");
+        comment.setStatus(CommentStatus.DELETED);
         commentRepository.save(comment);
 
         //3.Ghi vào auditLog
-        RestResponse<PatientDTO> patientDTO = patientClient.getById(commentDeleteRequest.getDeleteById());
-        if (patientDTO == null) {
-            log.warn("⚠️ Patient with id={} not found", commentDeleteRequest.getDeleteById());
-            throw new DeleteException("Patient not found");
+        Long jwtDoctorId = jwtUtils.getCurrentUserId();
+        RestResponse<UserResponse> clientUser = userClient.getUser(jwtDoctorId);
+        if (clientUser == null) {
+
+            throw new DeleteException("DoctorId not found");
         }
         AuditDeleteComment auditDeleteComment = new AuditDeleteComment();
-        auditDeleteComment.setAction("DELETE_COMMENT");
+        auditDeleteComment.setAction(CommentStatus.DELETED.name());
         auditDeleteComment.setReferenceId(comment.getId());
         auditDeleteComment.setEntityType("Comment");
-        auditDeleteComment.setPerformedBy(patientDTO.getData().getFullName());
+        auditDeleteComment.setPerformedBy(clientUser.getData().getFullName());
         auditDeleteComment.setReason(commentDeleteRequest.getReason());
         auditDeleteComment.setPerformedAt(LocalDateTime.now());
 
@@ -208,38 +187,13 @@ public class CommentServiceImp implements CommentService {
 
         return CommentDeleteResponse.builder()
                 .referenceId(comment.getId())
-                .action(comment.getStatus())
+                .action(CommentStatus.DELETED.name())
                 .entityType("Comment")
-                .performedBy(patientDTO.getData().getFullName())
+                .performedBy(clientUser.getData().getFullName())
                 .reason(commentDeleteRequest.getReason())
                 .performedAt(LocalDateTime.now())
                 .build();
 
     }
 
-
-    private CommentResponse convertToDto(Comment comment) {
-        log.debug("🛠️ Bắt đầu convert commentId = {}", comment.getId());
-
-        CommentResponse commentResponse = new CommentResponse();
-        commentResponse.setCommentId(comment.getId());
-
-        try {
-            RestResponse<PatientDTO> patientDTO = patientClient.getById(comment.getUserId());
-            String userName = patientClient.getById(patientDTO.getData().getId()).getData().getFullName();
-            commentResponse.setUserName(userName);
-            log.debug("👤 Lấy thông tin userName = {} cho userId = {}", userName, comment.getUserId());
-        } catch (Exception e) {
-            log.error("❌ Lỗi khi gọi patientClient.getById({}): {}", comment.getUserId(), e.getMessage());
-            commentResponse.setUserName("Không xác định");
-        }
-
-        commentResponse.setCommentContent(comment.getContent());
-        commentResponse.setTestOrderId(comment.getTestOrder() != null ? comment.getTestOrder().getId() : 0L);
-        commentResponse.setTestResultId(comment.getTestResult() != null ? comment.getTestResult().getId() : 0L);
-        commentResponse.setCreatedAt(comment.getCreatedAt());
-
-        log.debug("✅ Hoàn tất convert commentId = {}", comment.getId());
-        return commentResponse;
-    }
 }

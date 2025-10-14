@@ -24,6 +24,8 @@ public class PatientDTO {
 
     private String email;
 
+    private Long createdBy;
+
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate lastTestDate;
 
