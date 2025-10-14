@@ -18,12 +18,4 @@ public class PatientRequest {
 //    @NotNull(message = "User ID is required")
     private Long userId;
 
-    @Past(message = "Last test date must be in the past")
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate lastTestDate;
-
-    private String lastTestType;
-
-    private String instrumentUsed;
-
 }

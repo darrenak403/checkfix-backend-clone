@@ -6,10 +6,7 @@ import com.datnguyen.testorderservices.client.UserClient;
 import com.datnguyen.testorderservices.dto.request.TestOrderCreateRequest;
 import com.datnguyen.testorderservices.dto.request.TestOrderUpdateRequest;
 import com.datnguyen.testorderservices.dto.request.TestOrderUpdateStatusRequest;
-import com.datnguyen.testorderservices.dto.response.RestResponse;
-import com.datnguyen.testorderservices.dto.response.TestOrderCreationResponse;
-import com.datnguyen.testorderservices.dto.response.TestOrderDetailResponse;
-import com.datnguyen.testorderservices.dto.response.UserResponse;
+import com.datnguyen.testorderservices.dto.response.*;
 import com.datnguyen.testorderservices.entity.*;
 import com.datnguyen.testorderservices.mapper.TestOrderMapper;
 import com.datnguyen.testorderservices.repository.*;
@@ -18,7 +15,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -26,6 +25,8 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +62,8 @@ public class TestOrderService {
                 .createdBy(jwtUtils.getFullName())
                 .runBy(user.getData().getFullName())
                 .priority(req.getPriority())
+                .testType(req.getTestType())
+                .instrument(req.getInstrument())
                 .age(ageFrom(patientResponse.getYob()))
                 .deleted(false)
                 .build();
@@ -122,13 +125,14 @@ public class TestOrderService {
         TestOrder o = orderRepo.findById(id)
                 .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
                 .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại"));
-
+        RestResponse<UserResponse> user = userClient.getUser(req.getRunBy());
         if (StringUtils.hasText(req.getFullName())) o.setPatientName(req.getFullName());
         if (StringUtils.hasText(req.getPhone())) o.setPhone(req.getPhone());
         if (StringUtils.hasText(req.getAddress())) o.setAddress(req.getAddress());
         if (req.getYob() != null) o.setYob(req.getYob());
         if (StringUtils.hasText(req.getGender())) o.setGender(req.getGender());
         o.setAge(ageFrom(req.getYob()));
+        if (req.getRunBy() != null) o.setRunBy(user.getData().getFullName());
         logAudit(o.getId(), "UPDATE", safeJson(o), jwtUtils.getCurrentUserId());
         orderRepo.save(o);
         return mapper.toTestOrderCreationResponse(o);
@@ -155,6 +159,22 @@ public class TestOrderService {
         } catch (Exception e) {
             throw new IllegalArgumentException("Không kết nối được tới Patient Service");
         }
+    }
+
+    public PageResponse<TestOrderResponse> getAllOrdersByPatientId(Long patientId, int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        Page<TestOrder> orders = orderRepo.findByPatientIdAndDeletedFalse(patientId, pageable);
+        if (orders.isEmpty()){
+            throw new IllegalArgumentException("Không tìm thấy phiếu xét nghiệm nào cho bệnh nhân này");
+        }
+        return PageResponse.<TestOrderResponse>builder()
+                .currentPage(page)
+                .totalPages(orders.getTotalPages())
+                .pageSize(orders.getSize())
+                .totalItems(orders.getTotalElements())
+                .data(orders.getContent().stream().map(mapper::toTestOrderResponse).toList())
+                .build();
     }
 
 

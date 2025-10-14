@@ -2,10 +2,12 @@ package jungle.warehouseservice.service.impl;
 
 import jungle.warehouseservice.dto.request.InstrumentRequest;
 import jungle.warehouseservice.dto.response.InstrumentResponse;
+import jungle.warehouseservice.dto.response.PageResponse;
 import jungle.warehouseservice.entity.Instrument;
 import jungle.warehouseservice.entity.InstrumentStatus;
 import jungle.warehouseservice.mapper.InstrumentMapper;
 import jungle.warehouseservice.repository.InstrumentRepo;
+import jungle.warehouseservice.repository.httpClient.UserClient;
 import jungle.warehouseservice.service.InstrumentService;
 import jungle.warehouseservice.utils.JwtUtils;
 import lombok.AccessLevel;
@@ -13,9 +15,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,11 +40,24 @@ public class InstrumentServiceImp implements InstrumentService {
     public InstrumentResponse createInstrument(InstrumentRequest instrumentRequest) {
         Instrument instrument = instrumentMapper.toInstrumentEntity(instrumentRequest);
 
-        instrument.setCreatedBy(jwtUtils.getCurrentUserId());
+        instrument.setCreatedBy(jwtUtils.getFullName());
         instrument.setStatus(InstrumentStatus.READY);
         instrument.setCreatedAt(LocalDateTime.now());
-        log.info("User create: {}", jwtUtils.getCurrentUserId());
         instrumentRepo.save(instrument);
         return instrumentMapper.toInstrumentResponse(instrument);
+    }
+
+    @Override
+    public PageResponse<InstrumentResponse> getInstruments(int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        var instrumentPage = instrumentRepo.findAll(pageable);
+        return PageResponse.<InstrumentResponse>builder()
+                .totalPages(instrumentPage.getTotalPages())
+                .currentPage(page)
+                .pageSize(size)
+                .totalItems(instrumentPage.getTotalElements())
+                .data(instrumentPage.getContent().stream().map(instrumentMapper::toInstrumentResponse).toList())
+                .build();
     }
 }

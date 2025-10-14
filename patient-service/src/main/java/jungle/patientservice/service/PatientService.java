@@ -5,7 +5,6 @@ import jungle.patientservice.dto.request.PatientRequest;
 import jungle.patientservice.dto.request.PatientUpdateRequest;
 import jungle.patientservice.dto.response.PageResponse;
 import jungle.patientservice.dto.response.PatientResponse;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -35,11 +35,4 @@ public class PatientUpdateRequest {
     @Email(message = "Email không hợp lệ!!")
     private String email;
 
-    @Past(message = "Last test date must be in the past")
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate lastTestDate;
-
-    private String lastTestType;
-
-    private String instrumentUsed;
 }

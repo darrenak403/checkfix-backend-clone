@@ -19,6 +19,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class TestOrderCreationResponse {
+
+    private Long id;
+
     private Long patientId;
 
     private String patientName;
@@ -36,6 +39,10 @@ public class TestOrderCreationResponse {
 
     @Enumerated(EnumType.STRING)
     private PriorityStatus priority;
+
+    private String testType;
+
+    private String instrument;
 
     private String createdBy;
 

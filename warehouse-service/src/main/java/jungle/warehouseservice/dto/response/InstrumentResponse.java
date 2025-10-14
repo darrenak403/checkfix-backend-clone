@@ -18,7 +18,7 @@ public class InstrumentResponse {
     String name;
     String serialNumber;
     InstrumentStatus status;
-    Long createdBy;
+    String createdBy;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     LocalDateTime createdAt;

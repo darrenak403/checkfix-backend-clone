@@ -1,7 +1,6 @@
 package jungle.patientservice.utils;
 
-import jungle.patientservice.dto.response.RestResponse;
-import jungle.patientservice.dto.response.UserResponse;
+
 import jungle.patientservice.repo.httpClient.UserClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;

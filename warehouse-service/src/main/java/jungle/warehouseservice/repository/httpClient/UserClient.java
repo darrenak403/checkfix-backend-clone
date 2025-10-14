@@ -1,8 +1,8 @@
-package jungle.patientservice.repo.httpClient;
+package jungle.warehouseservice.repository.httpClient;
 
-import jungle.patientservice.config.AuthenticationRequestInterceptor;
-import jungle.patientservice.dto.response.RestResponse;
-import jungle.patientservice.dto.response.UserResponse;
+import jungle.warehouseservice.config.AuthenticationRequestInterceptor;
+import jungle.warehouseservice.dto.response.RestResponse;
+import jungle.warehouseservice.dto.response.UserResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

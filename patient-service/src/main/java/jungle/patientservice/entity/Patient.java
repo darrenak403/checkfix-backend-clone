@@ -34,11 +34,6 @@ public class Patient {
 
     private String email;
 
-    private LocalDate lastTestDate;
-
-    private String lastTestType;
-
-    private String instrumentUsed;
 
     private Long userId;
 

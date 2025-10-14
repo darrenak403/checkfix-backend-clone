@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @Data
 public class BaseResponse {
     private int status;
-    private String message;
-    private Object data;
-    private String path;        // API path
     private String error;
+    private String message;
+    private String path;        // API path
     private LocalDateTime timestamp; // Thời gian xảy ra response
+    private Object data;
 }

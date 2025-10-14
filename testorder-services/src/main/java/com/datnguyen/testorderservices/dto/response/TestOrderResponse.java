@@ -1,33 +1,40 @@
 package com.datnguyen.testorderservices.dto.response;
 
-import com.datnguyen.testorderservices.entity.Comment;
 import com.datnguyen.testorderservices.entity.OrderStatus;
+import com.datnguyen.testorderservices.entity.PriorityStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
-import org.bouncycastle.util.test.TestResult;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TestOrderDetailResponse {
+public class TestOrderResponse {
     private Long id;
-    private Long patientId;
-    private String patientName;
-    private String gender;
-    private String email;
-    private String phone;
-    private Integer age;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate yob;
+    private Long patientId;
+
+    private String patientName;
+
+    private String email;
 
     private String address;
+
+    private String phone;
+
+    private String gender;
+
+    private LocalDate yob;
+    private Integer  age;
+
     private String priority;
 
     private String testType;
@@ -35,15 +42,11 @@ public class TestOrderDetailResponse {
     private String instrument;
 
     private String createdBy;
+
     private String runBy;
-    private OrderStatus status;
+
+    private String status;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime createdAt;
-
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    private LocalDateTime runAt;
-    private List<TestResult> results;
-    private List<Comment> comments;
-
 }

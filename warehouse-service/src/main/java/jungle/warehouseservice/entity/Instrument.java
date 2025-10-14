@@ -32,7 +32,7 @@ public class Instrument {
 
     private Instant deactivatedAt;
 
-    private Long createdBy;
+    private String createdBy;
 
     private LocalDateTime createdAt;
 
