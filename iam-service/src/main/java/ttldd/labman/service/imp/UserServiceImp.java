@@ -276,9 +276,6 @@ public  class UserServiceImp implements UserService {
         if (existingUser.isPresent()) {
             // User đã tồn tại
             userEntity = existingUser.get();
-            if(!userEntity.getLoginProvider().equalsIgnoreCase("google")){
-                throw new RuntimeException("Email đã được đăng ký bằng phương thức khác");
-            }
         } else {
             // Sign Up
             Role roleEntity = roleRepository.findByRoleCode(role)
