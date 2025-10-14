@@ -46,6 +46,32 @@ public class TestOrderService {
         return (dob == null) ? null : Period.between(dob, LocalDate.now()).getYears();
     }
 
+    //    @Transactional
+//    public TestOrderCreationResponse create(TestOrderCreateRequest req) {
+//        var patientResponse = getPatient(req.getPatientId());
+//        RestResponse<UserResponse> user = userClient.getUser(req.getRunBy());
+//        TestOrder order = TestOrder.builder()
+//                .patientId(req.getPatientId())
+//                .patientName(patientResponse.getFullName())
+//                .email(patientResponse.getEmail())
+//                .address(patientResponse.getAddress())
+//                .phone(patientResponse.getPhone())
+//                .yob(patientResponse.getYob())
+//                .gender(patientResponse.getGender())
+//                .status(OrderStatus.PENDING)
+//                .createdBy(jwtUtils.getFullName())
+//                .runBy(user.getData().getFullName())
+//                .priority(req.getPriority())
+//                .testType(req.getTestType())
+//                .instrument(req.getInstrument())
+//                .age(ageFrom(patientResponse.getYob()))
+//                .deleted(false)
+//                .build();
+//
+//        TestOrder saved = orderRepo.save(order);
+//        logAudit(saved.getId(), "CREATE", safeJson(req), jwtUtils.getCurrentUserId());
+//        return mapper.toTestOrderCreationResponse(saved);
+//    }
     @Transactional
     public TestOrderCreationResponse create(TestOrderCreateRequest req) {
         var patientResponse = getPatient(req.getPatientId());
@@ -72,6 +98,7 @@ public class TestOrderService {
         logAudit(saved.getId(), "CREATE", safeJson(req), jwtUtils.getCurrentUserId());
         return mapper.toTestOrderCreationResponse(saved);
     }
+
 
     @Transactional(readOnly = true)
     public Page<TestOrderCreationResponse> list(OrderStatus status, Pageable pageable) {
@@ -150,6 +177,17 @@ public class TestOrderService {
         logAudit(o.getId(), "DELETE", safeJson(o), jwtUtils.getCurrentUserId());
     }
 
+    //    private PatientDTO getPatient(Long patientId) {
+//        try {
+//            RestResponse<PatientDTO> response = patientClient.getById(patientId);
+//            if (response == null || response.getData().isDeleted())
+//                throw new IllegalArgumentException("Bệnh nhân không tồn tại hoặc đã bị xoá");
+//            return response.getData();
+//        } catch (Exception e) {
+//            log.error("Lỗi khi gọi Patient Service: {}", e.getMessage());
+//            throw new IllegalArgumentException("Không kết nối được tới Patient Service");
+//        }
+//    }
     private PatientDTO getPatient(Long patientId) {
         try {
             RestResponse<PatientDTO> response = patientClient.getById(patientId);
@@ -157,15 +195,17 @@ public class TestOrderService {
                 throw new IllegalArgumentException("Bệnh nhân không tồn tại hoặc đã bị xoá");
             return response.getData();
         } catch (Exception e) {
+            log.error("Lỗi khi gọi Patient Service: {}", e.getMessage());
             throw new IllegalArgumentException("Không kết nối được tới Patient Service");
         }
     }
+
 
     public PageResponse<TestOrderResponse> getAllOrdersByPatientId(Long patientId, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page - 1, size, sort);
         Page<TestOrder> orders = orderRepo.findByPatientIdAndDeletedFalse(patientId, pageable);
-        if (orders.isEmpty()){
+        if (orders.isEmpty()) {
             throw new IllegalArgumentException("Không tìm thấy phiếu xét nghiệm nào cho bệnh nhân này");
         }
         return PageResponse.<TestOrderResponse>builder()
@@ -176,7 +216,6 @@ public class TestOrderService {
                 .data(orders.getContent().stream().map(mapper::toTestOrderResponse).toList())
                 .build();
     }
-
 
 
     private void logAudit(Long orderId, String action, String detail, Long operatorUserId) {
