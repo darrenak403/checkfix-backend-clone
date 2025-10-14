@@ -4,7 +4,7 @@ server:
   port: 6789
 spring:
   application:
-    name: api-gateway
+    name: API-GATEWAY
   cloud:
     gateway:
         routes:
@@ -74,3 +74,24 @@ springdoc:
     enabled: true
 
 
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  tracing:
+    sampling:
+      probability: 1.0 # 100% request được tracking (nếu hệ thống lớn, có thể giảm xuống 0.5)
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
