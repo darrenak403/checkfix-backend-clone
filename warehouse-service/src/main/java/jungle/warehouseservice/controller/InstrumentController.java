@@ -3,6 +3,7 @@ package jungle.warehouseservice.controller;
 import jakarta.validation.Valid;
 import jungle.warehouseservice.dto.request.InstrumentRequest;
 import jungle.warehouseservice.dto.response.InstrumentResponse;
+import jungle.warehouseservice.dto.response.PageResponse;
 import jungle.warehouseservice.dto.response.RestResponse;
 import jungle.warehouseservice.service.InstrumentService;
 import lombok.AccessLevel;
@@ -10,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/instruments")
@@ -32,6 +30,19 @@ public class InstrumentController {
                 .message("Instrument created successfully")
                 .build();
         return ResponseEntity.status(201).body(restResponse);
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF')")
+    public ResponseEntity<RestResponse<PageResponse<InstrumentResponse>>> getAllInstruments(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                                           @RequestParam(value = "size", defaultValue = "10") int size) {
+        PageResponse<InstrumentResponse> instruments = instrumentService.getInstruments(page, size);
+        RestResponse<PageResponse<InstrumentResponse>> restResponse = RestResponse.<PageResponse<InstrumentResponse>>builder()
+                .statusCode(200)
+                .data(instruments)
+                .message("Instruments retrieved successfully")
+                .build();
+        return ResponseEntity.ok(restResponse);
     }
 
 }
