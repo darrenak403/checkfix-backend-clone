@@ -3,7 +3,9 @@ package com.datnguyen.testorderservices.controller;
 import com.datnguyen.testorderservices.dto.request.TestOrderCreateRequest;
 import com.datnguyen.testorderservices.dto.request.TestOrderUpdateRequest;
 import com.datnguyen.testorderservices.dto.request.TestOrderUpdateStatusRequest;
-import com.datnguyen.testorderservices.dto.response.*;
+import com.datnguyen.testorderservices.dto.response.RestResponse;
+import com.datnguyen.testorderservices.dto.response.TestOrderCreationResponse;
+import com.datnguyen.testorderservices.dto.response.TestOrderDetailResponse;
 import com.datnguyen.testorderservices.entity.OrderStatus;
 import com.datnguyen.testorderservices.service.TestOrderService;
 import jakarta.validation.Valid;
@@ -12,14 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -68,6 +68,8 @@ public class TestOrderController {
             @PathVariable Long id,
             @Valid @RequestBody TestOrderUpdateRequest req
     ) {
+        Long userId = getCurrentUserId();
+        log.debug("Updating test order id={} by userId={}", id, userId);
 
         TestOrderCreationResponse response = service.update(id, req);
         return ResponseEntity.ok(RestResponse.success(response));
@@ -89,16 +91,16 @@ public class TestOrderController {
                 .build();
         return ResponseEntity.ok(response);
     }
-
-    @GetMapping("/patient/{patientId}")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<RestResponse<?>> getOrdersByPatientId(
-            @PathVariable Long patientId,
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size){
-        PageResponse<TestOrderResponse> orders = service.getAllOrdersByPatientId(patientId, page, size);
-        return ResponseEntity.ok(RestResponse.success(orders));
+    public Long getCurrentUserId() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            var jwt = jwtAuth.getToken();
+            Object idClaim = jwt.getClaim("userId");
+            if (idClaim != null) {
+                return Long.parseLong(idClaim.toString());
+            }
+        }
+        return null;
     }
-
 }
 

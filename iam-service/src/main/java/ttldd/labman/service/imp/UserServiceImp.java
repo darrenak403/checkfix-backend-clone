@@ -270,7 +270,7 @@ public  class UserServiceImp implements UserService {
         String refreshToken;
 
         // Kiểm tra googleId có tồn tại ở database chưa
-        Optional<User> existingUser = userRepo.findByGoogleId(userDTO.getSub());
+        Optional<User> existingUser = userRepo.findByEmail(userDTO.getEmail());
         User userEntity;
 
         if (existingUser.isPresent()) {

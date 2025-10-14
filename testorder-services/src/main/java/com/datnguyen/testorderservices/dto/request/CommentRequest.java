@@ -7,5 +7,4 @@ public class CommentRequest {
     private Long testOrderId;
     private Long testResultId;
     private String content;
-    private Long userId;
 }

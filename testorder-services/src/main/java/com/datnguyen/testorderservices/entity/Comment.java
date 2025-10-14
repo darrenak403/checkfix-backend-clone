@@ -21,8 +21,8 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;  // ID người viết comment
+    @Column(name = "doctorId", nullable = false)
+    private Long doctorId;
 
     @Column(nullable = false, length = 1000)
     private String content;
@@ -36,8 +36,10 @@ public class Comment {
     @Column(name = "updated_by")
     private String updatedBy;
 
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private CommentStatus status;
 
     @PrePersist
     void prePersist() {

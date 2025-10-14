@@ -12,5 +12,5 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findByUserId(Long userId);
+    List<Comment> findByDoctorId(Long doctorId);
 }
