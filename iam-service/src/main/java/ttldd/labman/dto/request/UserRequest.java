@@ -11,8 +11,11 @@ public class
 UserRequest {
     @Email(message = "Invalid email format")
     @NotBlank
-    @Column(nullable = false, unique = true, length = 100)
     private String email;
+
+    @NotBlank
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",
+            message = "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và số")
     private String password;
     private String sub;
     @Pattern(regexp = "^[\\p{L} ]+$", message = "Full name must contain only letters")

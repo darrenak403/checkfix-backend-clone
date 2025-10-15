@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+import ttldd.labman.dto.request.UserCreationRequest;
 import ttldd.labman.dto.response.AuthResponse;
 import ttldd.labman.dto.request.UserRequest;
 import ttldd.labman.dto.response.UserResponse;
@@ -405,6 +407,52 @@ public  class UserServiceImp implements UserService {
     public UserResponse getUserById(Long id) {
         User user = userRepo.findById(id).orElseThrow(() -> new GetException("User not found with id: " + id));
         return convertUserToUserResponse(user);
+    }
+
+    @Override
+    public UserResponse createUser(UserCreationRequest userRequest) {
+        if (userRepo.existsByEmail(userRequest.getEmail())) {
+            throw new InsertException("Email already exists");
+        }
+        try {
+            // Mã hóa mật khẩu
+            String encodedPassword = passwordEncoder.encode(userRequest.getPassword());
+
+            Role role = roleRepository.findById(userRequest.getRoleId())
+                    .orElseThrow(() -> new InsertException("Role not found: " + userRequest.getRoleId()));
+
+            // Tạo mới user
+            User user = User.builder()
+                    .email(userRequest.getEmail())
+                    .password(encodedPassword)
+                    .fullName(userRequest.getFullName())
+                    .address(userRequest.getAddress())
+                    .gender(userRequest.getGender())
+                    .dateOfBirth(userRequest.getDateOfBirth())
+                    .phoneNumber(userRequest.getPhone())
+                    .role(role)
+                    .loginProvider("local")
+                    .build();
+
+            // Lưu vào database
+            userRepo.save(user);
+
+            return convertUserToUserResponse(user);
+
+        } catch (InsertException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new InsertException("Error while inserting user: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public UserResponse updateUser(Long id, UserRequest userRequest) {
+        User user = userRepo.findById(id).orElseThrow(() -> new GetException("User not found with id: " + id));
+        if (StringUtils.hasText(userRequest.getFullName())) {
+            user.setFullName(userRequest.getFullName());
+        }
+        return null;
     }
 
     public String generateAccessToken(User user) {
