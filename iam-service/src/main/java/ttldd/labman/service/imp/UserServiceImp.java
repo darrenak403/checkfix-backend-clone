@@ -7,11 +7,14 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import ttldd.labman.dto.request.UserCreationRequest;
+import ttldd.labman.dto.request.UserUpdateRequest;
 import ttldd.labman.dto.response.AuthResponse;
 import ttldd.labman.dto.request.UserRequest;
 import ttldd.labman.dto.response.UserResponse;
@@ -447,12 +450,44 @@ public  class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserResponse updateUser(Long id, UserRequest userRequest) {
+    public UserResponse updateUser(Long id, UserUpdateRequest userRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepo.findById(id).orElseThrow(() -> new GetException("User not found with id: " + id));
         if (StringUtils.hasText(userRequest.getFullName())) {
             user.setFullName(userRequest.getFullName());
         }
-        return null;
+        if (StringUtils.hasText(userRequest.getEmail())) {
+            if (!user.getEmail().equals(userRequest.getEmail()) && userRepo.existsByEmail(userRequest.getEmail())) {
+                throw new InsertException("Email already exists");
+            }
+            user.setEmail(userRequest.getEmail());
+        }
+        if (StringUtils.hasText(userRequest.getPhone())){
+            user.setPhoneNumber(userRequest.getPhone());
+        }
+        if (StringUtils.hasText(userRequest.getAddress())) {
+            user.setAddress(userRequest.getAddress());
+        }
+        if (StringUtils.hasText(userRequest.getGender())) {
+            user.setGender(userRequest.getGender());
+        }
+        if (userRequest.getDateOfBirth() != null) {
+            user.setDateOfBirth(userRequest.getDateOfBirth());
+        }
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        if (userRequest.getRoleId() != null) {
+            if (!isAdmin) {
+                throw new IllegalArgumentException("Only admin can change roles");
+            }
+            Role role = roleRepository.findById(userRequest.getRoleId())
+                    .orElseThrow(() -> new InsertException("Role not found: " + userRequest.getRoleId()));
+            user.setRole(role);
+        }
+        userRepo.save(user);
+        return convertUserToUserResponse(user);
     }
 
     public String generateAccessToken(User user) {

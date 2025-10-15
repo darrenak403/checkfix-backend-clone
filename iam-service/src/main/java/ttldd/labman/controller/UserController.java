@@ -1,11 +1,13 @@
 package ttldd.labman.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ttldd.labman.dto.request.UserCreationRequest;
 import ttldd.labman.dto.request.UserRequest;
+import ttldd.labman.dto.request.UserUpdateRequest;
 import ttldd.labman.dto.response.BaseResponse;
 import ttldd.labman.dto.response.RestResponse;
 import ttldd.labman.dto.response.UserResponse;
@@ -53,4 +55,17 @@ public class UserController {
                 .build();
         return ResponseEntity.status(201).body(response);
     }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<RestResponse<UserResponse>> updateUser(@PathVariable Long id ,@Valid @RequestBody UserUpdateRequest user) {
+        UserResponse updatedUser = userService.updateUser(id,user);
+        RestResponse<UserResponse> response = RestResponse.<UserResponse>builder()
+                .statusCode(200)
+                .message("User updated successfully")
+                .data(updatedUser)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
 }
