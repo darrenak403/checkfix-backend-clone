@@ -1,6 +1,7 @@
 package ttldd.labman.service;
 
 import ttldd.labman.dto.request.UserCreationRequest;
+import ttldd.labman.dto.request.UserUpdateRequest;
 import ttldd.labman.dto.response.AuthResponse;
 import ttldd.labman.dto.request.UserRequest;
 import ttldd.labman.dto.response.UserResponse;
@@ -19,5 +20,5 @@ public interface UserService {
     List<UserResponse>  getAllUser();
     UserResponse getUserById(Long id);
     UserResponse createUser(UserCreationRequest userRequest);
-    UserResponse updateUser(Long id, UserRequest userRequest);
+    UserResponse updateUser(Long id, UserUpdateRequest userRequest);
 }
