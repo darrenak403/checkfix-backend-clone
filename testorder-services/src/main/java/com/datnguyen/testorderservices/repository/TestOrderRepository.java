@@ -18,4 +18,8 @@ public interface TestOrderRepository extends JpaRepository<TestOrder, Long> {
     Page<TestOrder> findByDeletedFalseAndStatus(OrderStatus status, Pageable pageable);
     Optional<TestOrder> findById(Long testOrderId);
     Page<TestOrder> findByPatientIdAndDeletedFalse(Long id, Pageable pageable);
+
+    Optional<TestOrder> findByAccessionNumberAndDeletedFalse(String accessionNumber);
+    Optional<TestOrder> findByAccessionNumber(String accessionNumber);
+
 }

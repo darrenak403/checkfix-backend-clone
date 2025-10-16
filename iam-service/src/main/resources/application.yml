@@ -1,4 +1,3 @@
-
 spring:
   application:
     name: iam-service
@@ -43,6 +42,11 @@ spring:
         transport:
           protocol: smtp
         debug: false
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+
   security:
     oauth2:
       client:
@@ -90,8 +94,6 @@ eureka:
   instance:
     prefer-ip-address: true
 
-
-
 management:
   endpoints:
     web:
@@ -103,3 +105,6 @@ management:
   zipkin:
     tracing:
       endpoint: http://localhost:9411/api/v2/spans
+  health:
+    rabbit:
+      enabled: false

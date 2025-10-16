@@ -32,6 +32,10 @@ public class TestOrder {
 
     private String phone;
 
+    //ACC
+    @Column(unique = true, length = 50)
+    private String accessionNumber;
+
     private String gender;
 
     private LocalDate yob;
@@ -63,6 +67,10 @@ public class TestOrder {
 
 
     private Boolean deleted = false;
+
+    @OneToMany(mappedBy = "testOrder", cascade = CascadeType.ALL)
+    private List<TestResult> testResults;
+
 
     @PrePersist
     void prePersist() {

@@ -1,6 +1,7 @@
 package com.datnguyen.testorderservices.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,28 +20,41 @@ public class TestResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
-    private TestOrder order;
+    @JoinColumn(name = "test_order_id", nullable = false)
+    @JsonIgnore
 
+    private TestOrder testOrder;
 
-    private String parameter;
+    private Long patientId;
+    private String accessionNumber;
+    private String instrumentName;
 
-    private String value;
+    @Column(length = 30)
+    private String status; // COMPLETE / AI_REVIEW / REVIEWED / REJECTED
+    private Long commentId; // optional
 
-
-    //Flag: NORMAL / ABNORMAL / CRITICAL
-    private String flag;
     @Lob
-    private String hl7Raw;
+    private String parseHl7; // raw HL7
 
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+
+    @OneToMany(mappedBy = "testResult", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TestResultParameter> parameters;
+
     @PrePersist
     void prePersist() {
-
-        if (getOrder().getCreatedAt() == null) createdAt = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
     }
+
+    @PreUpdate
+    void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+
 
     @OneToMany(mappedBy = "testResult", cascade = CascadeType.ALL)
     private List<Comment> comments;
