@@ -28,7 +28,7 @@ spring:
           - id: testOrder-service
             uri: lb://testorder-service
             predicates:
-              - Path=${app.prefix}/orders/**, ${app.prefix}/comments/**
+              - Path=${app.prefix}/orders/**, ${app.prefix}/comments/**, ${app.prefix}/results/**
             filters:
               - StripPrefix=2
           #swagger

@@ -16,5 +16,8 @@ public class TestResultResponse {
     private String accessionNumber;
     private String instrument;
     private String status;
+
     private List<TestParameterDTO> parameters;
+
+
 }
