@@ -32,7 +32,7 @@ public class TestResult {
 
     @Column(length = 30)
     private String status; // COMPLETE / AI_REVIEW / REVIEWED / REJECTED
-    private Long commentId; // optional
+//    private Long commentId; // optional
 
     @Lob
     private String parseHl7; // raw HL7

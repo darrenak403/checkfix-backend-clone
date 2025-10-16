@@ -44,7 +44,7 @@ public class TestOrderDetailResponse {
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime runAt;
-    private List<TestResult> results;
-    private List<Comment> comments;
+    private List<TestResultResponse> results;
+    private List<CommentResponse> comments;
 
 }

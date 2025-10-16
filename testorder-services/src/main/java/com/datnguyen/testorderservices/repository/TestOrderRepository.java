@@ -1,6 +1,7 @@
 package com.datnguyen.testorderservices.repository;
 
 import com.datnguyen.testorderservices.dto.response.TestOrderResponse;
+import com.datnguyen.testorderservices.entity.Comment;
 import com.datnguyen.testorderservices.entity.TestOrder;
 import com.datnguyen.testorderservices.entity.OrderStatus;
 
@@ -21,5 +22,4 @@ public interface TestOrderRepository extends JpaRepository<TestOrder, Long> {
 
     Optional<TestOrder> findByAccessionNumberAndDeletedFalse(String accessionNumber);
     Optional<TestOrder> findByAccessionNumber(String accessionNumber);
-
 }
