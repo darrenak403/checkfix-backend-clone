@@ -280,6 +280,7 @@ public  class UserServiceImp implements UserService {
                 throw new RuntimeException("Email đã được đăng ký bằng phương thức khác");
             }
         } else {
+
             // Sign Up
             Role roleEntity = roleRepository.findByRoleCode(role)
                     .orElseThrow(() -> new RuntimeException("Role not found: " + role));
