@@ -23,6 +23,7 @@ public class TestOrderCreationResponse {
     private Long id;
 
     private Long patientId;
+    private String accessionNumber;
 
     private String patientName;
 

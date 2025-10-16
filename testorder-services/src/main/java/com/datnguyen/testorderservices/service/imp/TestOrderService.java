@@ -1,4 +1,4 @@
-package com.datnguyen.testorderservices.service;
+package com.datnguyen.testorderservices.service.imp;
 
 import com.datnguyen.testorderservices.client.PatientClient;
 import com.datnguyen.testorderservices.client.PatientDTO;
@@ -23,10 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -72,10 +69,13 @@ public class TestOrderService {
 //        logAudit(saved.getId(), "CREATE", safeJson(req), jwtUtils.getCurrentUserId());
 //        return mapper.toTestOrderCreationResponse(saved);
 //    }
+
     @Transactional
     public TestOrderCreationResponse create(TestOrderCreateRequest req) {
         var patientResponse = getPatient(req.getPatientId());
         RestResponse<UserResponse> user = userClient.getUser(req.getRunBy());
+
+        String accessionNumber = generateAccessionNumber();
         TestOrder order = TestOrder.builder()
                 .patientId(req.getPatientId())
                 .patientName(patientResponse.getFullName())
@@ -89,6 +89,7 @@ public class TestOrderService {
                 .runBy(user.getData().getFullName())
                 .priority(req.getPriority())
                 .testType(req.getTestType())
+                .accessionNumber(accessionNumber)
                 .instrument(req.getInstrument())
                 .age(ageFrom(patientResponse.getYob()))
                 .deleted(false)
@@ -225,6 +226,13 @@ public class TestOrderService {
                 .detail(detail)
                 .operatorUserId(operatorUserId)
                 .build());
+    }
+    private String generateAccessionNumber() {
+        // Lấy số lượng phiếu hiện có để sinh mã kế tiếp
+        long count = orderRepo.count() + 1;
+
+
+        return String.format("ACC%03d", count);
     }
 
 

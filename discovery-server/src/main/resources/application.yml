@@ -1,6 +1,11 @@
 spring:
   application:
     name: discovery-server
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+
 server:
   port: 8761
 eureka:
@@ -12,3 +17,7 @@ logging:
     com.netflix.eureka: OFF
     com.netflix.discovery: OFF
 
+management:
+  health:
+    rabbit:
+      enabled: false
