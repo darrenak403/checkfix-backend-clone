@@ -117,7 +117,7 @@ public class TestOrderService {
         TestOrder o = orderRepo.findById(id)
                 .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
                 .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại"));
-        List<Comment> comments = commentRepo.findByTestOrderId(o.getId());
+        List<Comment> comments = commentRepo.findByTestOrderIdAndStatus(o.getId(), CommentStatus.ACTIVE);
         o.setComments(comments);
         List<CommentResponse> commentResponses = comments.stream()
                 .map(c -> {
