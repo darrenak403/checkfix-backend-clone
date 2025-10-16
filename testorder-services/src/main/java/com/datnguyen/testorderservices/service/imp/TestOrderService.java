@@ -8,6 +8,7 @@ import com.datnguyen.testorderservices.dto.request.TestOrderUpdateRequest;
 import com.datnguyen.testorderservices.dto.request.TestOrderUpdateStatusRequest;
 import com.datnguyen.testorderservices.dto.response.*;
 import com.datnguyen.testorderservices.entity.*;
+import com.datnguyen.testorderservices.mapper.CommentMapper;
 import com.datnguyen.testorderservices.mapper.TestOrderMapper;
 import com.datnguyen.testorderservices.repository.*;
 import com.datnguyen.testorderservices.util.JwtUtils;
@@ -24,6 +25,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -115,7 +117,25 @@ public class TestOrderService {
         TestOrder o = orderRepo.findById(id)
                 .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
                 .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại"));
+        List<Comment> comments = commentRepo.findByTestOrderId(o.getId());
+        o.setComments(comments);
+        List<CommentResponse> commentResponses = comments.stream()
+                .map(c -> {
+                    long testOrderId = (c.getTestOrder() != null) ? c.getTestOrder().getId() : 0L;
+                    long testResultId = (c.getTestResult() != null) ? c.getTestResult().getId() : 0L;
 
+                    return CommentResponse.builder()
+                            .commentId(c.getId())
+                            .commentContent(c.getContent())
+                            .testOrderId(testOrderId)
+                            .doctorName(jwtUtils.getFullName())
+                            .testResultId(testResultId)
+                            .createdAt(c.getCreatedAt())
+                            .build();
+                })
+                .toList();
+        TestOrderDetailResponse resp = mapper.toTestOrderDetailResponse(o);
+        resp.setComments(commentResponses);
 //        var dto = TestOrderDetailResponse.builder()
 //                .id(o.getId())
 //                .status(o.getStatus())
@@ -133,7 +153,7 @@ public class TestOrderService {
 //            dto.setPatientAge(ageFrom(p.getYob()));
 //        } catch (Exception ignored) {}
 
-        return mapper.toTestOrderDetailResponse(o);
+        return resp;
     }
 
     @Transactional
