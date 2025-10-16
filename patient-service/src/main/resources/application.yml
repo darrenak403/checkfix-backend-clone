@@ -17,11 +17,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
-
 app:
   user-service:
     url: http://localhost:8081/iam
@@ -32,6 +27,7 @@ eureka:
       defaultZone: http://localhost:8761/eureka
   instance:
     prefer-ip-address: true
+
 
 management:
   endpoints:
@@ -44,6 +40,3 @@ management:
   zipkin:
     tracing:
       endpoint: http://localhost:9411/api/v2/spans
-  health:
-    rabbit:
-      enabled: false
