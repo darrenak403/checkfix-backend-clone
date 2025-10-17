@@ -4,12 +4,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class PatientDTO {
     private Long id;
 
     private Long userId;
+
+    private String patientCode;
 
     private String fullName;
 
@@ -24,11 +27,11 @@ public class PatientDTO {
 
     private String email;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate lastTestDate;
+    private String createdBy;
 
-    private String lastTestType;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime createdAt;
 
-    private String instrumentUsed;
-    private boolean deleted = false;
+    private String modifiedBy;
+
 }
