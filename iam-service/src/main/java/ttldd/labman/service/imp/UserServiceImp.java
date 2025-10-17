@@ -166,7 +166,11 @@ public  class UserServiceImp implements UserService {
         us.setEmail(userEntity.getEmail());
         us.setFullName(userEntity.getFullName());
         us.setRole(userEntity.getRole().getRoleCode());
-
+        us.setAvatarUrl(userEntity.getAvatarUrl());
+        us.setDateOfBirth(userEntity.getDateOfBirth());
+        us.setGender(userEntity.getGender());
+        us.setAddress(userEntity.getAddress());
+        us.setPhone(userEntity.getPhoneNumber());
         return new AuthResponse(accessToken, refreshToken, us);
     }
 
