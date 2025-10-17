@@ -50,6 +50,7 @@ public class User {
 
     private String password;
 
+    private String avatarUrl;
 
     private String googleId;
     private String loginProvider;
