@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: instrument-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/instrument_service
+      database: instrument_service
+server:
+  port: 8084
