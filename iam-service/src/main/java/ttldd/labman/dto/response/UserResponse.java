@@ -13,7 +13,7 @@ public class UserResponse {
     private Long id;
     private String role;
     private String address;
-
+    private String avatarUrl;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateOfBirth;
     private String gender;
