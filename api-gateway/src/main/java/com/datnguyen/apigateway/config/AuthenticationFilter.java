@@ -33,7 +33,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
     @NonFinal
     private String[] whileList = {
-            "^/actuator/.*",
+            "/actuator/.*",
             "/iam/auth/.*"
     };
 

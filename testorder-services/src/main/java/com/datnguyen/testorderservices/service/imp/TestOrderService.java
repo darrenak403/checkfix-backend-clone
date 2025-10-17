@@ -221,6 +221,13 @@ public class TestOrderService {
         }
     }
 
+    public PatientDTO getPatientByAccessionNumber(String accessionNumber) {
+        TestOrder order = orderRepo.findByAccessionNumberAndDeletedFalse(accessionNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu xét nghiệm với số accession number đã cho"));
+
+        return getPatient(order.getPatientId());
+    }
+
 
     public PageResponse<TestOrderResponse> getAllOrdersByPatientId(Long patientId, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");

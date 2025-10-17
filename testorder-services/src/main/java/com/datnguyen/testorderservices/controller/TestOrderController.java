@@ -1,5 +1,6 @@
 package com.datnguyen.testorderservices.controller;
 
+import com.datnguyen.testorderservices.client.PatientDTO;
 import com.datnguyen.testorderservices.dto.request.TestOrderCreateRequest;
 import com.datnguyen.testorderservices.dto.request.TestOrderUpdateRequest;
 import com.datnguyen.testorderservices.dto.request.TestOrderUpdateStatusRequest;
@@ -93,6 +94,13 @@ public class TestOrderController {
             @RequestParam(value = "size", defaultValue = "10") int size){
         PageResponse<TestOrderResponse> orders = service.getAllOrdersByPatientId(patientId, page, size);
         return ResponseEntity.ok(RestResponse.success(orders));
+    }
+
+    @GetMapping("/accessionNumber/patient/{accessionNumber}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_STAFF') or hasAnyAuthority('ROLE_DOCTOR')")
+    public ResponseEntity<RestResponse<?>> getOrdersByAccessionNumber(@PathVariable String accessionNumber){
+        PatientDTO patientDTO = service.getPatientByAccessionNumber(accessionNumber);
+        return ResponseEntity.ok(RestResponse.success(patientDTO));
     }
 
 }
