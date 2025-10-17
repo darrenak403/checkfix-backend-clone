@@ -4,6 +4,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+import ttldd.labman.dto.request.UpdateAvatarRequest;
 import ttldd.labman.dto.request.UserCreationRequest;
 import ttldd.labman.dto.request.UserUpdateRequest;
 import ttldd.labman.dto.response.AuthResponse;
@@ -32,6 +34,7 @@ import java.util.*;
 
 
 @Service
+@Slf4j
 public  class UserServiceImp implements UserService {
 
 
@@ -490,6 +493,15 @@ public  class UserServiceImp implements UserService {
         return convertUserToUserResponse(user);
     }
 
+    @Override
+    public UserResponse updateAvatar(UpdateAvatarRequest updateAvatarRequest) {
+        User user = userRepo.findById(jwtHelper.getCurrentUserId())
+                .orElseThrow(() -> new GetException("User not found with id: " + jwtHelper.getCurrentUserId()));
+        user.setAvatarUrl(updateAvatarRequest.getAvatarUrl());
+        userRepo.save(user);
+        return convertUserToUserResponse(user);
+    }
+
     public String generateAccessToken(User user) {
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -519,6 +531,7 @@ public  class UserServiceImp implements UserService {
         userResponse.setGender(user.getGender());
         userResponse.setPhone(user.getPhoneNumber());
         userResponse.setDateOfBirth(user.getDateOfBirth());
+        userResponse.setAvatarUrl(user.getAvatarUrl());
         return userResponse;
     }
 }

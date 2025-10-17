@@ -10,7 +10,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -19,6 +22,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Component
+@Slf4j
 public class JwtHelper {
 
     @Value("${jwt.secret}")
@@ -167,5 +171,18 @@ public class JwtHelper {
         }
 
         return signedJWT;
+    }
+
+    public Long getCurrentUserId() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuth) {
+            var jwt = jwtAuth.getToken();
+            log.info("JWT Claims: {}", jwt.getClaims());
+            Object idClaim = jwt.getClaim("userId");
+            if (idClaim != null) {
+                return Long.parseLong(idClaim.toString());
+            }
+        }
+        return null;
     }
 }
