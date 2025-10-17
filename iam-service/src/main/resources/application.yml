@@ -42,11 +42,11 @@ spring:
         transport:
           protocol: smtp
         debug: false
-
+  
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
-
+  
   security:
     oauth2:
       client:
