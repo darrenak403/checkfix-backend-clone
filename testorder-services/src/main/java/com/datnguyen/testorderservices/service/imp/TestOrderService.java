@@ -212,13 +212,19 @@ public class TestOrderService {
     private PatientDTO getPatient(Long patientId) {
         try {
             RestResponse<PatientDTO> response = patientClient.getById(patientId);
-            if (response == null || response.getData().isDeleted())
+            if (response == null)
                 throw new IllegalArgumentException("Bệnh nhân không tồn tại hoặc đã bị xoá");
             return response.getData();
         } catch (Exception e) {
             log.error("Lỗi khi gọi Patient Service: {}", e.getMessage());
             throw new IllegalArgumentException("Không kết nối được tới Patient Service");
         }
+    }
+
+    public PatientDTO getPatientByAccessionNumber(String accessionNumber) {
+        TestOrder order = orderRepo.findByAccessionNumberAndDeletedFalse(accessionNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu xét nghiệm với số accession number đã cho"));
+        return getPatient(order.getPatientId());
     }
 
 
