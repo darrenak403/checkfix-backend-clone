@@ -23,6 +23,8 @@ public class PatientDTO {
 
     private String address;
 
+    private String avatarUrl;
+
     private String phone;
 
     private String email;
