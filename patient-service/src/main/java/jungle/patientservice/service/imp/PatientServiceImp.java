@@ -55,6 +55,7 @@ public class PatientServiceImp implements PatientService {
         patient.setYob(user.getData().getDateOfBirth());
         patient.setCreatedBy(jwtUtils.getFullName());
         patient.setCreatedAt(LocalDateTime.now());
+        patient.setAvatarUrl(user.getData().getAvatarUrl());
 
         patientRepo.save(patient);
         return patientMapper.toPatientResponse(patient);
