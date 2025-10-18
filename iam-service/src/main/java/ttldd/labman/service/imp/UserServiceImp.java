@@ -328,45 +328,16 @@ public  class UserServiceImp implements UserService {
         us.setEmail(userEntity.getEmail());
         us.setFullName(userEntity.getFullName());
         us.setRole(userEntity.getRole().getRoleCode());
+        us.setAddress(userEntity.getAddress());
+        us.setGender(userEntity.getGender());
+        us.setPhone(userEntity.getPhoneNumber());
+        us.setDateOfBirth(userEntity.getDateOfBirth());
+        us.setAvatarUrl(userEntity.getAvatarUrl());
 
         return new AuthResponse(accessToken, refreshToken, us);
     }
 
 
-    @Transactional
-    public void createAdminUser() {
-        try {
-            // Kiểm tra admin đã tồn tại chưa
-            if (userRepo.existsByEmail(adminEmail)) {
-                System.out.println("Admin đã được tạo: " + adminEmail);
-                return;
-            }
-
-            // Tìm ROLE_ADMIN
-            Role adminRole = roleRepository.findByRoleCode("ROLE_ADMIN")
-                    .orElseThrow(() -> new InsertException("ROLE_ADMIN không tồn tại. Vui lòng tạo role trước."));
-
-            // Tạo admin user đơn giản
-            User admin = User.builder()
-                    .email(adminEmail)
-                    .password(passwordEncoder.encode(adminPassword))
-                    .fullName("Administrator") // Tên mặc định
-                    .role(adminRole)
-                    .loginProvider("local")
-                    .build();
-
-            // Lưu admin user
-            userRepo.save(admin);
-            System.out.println("TẠO ADMIN THÀNH CÔNG:");
-            System.out.println("   Email: " + adminEmail);
-            System.out.println("   Password: " + adminPassword);
-            System.out.println("   Role: ROLE_ADMIN");
-
-        } catch (Exception e) {
-            System.err.println(" Lỗi tạo admin user: " + e.getMessage());
-            throw new InsertException("Tạo admin thất bại: " + e.getMessage());
-        }
-    }
 
     @Override
     public AuthResponse refreshAccessToken(String refreshToken) {
