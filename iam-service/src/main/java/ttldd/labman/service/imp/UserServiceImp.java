@@ -4,16 +4,20 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+import ttldd.event.dto.PatientUpdateEvent;
+import ttldd.event.dto.UserUpdatedEvent;
 import ttldd.labman.dto.request.UpdateAvatarRequest;
 import ttldd.labman.dto.request.UserCreationRequest;
 import ttldd.labman.dto.request.UserUpdateRequest;
@@ -35,6 +39,7 @@ import java.util.*;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public  class UserServiceImp implements UserService {
 
 
@@ -90,6 +95,7 @@ public  class UserServiceImp implements UserService {
     @Value("${admin.password}")
     private String adminPassword;
 
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Override
     @Transactional
@@ -465,6 +471,18 @@ public  class UserServiceImp implements UserService {
             user.setRole(role);
         }
         userRepo.save(user);
+        UserUpdatedEvent userUpdatedEvent = UserUpdatedEvent.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .fullName(user.getFullName())
+                .phone(user.getPhoneNumber())
+                .address(user.getAddress())
+                .avatarUrl(user.getAvatarUrl())
+                .gender(user.getGender())
+                .dateOfBirth(user.getDateOfBirth())
+                .build();
+        kafkaTemplate.send("user-updated-topic", userUpdatedEvent);
+        log.info("Published UserUpdatedEvent for user ID: {}", userUpdatedEvent);
         return convertUserToUserResponse(user);
     }
 
@@ -475,6 +493,37 @@ public  class UserServiceImp implements UserService {
         user.setAvatarUrl(updateAvatarRequest.getAvatarUrl());
         userRepo.save(user);
         return convertUserToUserResponse(user);
+    }
+
+    @Override
+    public void syncUserFromPatient(PatientUpdateEvent event) {
+        userRepo.findById(event.getUserId()).ifPresentOrElse(user -> {
+            if (StringUtils.hasText(event.getFullName())) {
+                user.setFullName(event.getFullName());
+            }
+            if (StringUtils.hasText(event.getGender())) {
+                user.setGender(event.getGender());
+            }
+            if (event.getDateOfBirth() != null) {
+                user.setDateOfBirth(event.getDateOfBirth());
+            }
+            if (StringUtils.hasText(event.getAddress())) {
+                user.setAddress(event.getAddress());
+            }
+            if (StringUtils.hasText(event.getEmail())) {
+                user.setEmail(event.getEmail());
+            }
+            if (StringUtils.hasText(event.getPhone())) {
+                user.setPhoneNumber(event.getPhone());
+            }
+            if (StringUtils.hasText(event.getAvatarUrl())) {
+                user.setAvatarUrl(event.getAvatarUrl());
+            }
+            userRepo.save(user);
+            log.info("User info synced with patient update: {}", user.getId());
+        }, () -> {
+            log.warn("No user found with ID {} to sync from patient update", event.getId());
+        });
     }
 
     public String generateAccessToken(User user) {
