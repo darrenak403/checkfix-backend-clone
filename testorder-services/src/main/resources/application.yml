@@ -7,7 +7,19 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  #kafka
+  kafka:
+    bootstrap-servers: localhost:9094
+    consumer:
+      group-id: testOrder-service-group
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+#        spring.json.value.default.type: ttldd.event.dto.PatientUpdateEvent
+    listener:
+      missing-topics-fatal: false
   jpa:
     hibernate:
       ddl-auto: update
