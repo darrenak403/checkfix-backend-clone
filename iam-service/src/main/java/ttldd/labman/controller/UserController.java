@@ -2,15 +2,15 @@ package ttldd.labman.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ttldd.labman.dto.request.UserCardRequest;
+import ttldd.labman.dto.response.UserCardResponse;
 import ttldd.labman.dto.request.UpdateAvatarRequest;
 import ttldd.labman.dto.request.UserCreationRequest;
-import ttldd.labman.dto.request.UserRequest;
 import ttldd.labman.dto.request.UserUpdateRequest;
 import ttldd.labman.dto.response.BaseResponse;
 import ttldd.labman.dto.response.RestResponse;
@@ -89,13 +89,24 @@ public class UserController {
     }
 
     @PostMapping(value = "/extract-id-card", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<RestResponse<UserResponse>> extractIdCard(@RequestParam("frontImage") MultipartFile frontImage,
-                                                                    @RequestParam("backImage") MultipartFile backImage) {
-        UserResponse userResponse = vnptKycService.extractIdCardInfo(frontImage, backImage);
-        RestResponse<UserResponse> response = RestResponse.<UserResponse>builder()
+    public ResponseEntity<RestResponse<UserCardResponse>> extractIdCard(@RequestParam("frontImage") MultipartFile frontImage,
+                                                                        @RequestParam("backImage") MultipartFile backImage) {
+        UserCardResponse userResponse = vnptKycService.extractIdCardInfo(frontImage, backImage);
+        RestResponse<UserCardResponse> response = RestResponse.<UserCardResponse>builder()
                 .statusCode(200)
                 .message("ID card extracted successfully")
                 .data(userResponse)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/identity")
+    public ResponseEntity<RestResponse<UserResponse>> saveIdentityCard(@RequestBody UserCardRequest rq) {
+        UserResponse savedCard = vnptKycService.saveUserCard(rq);
+        RestResponse<UserResponse> response = RestResponse.<UserResponse>builder()
+                .statusCode(200)
+                .message("ID card saved successfully")
+                .data(savedCard)
                 .build();
         return ResponseEntity.ok(response);
     }

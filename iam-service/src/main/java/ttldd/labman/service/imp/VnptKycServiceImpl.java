@@ -5,8 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -15,6 +13,8 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import ttldd.labman.dto.PostCodeDTO;
+import ttldd.labman.dto.request.UserCardRequest;
+import ttldd.labman.dto.response.UserCardResponse;
 import ttldd.labman.dto.VnptOcrDTO;
 import ttldd.labman.dto.request.VnptClassifyRequest;
 import ttldd.labman.dto.request.VnptOcrFullRequest;
@@ -22,9 +22,9 @@ import ttldd.labman.dto.response.UserResponse;
 import ttldd.labman.dto.response.VnptClassifyResponse;
 import ttldd.labman.dto.response.VnptOcrFullResponse;
 import ttldd.labman.dto.response.VnptUploadResponse;
+import ttldd.labman.entity.Card;
 import ttldd.labman.entity.User;
 import ttldd.labman.exception.GetException;
-import ttldd.labman.mapper.UserMapper;
 import ttldd.labman.repo.UserRepo;
 import ttldd.labman.service.VnptKycService;
 import ttldd.labman.utils.DateUtils;
@@ -46,13 +46,11 @@ public class VnptKycServiceImpl implements VnptKycService {
 
     UserRepo userRepo;
 
-    UserMapper userMapper;
-
     JwtHelper jwtHelper;
 
     @Override
-    public UserResponse extractIdCardInfo(MultipartFile frontImage,
-                                          MultipartFile backImage) {
+    public UserCardResponse extractIdCardInfo(MultipartFile frontImage,
+                                              MultipartFile backImage) {
         User user = userRepo.findById(jwtHelper.getCurrentUserId())
                 .orElseThrow(() -> new GetException("User not found with id: " + jwtHelper.getCurrentUserId()));
         String initialClientSession = user.getEmail() + "_" + System.currentTimeMillis();
@@ -86,10 +84,30 @@ public class VnptKycServiceImpl implements VnptKycService {
             throw new IllegalArgumentException("Không bóc tách được dữ liệu (object is null)");
         }
         VnptOcrDTO data = response.getObject();
-        mapDataToUser(data, user);
-        userRepo.save(user);
-
         log.info("Bóc tách thành công User: {}", user.getFullName());
+        return mapDataToUser(data);
+    }
+
+    @Override
+    public UserResponse saveUserCard(UserCardRequest userCardDTO) {
+        User user = userRepo.findById(jwtHelper.getCurrentUserId())
+                .orElseThrow(() -> new GetException("User not found with id: " + jwtHelper.getCurrentUserId()));
+        user.setIdentifyNumber(userCardDTO.getIdentifyNumber());
+        user.setFullName(userCardDTO.getFullName());
+        user.setDateOfBirth(dateUtils.parseVnDate(userCardDTO.getBirthDate()));
+        user.setGender(userCardDTO.getGender());
+        user.setAddress(userCardDTO.getRecentLocation());
+        if (userCardDTO.getCardImages() != null) {
+            for (UserCardRequest.CardImageRequest img : userCardDTO.getCardImages()) {
+                Card card = Card.builder()
+                        .cardUrl(img.getImageUrl())
+                        .user(user)
+                        .build();
+                user.getCards().add(card);
+            }
+        }
+        userRepo.save(user);
+        log.info("Cập nhật thông tin giấy tờ cho User: {}", user.getFullName());
         return convertUserToUserResponse(user);
     }
 
@@ -124,12 +142,12 @@ public class VnptKycServiceImpl implements VnptKycService {
 
         try {
             VnptClassifyResponse response = vnptWebClient.post()
-                    .uri("/ai/v1/classify/id") // <-- URI API Phân loại
+                    .uri("/ai/v1/classify/id")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .header("mac-address", "TEST1") // Header đặc thù
+                    .header("mac-address", "TEST1")
                     .body(BodyInserters.fromValue(requestBody))
                     .retrieve()
-                    .bodyToMono(VnptClassifyResponse.class) // Hứng bằng DTO cha
+                    .bodyToMono(VnptClassifyResponse.class)
                     .block();
 
             // Lấy type từ object con
@@ -200,13 +218,18 @@ public class VnptKycServiceImpl implements VnptKycService {
     }
 
 
-    private void mapDataToUser(VnptOcrDTO data, User user) {
-        user.setIdentifyNumber(data.getId());
-        user.setFullName(data.getName());
-        user.setGender(data.getGender());
-        user.setDateOfBirth(dateUtils.parseVnDate(data.getBirthDay()));
+    private UserCardResponse mapDataToUser(VnptOcrDTO data) {
         String address = formatAddressFromPostCode(data.getNewPostCode());
-        user.setAddress(address != null ? address : data.getRecentLocation().replace("\n", ", "));
+        return UserCardResponse.builder()
+                .identifyNumber(data.getId())
+                .fullName(data.getName())
+                .birthDate(data.getBirthDay())
+                .nationality(data.getNationality())
+                .recentLocation(address != null ? address : data.getRecentLocation().replace("\n", ", "))
+                .validDate(data.getValidDate())
+                .issueDate(data.getIssueDate())
+                .gender(data.getGender())
+                .build();
     }
 
     private String formatAddressFromPostCode(List<PostCodeDTO> postCodes) {
