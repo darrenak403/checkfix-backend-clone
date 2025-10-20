@@ -33,11 +33,13 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
     @NonFinal
     private String[] whileList = {
+            "/actuator/.*",
             "/iam/auth/.*"
     };
 
     @NonFinal
     private String[] swaggerList = {
+
             "/swagger-ui/.*",
             "/v3/api-docs/.*",
             "/swagger-ui.html",

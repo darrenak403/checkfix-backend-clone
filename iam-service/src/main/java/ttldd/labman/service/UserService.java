@@ -1,5 +1,10 @@
 package ttldd.labman.service;
 
+import ttldd.event.dto.PatientUpdateEvent;
+import ttldd.event.dto.UserUpdatedEvent;
+import ttldd.labman.dto.request.UpdateAvatarRequest;
+import ttldd.labman.dto.request.UserCreationRequest;
+import ttldd.labman.dto.request.UserUpdateRequest;
 import ttldd.labman.dto.response.AuthResponse;
 import ttldd.labman.dto.request.UserRequest;
 import ttldd.labman.dto.response.UserResponse;
@@ -17,4 +22,8 @@ public interface UserService {
     AuthResponse refreshAccessToken(String refreshToken);
     List<UserResponse>  getAllUser();
     UserResponse getUserById(Long id);
+    UserResponse createUser(UserCreationRequest userRequest);
+    UserResponse updateUser(Long id, UserUpdateRequest userRequest);
+    UserResponse updateAvatar(UpdateAvatarRequest updateAvatarRequest);
+    void  syncUserFromPatient(PatientUpdateEvent event);
 }

@@ -4,12 +4,23 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+import ttldd.event.dto.PatientUpdateEvent;
+import ttldd.event.dto.UserUpdatedEvent;
+import ttldd.labman.dto.request.UpdateAvatarRequest;
+import ttldd.labman.dto.request.UserCreationRequest;
+import ttldd.labman.dto.request.UserUpdateRequest;
 import ttldd.labman.dto.response.AuthResponse;
 import ttldd.labman.dto.request.UserRequest;
 import ttldd.labman.dto.response.UserResponse;
@@ -27,6 +38,8 @@ import java.util.*;
 
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public  class UserServiceImp implements UserService {
 
 
@@ -82,6 +95,7 @@ public  class UserServiceImp implements UserService {
     @Value("${admin.password}")
     private String adminPassword;
 
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Override
     @Transactional
@@ -158,7 +172,11 @@ public  class UserServiceImp implements UserService {
         us.setEmail(userEntity.getEmail());
         us.setFullName(userEntity.getFullName());
         us.setRole(userEntity.getRole().getRoleCode());
-
+        us.setAvatarUrl(userEntity.getAvatarUrl());
+        us.setDateOfBirth(userEntity.getDateOfBirth());
+        us.setGender(userEntity.getGender());
+        us.setAddress(userEntity.getAddress());
+        us.setPhone(userEntity.getPhoneNumber());
         return new AuthResponse(accessToken, refreshToken, us);
     }
 
@@ -316,45 +334,16 @@ public  class UserServiceImp implements UserService {
         us.setEmail(userEntity.getEmail());
         us.setFullName(userEntity.getFullName());
         us.setRole(userEntity.getRole().getRoleCode());
+        us.setAddress(userEntity.getAddress());
+        us.setGender(userEntity.getGender());
+        us.setPhone(userEntity.getPhoneNumber());
+        us.setDateOfBirth(userEntity.getDateOfBirth());
+        us.setAvatarUrl(userEntity.getAvatarUrl());
 
         return new AuthResponse(accessToken, refreshToken, us);
     }
 
 
-    @Transactional
-    public void createAdminUser() {
-        try {
-            // Kiểm tra admin đã tồn tại chưa
-            if (userRepo.existsByEmail(adminEmail)) {
-                System.out.println("Admin đã được tạo: " + adminEmail);
-                return;
-            }
-
-            // Tìm ROLE_ADMIN
-            Role adminRole = roleRepository.findByRoleCode("ROLE_ADMIN")
-                    .orElseThrow(() -> new InsertException("ROLE_ADMIN không tồn tại. Vui lòng tạo role trước."));
-
-            // Tạo admin user đơn giản
-            User admin = User.builder()
-                    .email(adminEmail)
-                    .password(passwordEncoder.encode(adminPassword))
-                    .fullName("Administrator") // Tên mặc định
-                    .role(adminRole)
-                    .loginProvider("local")
-                    .build();
-
-            // Lưu admin user
-            userRepo.save(admin);
-            System.out.println("TẠO ADMIN THÀNH CÔNG:");
-            System.out.println("   Email: " + adminEmail);
-            System.out.println("   Password: " + adminPassword);
-            System.out.println("   Role: ROLE_ADMIN");
-
-        } catch (Exception e) {
-            System.err.println(" Lỗi tạo admin user: " + e.getMessage());
-            throw new InsertException("Tạo admin thất bại: " + e.getMessage());
-        }
-    }
 
     @Override
     public AuthResponse refreshAccessToken(String refreshToken) {
@@ -407,6 +396,136 @@ public  class UserServiceImp implements UserService {
         return convertUserToUserResponse(user);
     }
 
+    @Override
+    public UserResponse createUser(UserCreationRequest userRequest) {
+        if (userRepo.existsByEmail(userRequest.getEmail())) {
+            throw new InsertException("Email already exists");
+        }
+        try {
+            // Mã hóa mật khẩu
+            String encodedPassword = passwordEncoder.encode(userRequest.getPassword());
+
+            Role role = roleRepository.findById(userRequest.getRoleId())
+                    .orElseThrow(() -> new InsertException("Role not found: " + userRequest.getRoleId()));
+
+            // Tạo mới user
+            User user = User.builder()
+                    .email(userRequest.getEmail())
+                    .password(encodedPassword)
+                    .fullName(userRequest.getFullName())
+                    .address(userRequest.getAddress())
+                    .gender(userRequest.getGender())
+                    .dateOfBirth(userRequest.getDateOfBirth())
+                    .phoneNumber(userRequest.getPhone())
+                    .role(role)
+                    .loginProvider("local")
+                    .build();
+
+            // Lưu vào database
+            userRepo.save(user);
+
+            return convertUserToUserResponse(user);
+
+        } catch (InsertException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new InsertException("Error while inserting user: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public UserResponse updateUser(Long id, UserUpdateRequest userRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepo.findById(id).orElseThrow(() -> new GetException("User not found with id: " + id));
+        if (StringUtils.hasText(userRequest.getFullName())) {
+            user.setFullName(userRequest.getFullName());
+        }
+        if (StringUtils.hasText(userRequest.getEmail())) {
+            if (!user.getEmail().equals(userRequest.getEmail()) && userRepo.existsByEmail(userRequest.getEmail())) {
+                throw new InsertException("Email already exists");
+            }
+            user.setEmail(userRequest.getEmail());
+        }
+        if (StringUtils.hasText(userRequest.getPhone())){
+            user.setPhoneNumber(userRequest.getPhone());
+        }
+        if (StringUtils.hasText(userRequest.getAddress())) {
+            user.setAddress(userRequest.getAddress());
+        }
+        if (StringUtils.hasText(userRequest.getGender())) {
+            user.setGender(userRequest.getGender());
+        }
+        if (userRequest.getDateOfBirth() != null) {
+            user.setDateOfBirth(userRequest.getDateOfBirth());
+        }
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        if (userRequest.getRoleId() != null) {
+            if (!isAdmin) {
+                throw new IllegalArgumentException("Only admin can change roles");
+            }
+            Role role = roleRepository.findById(userRequest.getRoleId())
+                    .orElseThrow(() -> new InsertException("Role not found: " + userRequest.getRoleId()));
+            user.setRole(role);
+        }
+        userRepo.save(user);
+        UserUpdatedEvent userUpdatedEvent = UserUpdatedEvent.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .fullName(user.getFullName())
+                .phone(user.getPhoneNumber())
+                .address(user.getAddress())
+                .avatarUrl(user.getAvatarUrl())
+                .gender(user.getGender())
+                .dateOfBirth(user.getDateOfBirth())
+                .build();
+        kafkaTemplate.send("user-updated-topic", userUpdatedEvent);
+        log.info("Published UserUpdatedEvent for user ID: {}", userUpdatedEvent);
+        return convertUserToUserResponse(user);
+    }
+
+    @Override
+    public UserResponse updateAvatar(UpdateAvatarRequest updateAvatarRequest) {
+        User user = userRepo.findById(jwtHelper.getCurrentUserId())
+                .orElseThrow(() -> new GetException("User not found with id: " + jwtHelper.getCurrentUserId()));
+        user.setAvatarUrl(updateAvatarRequest.getAvatarUrl());
+        userRepo.save(user);
+        return convertUserToUserResponse(user);
+    }
+
+    @Override
+    public void syncUserFromPatient(PatientUpdateEvent event) {
+        userRepo.findById(event.getUserId()).ifPresentOrElse(user -> {
+            if (StringUtils.hasText(event.getFullName())) {
+                user.setFullName(event.getFullName());
+            }
+            if (StringUtils.hasText(event.getGender())) {
+                user.setGender(event.getGender());
+            }
+            if (event.getDateOfBirth() != null) {
+                user.setDateOfBirth(event.getDateOfBirth());
+            }
+            if (StringUtils.hasText(event.getAddress())) {
+                user.setAddress(event.getAddress());
+            }
+            if (StringUtils.hasText(event.getEmail())) {
+                user.setEmail(event.getEmail());
+            }
+            if (StringUtils.hasText(event.getPhone())) {
+                user.setPhoneNumber(event.getPhone());
+            }
+            if (StringUtils.hasText(event.getAvatarUrl())) {
+                user.setAvatarUrl(event.getAvatarUrl());
+            }
+            userRepo.save(user);
+            log.info("User info synced with patient update: {}", user.getId());
+        }, () -> {
+            log.warn("No user found with ID {} to sync from patient update", event.getId());
+        });
+    }
+
     public String generateAccessToken(User user) {
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -427,15 +546,17 @@ public  class UserServiceImp implements UserService {
     }
 
     private UserResponse convertUserToUserResponse(User user) {
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setEmail(user.getEmail());
-        userResponse.setFullName(user.getFullName());
-        userResponse.setRole(user.getRole().getRoleCode());
-        userResponse.setAddress(user.getAddress());
-        userResponse.setGender(user.getGender());
-        userResponse.setPhone(user.getPhoneNumber());
-        userResponse.setDateOfBirth(user.getDateOfBirth());
-        return userResponse;
+        return UserResponse.builder()
+                .id(user.getId())
+                .identifyNumber(user.getIdentifyNumber())
+                .email(user.getEmail())
+                .fullName(user.getFullName())
+                .role(user.getRole().getRoleCode())
+                .address(user.getAddress())
+                .gender(user.getGender())
+                .dateOfBirth(user.getDateOfBirth())
+                .phone(user.getPhoneNumber())
+                .avatarUrl(user.getAvatarUrl())
+                .build();
     }
 }
