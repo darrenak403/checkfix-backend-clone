@@ -23,43 +23,20 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 public class JwtDecoderCustomizer implements JwtDecoder {
-    @Value("${jwt.secret}")
-    private String secretKey;
-
-    private NimbusJwtDecoder nimbusJwtDecoder = null;
-
-    public boolean verifyToken(String token) throws ParseException, JOSEException {
-        if(StringUtils.isBlank(token)) {
-            return false;
-        }
-        SignedJWT signedJWT = SignedJWT.parse(token);
-
-        if(signedJWT.getJWTClaimsSet().getExpirationTime().before(new Date())) {
-            return false;
-        }
-
-        return signedJWT.verify(new MACVerifier(Decoders.BASE64.decode(secretKey)));
-    }
 
     @Override
     public Jwt decode(String token) throws JwtException {
         try {
-            if(!verifyToken(token)) {
-                throw new JwtException("Invalid token");
-            }
-
-            if(Objects.isNull(nimbusJwtDecoder)) {
-                SecretKeySpec secretKeySpec = new SecretKeySpec(
-                        Decoders.BASE64.decode(secretKey),
-                        "HS256");
-
-                nimbusJwtDecoder = NimbusJwtDecoder.withSecretKey(secretKeySpec)
-                        .macAlgorithm(MacAlgorithm.HS256)
-                        .build();
-            }
-        } catch (ParseException | JOSEException e) {
-            throw new RuntimeException(e);
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            return new Jwt(
+                    token,
+                    signedJWT.getJWTClaimsSet().getIssueTime().toInstant(),
+                    signedJWT.getJWTClaimsSet().getExpirationTime().toInstant(),
+                    signedJWT.getHeader().toJSONObject(),
+                    signedJWT.getJWTClaimsSet().getClaims()
+            );
+        } catch (ParseException e) {
+            throw new JwtException("Invalid JWT token", e);
         }
-        return nimbusJwtDecoder.decode(token);
     }
 }

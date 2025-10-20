@@ -42,6 +42,34 @@
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
+
+
+
+
+		<!-- Dependency để sử dụng Spring Boot Actuator : theo dõi sức khỏe của WebApp -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<!-- Thư viện chính thực hiện tracing -->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-tracing</artifactId>
+		</dependency>
+
+		<!--Bridge kết nối với Brave, Brave chủ yếu được dùng với Zipkin -->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-tracing-bridge-brave</artifactId>
+		</dependency>
+
+		<!--     Gửi dữ liệu tracing từ Micrometer Tracing + Brave đến Zipkin Server-->
+		<dependency>
+			<groupId>io.zipkin.reporter2</groupId>
+			<artifactId>zipkin-reporter-brave</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -116,7 +144,11 @@
 			<version>1.5.5.Final</version>
 		</dependency>
 
-
+		<!--kafka-->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
