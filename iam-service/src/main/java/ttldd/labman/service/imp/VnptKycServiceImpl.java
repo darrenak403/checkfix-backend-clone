@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import ttldd.labman.dto.CardImgDTO;
 import ttldd.labman.dto.PostCodeDTO;
 import ttldd.labman.dto.request.UserCardRequest;
 import ttldd.labman.dto.response.UserCardResponse;
@@ -26,13 +27,16 @@ import ttldd.labman.entity.Card;
 import ttldd.labman.entity.User;
 import ttldd.labman.exception.GetException;
 import ttldd.labman.repo.UserRepo;
+import ttldd.labman.service.CloudinaryService;
 import ttldd.labman.service.VnptKycService;
 import ttldd.labman.utils.DateUtils;
 import ttldd.labman.utils.JwtHelper;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +51,8 @@ public class VnptKycServiceImpl implements VnptKycService {
     UserRepo userRepo;
 
     JwtHelper jwtHelper;
+
+    CloudinaryService cloudinaryService;
 
     @Override
     public UserCardResponse extractIdCardInfo(MultipartFile frontImage,
@@ -84,8 +90,10 @@ public class VnptKycServiceImpl implements VnptKycService {
             throw new IllegalArgumentException("Không bóc tách được dữ liệu (object is null)");
         }
         VnptOcrDTO data = response.getObject();
+        UserCardResponse userCardResponse = mapDataToUser(data);
+        userCardResponse.setCardImages(generateCardImageDTOs(frontImage, backImage));
         log.info("Bóc tách thành công User: {}", user.getFullName());
-        return mapDataToUser(data);
+        return userCardResponse;
     }
 
     @Override
@@ -98,9 +106,11 @@ public class VnptKycServiceImpl implements VnptKycService {
         user.setGender(userCardDTO.getGender());
         user.setAddress(userCardDTO.getRecentLocation());
         if (userCardDTO.getCardImages() != null) {
-            for (UserCardRequest.CardImageRequest img : userCardDTO.getCardImages()) {
+            for (CardImgDTO img : userCardDTO.getCardImages()) {
                 Card card = Card.builder()
                         .cardUrl(img.getImageUrl())
+                        .type(img.getType())
+                        .description(img.getDescription())
                         .user(user)
                         .build();
                 user.getCards().add(card);
@@ -109,6 +119,27 @@ public class VnptKycServiceImpl implements VnptKycService {
         userRepo.save(user);
         log.info("Cập nhật thông tin giấy tờ cho User: {}", user.getFullName());
         return convertUserToUserResponse(user);
+    }
+
+    private List<CardImgDTO> generateCardImageDTOs(MultipartFile frontImage,
+                                                   MultipartFile backImage) {
+        try{
+            String frontImageUrl = cloudinaryService.uploadFile(frontImage);
+            String backImageUrl = cloudinaryService.uploadFile(backImage);
+            return Stream.of(
+                            new String[]{"front", "Ảnh mặt trước CCCD", frontImageUrl},
+                            new String[]{"back", "Ảnh mặt sau CCCD", backImageUrl}
+                    )
+                    .map(arr -> CardImgDTO.builder()
+                            .type(arr[0])
+                            .description(arr[1])
+                            .imageUrl(arr[2])
+                            .build())
+                    .toList();
+        }catch(IOException e){
+            log.error("Lỗi khi upload ảnh lên Cloudinary: {}", e.getMessage(), e);
+            throw new IllegalArgumentException("Lỗi khi upload ảnh lên Cloudinary: " + e.getMessage(), e);
+        }
     }
 
     private void validateDocumentType(Integer idType) {

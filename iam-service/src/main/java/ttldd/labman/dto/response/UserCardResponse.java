@@ -3,6 +3,9 @@ package ttldd.labman.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ttldd.labman.dto.CardImgDTO;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,4 +22,5 @@ public class UserCardResponse {
     String nationality;
     String issueDate;
     String validDate;
+    List<CardImgDTO> cardImages;
 }

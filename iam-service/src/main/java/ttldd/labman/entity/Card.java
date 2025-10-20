@@ -16,6 +16,10 @@ public class Card {
     Long id;
     String cardUrl;
 
+    String type;
+
+    String description;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     User user;

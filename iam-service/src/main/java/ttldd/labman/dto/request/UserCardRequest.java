@@ -3,6 +3,7 @@ package ttldd.labman.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ttldd.labman.dto.CardImgDTO;
 
 import java.util.List;
 
@@ -21,15 +22,6 @@ public class UserCardRequest {
     String nationality;
     String issueDate;
     String validDate;
-    List<CardImageRequest> cardImages;
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class CardImageRequest {
-        private String type;
-        private String imageUrl;
-    }
+    List<CardImgDTO> cardImages;
 
 }
