@@ -129,6 +129,13 @@ management:
     rabbit:
       enabled: false
 
+cloudinary:
+  cloud:
+    name: darnrlpag
+  api:
+    key: 862363649448685
+    secret: XyiZzdrwIArp7SPiGlL7XyHb-oA
+
 vnpt:
   ekyc:
     api:
