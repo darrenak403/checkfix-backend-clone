@@ -9,40 +9,40 @@ import java.util.List;
 public class VnptOcrDTO {
 
     @JsonProperty("id")
-    private String id; // Số CCCD
+    private String id;
 
     @JsonProperty("name")
-    private String name; // Họ tên
+    private String name;
 
     @JsonProperty("birth_day")
-    private String birthDay; // Ngày sinh
+    private String birthDay;
 
     @JsonProperty("gender")
-    private String gender; // Giới tính
+    private String gender;
 
     @JsonProperty("nationality")
-    private String nationality; // Quốc tịch
+    private String nationality;
 
     @JsonProperty("origin_location")
-    private String originLocation; // Quê quán (dạng chuỗi)
+    private String originLocation;
 
     @JsonProperty("recent_location")
-    private String recentLocation; // Nơi thường trú (dạng chuỗi)
+    private String recentLocation;
 
     @JsonProperty("valid_date")
-    private String validDate; // Ngày hết hạn
+    private String validDate;
 
-    // ----- Mặt sau -----
+    // ----- Back -----
     @JsonProperty("issue_date")
-    private String issueDate; // Ngày cấp
+    private String issueDate;
 
     @JsonProperty("issue_place")
-    private String issuePlace; // Nơi cấp
+    private String issuePlace;
 
     @JsonProperty("features")
-    private String features; // Đặc điểm nhận dạng
+    private String features;
 
-    // ----- Dữ liệu cấu trúc (nếu cần) -----
+    // -----Data postcode -----
     @JsonProperty("new_post_code")
     private List<PostCodeDTO> newPostCode;
 }
