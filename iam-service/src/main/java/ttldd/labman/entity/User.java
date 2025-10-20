@@ -36,7 +36,6 @@ public class User {
     @Pattern(regexp = "^(\\d{9}|\\d{12})$", message = "Identify number must be 9 or 12 digits")
     private String identifyNumber;
 
-    @Pattern(regexp = "^(male|female)$", message = "Gender must be male or female")
     private String gender;
 
     @Min(18)

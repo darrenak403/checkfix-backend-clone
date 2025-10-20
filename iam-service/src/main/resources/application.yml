@@ -1,3 +1,4 @@
+
 spring:
   application:
     name: iam-service
@@ -16,6 +17,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
   #kafka
   kafka:
     bootstrap-servers: localhost:9094
@@ -56,11 +62,11 @@ spring:
         transport:
           protocol: smtp
         debug: false
-  
+
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
-  
+
   security:
     oauth2:
       client:
@@ -122,3 +128,11 @@ management:
   health:
     rabbit:
       enabled: false
+
+vnpt:
+  ekyc:
+    api:
+      url: https://api.idg.vnpt.vn
+      token-id: 417350d2-03a2-228b-e063-62199f0a299e
+      token-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKITrG5xm3Ztql0ewIuQXoeyhCklGEDROnu28XKkg62FKu0YixsF6E1xu3nGyZKaLaGzM+/XCj8c2pTXIUInLgkCAwEAAQ==
+      access-token: K1AYrID6CkPDzgyGbn4CeBNBS7fhkJKN1zxn97-mR5gmEg
