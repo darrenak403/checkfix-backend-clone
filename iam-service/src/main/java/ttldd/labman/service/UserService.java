@@ -1,5 +1,8 @@
 package ttldd.labman.service;
 
+import ttldd.event.dto.PatientUpdateEvent;
+import ttldd.event.dto.UserUpdatedEvent;
+import ttldd.labman.dto.request.UpdateAvatarRequest;
 import ttldd.labman.dto.request.UserCreationRequest;
 import ttldd.labman.dto.request.UserUpdateRequest;
 import ttldd.labman.dto.response.AuthResponse;
@@ -21,4 +24,6 @@ public interface UserService {
     UserResponse getUserById(Long id);
     UserResponse createUser(UserCreationRequest userRequest);
     UserResponse updateUser(Long id, UserUpdateRequest userRequest);
+    UserResponse updateAvatar(UpdateAvatarRequest updateAvatarRequest);
+    void  syncUserFromPatient(PatientUpdateEvent event);
 }
