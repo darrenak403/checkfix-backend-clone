@@ -21,6 +21,6 @@ public class Card {
     String description;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    User user;
+    @JoinColumn(name = "identity_card_id", nullable = false)
+    IdentityCard identityCard;
 }

@@ -24,8 +24,10 @@ import ttldd.labman.dto.response.VnptClassifyResponse;
 import ttldd.labman.dto.response.VnptOcrFullResponse;
 import ttldd.labman.dto.response.VnptUploadResponse;
 import ttldd.labman.entity.Card;
+import ttldd.labman.entity.IdentityCard;
 import ttldd.labman.entity.User;
 import ttldd.labman.exception.GetException;
+import ttldd.labman.repo.IdentityCardRepo;
 import ttldd.labman.repo.UserRepo;
 import ttldd.labman.service.CloudinaryService;
 import ttldd.labman.service.VnptKycService;
@@ -53,6 +55,7 @@ public class VnptKycServiceImpl implements VnptKycService {
     JwtHelper jwtHelper;
 
     CloudinaryService cloudinaryService;
+
 
     @Override
     public UserCardResponse extractIdCardInfo(MultipartFile frontImage,
@@ -96,30 +99,6 @@ public class VnptKycServiceImpl implements VnptKycService {
         return userCardResponse;
     }
 
-    @Override
-    public UserResponse saveUserCard(UserCardRequest userCardDTO) {
-        User user = userRepo.findById(jwtHelper.getCurrentUserId())
-                .orElseThrow(() -> new GetException("User not found with id: " + jwtHelper.getCurrentUserId()));
-        user.setIdentifyNumber(userCardDTO.getIdentifyNumber());
-        user.setFullName(userCardDTO.getFullName());
-        user.setDateOfBirth(dateUtils.parseVnDate(userCardDTO.getBirthDate()));
-        user.setGender(userCardDTO.getGender());
-        user.setAddress(userCardDTO.getRecentLocation());
-        if (userCardDTO.getCardImages() != null) {
-            for (CardImgDTO img : userCardDTO.getCardImages()) {
-                Card card = Card.builder()
-                        .cardUrl(img.getImageUrl())
-                        .type(img.getType())
-                        .description(img.getDescription())
-                        .user(user)
-                        .build();
-                user.getCards().add(card);
-            }
-        }
-        userRepo.save(user);
-        log.info("Cập nhật thông tin giấy tờ cho User: {}", user.getFullName());
-        return convertUserToUserResponse(user);
-    }
 
     private List<CardImgDTO> generateCardImageDTOs(MultipartFile frontImage,
                                                    MultipartFile backImage) {
@@ -224,7 +203,7 @@ public class VnptKycServiceImpl implements VnptKycService {
 
     private String uploadFile(MultipartFile file) {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file", file.getResource()); // Giả sử key là "file"
+        body.add("file", file.getResource());
         body.add("title", "CCCD Upload");
         body.add("description", "Upload file eKYC cho session: user_123");
 
@@ -260,6 +239,8 @@ public class VnptKycServiceImpl implements VnptKycService {
                 .validDate(data.getValidDate())
                 .issueDate(data.getIssueDate())
                 .gender(data.getGender())
+                .features(data.getFeatures())
+                .issuePlace(data.getIssuePlace())
                 .build();
     }
 
@@ -283,18 +264,19 @@ public class VnptKycServiceImpl implements VnptKycService {
         }
     }
 
-    private UserResponse convertUserToUserResponse(User user) {
-        return UserResponse.builder()
-                .id(user.getId())
-                .identifyNumber(user.getIdentifyNumber())
-                .email(user.getEmail())
-                .fullName(user.getFullName())
-                .role(user.getRole().getRoleCode())
-                .address(user.getAddress())
-                .gender(user.getGender())
-                .dateOfBirth(user.getDateOfBirth())
-                .phone(user.getPhoneNumber())
-                .avatarUrl(user.getAvatarUrl())
+    private VnptOcrDTO convertIdentityCardToResponse(IdentityCard identityCard) {
+        return VnptOcrDTO.builder()
+                .id(identityCard.getIdentityNumber())
+                .name(identityCard.getFullName())
+                .birthDay(identityCard.getDateOfBirth())
+                .features(identityCard.getFeatures())
+                .issuePlace(identityCard.getIssuePlace())
+                .nationality(identityCard.getNationality())
+                .gender(identityCard.getGender())
+                .recentLocation(identityCard.getRecentLocation())
+                .nationality(identityCard.getNationality())
+                .issueDate(identityCard.getIssueDate())
+                .validDate(identityCard.getValidDate())
                 .build();
     }
 

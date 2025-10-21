@@ -22,5 +22,7 @@ public class UserCardResponse {
     String nationality;
     String issueDate;
     String validDate;
+    String issuePlace;
+    String features;
     List<CardImgDTO> cardImages;
 }
