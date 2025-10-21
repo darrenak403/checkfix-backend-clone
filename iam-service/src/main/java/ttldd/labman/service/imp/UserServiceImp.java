@@ -547,16 +547,17 @@ public  class UserServiceImp implements UserService {
     }
 
     private UserResponse convertUserToUserResponse(User user) {
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setEmail(user.getEmail());
-        userResponse.setFullName(user.getFullName());
-        userResponse.setRole(user.getRole().getRoleCode());
-        userResponse.setAddress(user.getAddress());
-        userResponse.setGender(user.getGender());
-        userResponse.setPhone(user.getPhoneNumber());
-        userResponse.setDateOfBirth(user.getDateOfBirth());
-        userResponse.setAvatarUrl(user.getAvatarUrl());
-        return userResponse;
+        return UserResponse.builder()
+                .id(user.getId())
+                .identifyNumber(user.getIdentifyNumber())
+                .email(user.getEmail())
+                .fullName(user.getFullName())
+                .role(user.getRole().getRoleCode())
+                .address(user.getAddress())
+                .gender(user.getGender())
+                .dateOfBirth(user.getDateOfBirth())
+                .phone(user.getPhoneNumber())
+                .avatarUrl(user.getAvatarUrl())
+                .build();
     }
 }

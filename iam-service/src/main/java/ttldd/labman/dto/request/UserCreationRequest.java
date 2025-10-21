@@ -29,6 +29,8 @@ public class UserCreationRequest {
     @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b", message = "Số điện thoại không hợp lệ!!" )
     private String phone;
     private String address;
+
+    @Pattern(regexp = "^(male|female)$", message = "Gender must be male or female")
     private String gender;
 
     @JsonFormat(pattern = "dd/MM/yyyy")

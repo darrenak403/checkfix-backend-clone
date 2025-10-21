@@ -1,3 +1,4 @@
+
 spring:
   application:
     name: iam-service
@@ -16,6 +17,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
   #kafka
   kafka:
     bootstrap-servers: localhost:9094
@@ -56,11 +62,11 @@ spring:
         transport:
           protocol: smtp
         debug: false
-  
+
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
-  
+
   security:
     oauth2:
       client:
@@ -122,3 +128,18 @@ management:
   health:
     rabbit:
       enabled: false
+
+cloudinary:
+  cloud:
+    name: darnrlpag
+  api:
+    key: 862363649448685
+    secret: XyiZzdrwIArp7SPiGlL7XyHb-oA
+
+vnpt:
+  ekyc:
+    api:
+      url: https://api.idg.vnpt.vn
+      token-id: 41a1c308-5452-5519-e063-63199f0a4d82
+      token-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBANjMSVnUgNEQHnnu5j1VU4Ni+AOSORT/oost5Q2sfMPI0U+amyI3l0/LslgVv1aJIiJ1p4e+Ad7yPxbwKRqMtP0CAwEAAQ==
+      access-token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0cmFuc2FjdGlvbl9pZCI6IjMyMWEwNDBjLTQ0NzMtNDk0YS04YTVhLWQ4MGZjMmJhZTg1YSIsInN1YiI6ImIxMjdiNGI1LWFlMTktMTFmMC05M2Q1LTg3M2JmNmM3NjUxZCIsImF1ZCI6WyJyZXN0c2VydmljZSJdLCJ1c2VyX25hbWUiOiJjb2RlbWFzdGVyMzk3OUBnbWFpbC5jb20iLCJzY29wZSI6WyJyZWFkIl0sImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0IiwibmFtZSI6ImNvZGVtYXN0ZXIzOTc5QGdtYWlsLmNvbSIsImV4cCI6MTc2MTA5NDk4MSwidXVpZF9hY2NvdW50IjoiYjEyN2I0YjUtYWUxOS0xMWYwLTkzZDUtODczYmY2Yzc2NTFkIiwiYXV0aG9yaXRpZXMiOlsiVVNFUiJdLCJqdGkiOiJlMTM2ODNhNS1iYTJmLTQyMGEtYTk5Yi03MmVjOTEzZDYzNWEiLCJjbGllbnRfaWQiOiJjbGllbnRhcHAifQ.k-Oqp1SyeO26fzl2iDu8ZBp067crT6SdkrFa5zs0pkX9BivjGa_j1DWlCcEEw8l-nqbjgfIqnKqpvRzVgJ3VKnujUCE073TgMQjNXPTlDfAncyf5s9Zd07-KAfvthP2nHBVMMPWm4-vsLZyO8u5V4PACYIO-nNJVJhPYmlbNVhLyPRYjNv9r5UMbfajNTRGk7pIEruDpclEC6UoXC6ijMFM3-EMrVFEX09MdESd01oeid3oSBnb6xM4r19VHhpEeTAteFwCULdmUxM22cIfiSZXfzwEE6dEBoE0tP0h_uuKFmh76CoJEoDXfir5diPGBLk3ZupOER1mSn4w-Rx4qxQ
