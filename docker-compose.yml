@@ -25,6 +25,130 @@ services:
       networks:
         - app_network
 
+  mysql:
+    image: mysql:lts
+    container_name: mysql
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_DATABASE=lab_manager
+      - MYSQL_ROOT_PASSWORD=123456
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app_network
+
+  mongodb:
+    image: bitnami/mongodb:8.0.5
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGODB_ROOT_USER=root
+      - MONGODB_ROOT_PASSWORD=123456
+    volumes:
+      - mongodb_data:/bitnami/mongodb
+    networks:
+      - app_network
+
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=warehouse_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+
+
+  eureka-server:
+    image: datdevv/eureka-service:1.0
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - app_network
+
+
+  api-gateway:
+    image: datdevv/api-gateway:1.0
+    container_name: api-gateway
+    ports:
+      - "6789:6789"
+    environment:
+        - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+        - eureka-server
+        - zipkin
+    networks:
+      - app_network
+
+  iam-service:
+    image: datdevv/iam-service:1.0
+    container_name: iam-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mysql
+      - eureka-server
+      - zipkin
+    networks:
+      - app_network
+
+  patien-service:
+    image: datdevv/patient-service:1.0
+    container_name: patient-service
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mysql
+      - eureka-server
+      - zipkin
+    networks:
+      - app_network
+
+  testoder-service:
+    image: datdevv/testorder-service:1.0
+    container_name: testorder-service
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mysql
+      - eureka-server
+      - zipkin
+    networks:
+      - app_network
+  warehouse-service:
+    image: datdevv/warehouse-service:1.0
+    container_name: warehouse-service
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - postgres
+      - eureka-server
+      - zipkin
+    networks:
+      - app_network
+
   zipkin:
     image: openzipkin/zipkin:latest
     container_name: zipkin
@@ -42,3 +166,6 @@ networks:
 
 volumes:
   kafka_data:
+  mongodb_data:
+  mysql_data:
+  postgres_data:
