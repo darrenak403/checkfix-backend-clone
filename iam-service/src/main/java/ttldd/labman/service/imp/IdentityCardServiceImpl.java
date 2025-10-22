@@ -18,6 +18,7 @@ import ttldd.labman.service.IdentityCardService;
 import ttldd.labman.utils.JwtHelper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,9 +34,21 @@ public class IdentityCardServiceImpl implements IdentityCardService {
 
     @Override
     public UserCardResponse saveIdentityCard(UserCardRequest userCardDTO) {
-        User user = userRepo.findById(jwtHelper.getCurrentUserId()).orElseThrow(() -> new GetException("User not found with id: " + jwtHelper.getCurrentUserId()));
-        IdentityCard identityCard = identityCardRepo.findByIdentityNumber(userCardDTO.getIdentifyNumber())
-                .orElseGet(IdentityCard::new);
+        Long currentUserId = jwtHelper.getCurrentUserId();
+        User user = userRepo.findById(currentUserId).orElseThrow(() -> new GetException("User not found with id: " + currentUserId));
+        Optional<IdentityCard> existingCardOpt = identityCardRepo.findByIdentityNumber(userCardDTO.getIdentifyNumber());
+
+        IdentityCard identityCard;
+
+        if (existingCardOpt.isPresent()) {
+            identityCard = existingCardOpt.get();
+            if (identityCard.getUser() != null && !identityCard.getUser().getId().equals(currentUserId)) {
+                throw new GetException("Căn cước công dân này đã được xác thực bởi tài khoản khác!");
+            }
+        } else {
+            identityCard = new IdentityCard();
+        }
+
         identityCard.setIdentityNumber(userCardDTO.getIdentifyNumber());
         identityCard.setFullName(userCardDTO.getFullName());
         identityCard.setDateOfBirth(userCardDTO.getBirthDate());
@@ -45,6 +58,7 @@ public class IdentityCardServiceImpl implements IdentityCardService {
         identityCard.setIssueDate(userCardDTO.getIssueDate());
         identityCard.setFeatures(userCardDTO.getFeatures());
         identityCard.setIssuePlace(userCardDTO.getIssuePlace());
+        identityCard.setGender(userCardDTO.getGender());
         identityCard.setUser(user);
         if (userCardDTO.getCardImages() != null) {
             for (CardImgDTO img : userCardDTO.getCardImages()) {
