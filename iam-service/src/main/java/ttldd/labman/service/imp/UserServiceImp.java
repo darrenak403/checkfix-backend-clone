@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.KafkaException;
+import org.springframework.kafka.core.KafkaProducerException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +30,7 @@ import ttldd.labman.entity.Role;
 import ttldd.labman.entity.User;
 import ttldd.labman.exception.GetException;
 import ttldd.labman.exception.InsertException;
+import ttldd.labman.producer.NotificationProducer;
 import ttldd.labman.repo.RoleRepo;
 import ttldd.labman.repo.UserRepo;
 import ttldd.labman.service.UserService;
@@ -97,6 +100,8 @@ public  class UserServiceImp implements UserService {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
+    private final NotificationProducer notificationProducer;
+
     @Override
     @Transactional
     public void registerUser(UserRequest userDTO, String role) {
@@ -128,11 +133,22 @@ public  class UserServiceImp implements UserService {
 
             // Lưu vào database
             userRepo.save(user);
+            //send mail notification
+            notificationProducer.sendEmail(
+                    "send-email",
+                    user.getEmail(),
+                    "Chào mừng đến với Laboratory Management System",
+                    "WELCOME_EMAIL",
+                    Map.of("userName", user.getFullName())
+            );
 
 
         } catch (InsertException e) {
             throw e;
-        } catch (Exception e) {
+        }catch (KafkaProducerException ke){
+            log.error("Failed to send notification email for user: {}", userDTO.getEmail(), ke);
+        }
+        catch (Exception e) {
             throw new InsertException("Error while inserting user: " + e.getMessage());
         }
     }
