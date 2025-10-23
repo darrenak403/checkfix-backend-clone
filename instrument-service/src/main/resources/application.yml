@@ -3,7 +3,7 @@ spring:
     name: instrument-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/instrument_service
+      uri: mongodb://admin:123456@localhost:27017/instrument_service?authSource=admin
       database: instrument_service
 server:
   port: 8085
