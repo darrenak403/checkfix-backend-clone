@@ -1,0 +1,111 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #87afcd;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    color: #333;
+}
+
+/* ==== Wrapper ==== */
+.email-wrapper {
+    width: 100%;
+    background-color: #e9f3fb;
+    padding: 40px 0;
+}
+
+/* ==== Header ==== */
+.email-header {
+    text-align: center;
+    background: linear-gradient(135deg, #007bff, #0d6efd);
+    color: white;
+    padding: 25px 15px;
+    border-radius: 8px 8px 0 0;
+}
+.email-header img {
+    width: 60px;
+    height: 60px;
+}
+.email-header h1 {
+    margin: 10px 0 0;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+}
+
+/* ==== Container ==== */
+.email-container {
+    max-width: 600px;
+    margin: auto;
+    background-color: #ffffff;
+    border-radius: 0 0 8px 8px;
+    padding: 30px 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    line-height: 1.7;
+}
+
+.email-container h2 {
+    color: #0d6efd;
+    font-size: 22px;
+    margin-bottom: 16px;
+}
+
+.email-container p {
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+.email-container ul {
+    margin: 12px 0 20px 20px;
+    padding: 0;
+}
+
+.email-container li {
+    margin-bottom: 8px;
+}
+
+/* ==== Button ==== */
+.btn-primary {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #0d6efd;
+    color: white !important;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+}
+
+/* ==== Footer ==== */
+.email-footer {
+    text-align: center;
+    color: #6c757d;
+    font-size: 13px;
+    margin-top: 25px;
+}
+
+.email-footer p {
+    margin: 3px 0;
+}
+
+.signature {
+    margin-top: 30px;
+    border-top: 1px solid #e5e5e5;
+    padding-top: 15px;
+    font-style: italic;
+}
+
+/* ==== Responsive ==== */
+@media (max-width: 600px) {
+    .email-container {
+        padding: 20px;
+    }
+    .btn-primary {
+        display: block;
+        text-align: center;
+        margin: 20px auto 0;
+    }
+}
