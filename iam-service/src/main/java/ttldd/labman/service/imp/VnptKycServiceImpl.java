@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -93,6 +94,7 @@ public class VnptKycServiceImpl implements VnptKycService {
             throw new IllegalArgumentException("Không bóc tách được dữ liệu (object is null)");
         }
         VnptOcrDTO data = response.getObject();
+        data.setIssuePlace(data.getIssuePlace().replace("/n", " "));
         UserCardResponse userCardResponse = mapDataToUser(data);
         userCardResponse.setCardImages(generateCardImageDTOs(frontImage, backImage));
         log.info("Bóc tách thành công User: {}", user.getFullName());
@@ -257,28 +259,15 @@ public class VnptKycServiceImpl implements VnptKycService {
             String ward = addressData.getWard().get(1).toString().trim();
             String district = addressData.getDistrict().get(1).toString().trim();
             String city = addressData.getCity().get(1).toString().trim();
-            return String.join(", ", detail, ward, district, city);
+            return Stream.of(detail, ward, district, city)
+                    .filter(s -> s != null && !s.isBlank())
+                    .collect(Collectors.joining(", "));
         } catch (Exception e) {
             log.warn("Lỗi khi format địa chỉ từ new_post_code: {}", e.getMessage());
             return null;
         }
     }
 
-    private VnptOcrDTO convertIdentityCardToResponse(IdentityCard identityCard) {
-        return VnptOcrDTO.builder()
-                .id(identityCard.getIdentityNumber())
-                .name(identityCard.getFullName())
-                .birthDay(identityCard.getDateOfBirth())
-                .features(identityCard.getFeatures())
-                .issuePlace(identityCard.getIssuePlace())
-                .nationality(identityCard.getNationality())
-                .gender(identityCard.getGender())
-                .recentLocation(identityCard.getRecentLocation())
-                .nationality(identityCard.getNationality())
-                .issueDate(identityCard.getIssueDate())
-                .validDate(identityCard.getValidDate())
-                .build();
-    }
 
 
 }

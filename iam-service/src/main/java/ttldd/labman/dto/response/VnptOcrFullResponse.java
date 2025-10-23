@@ -12,10 +12,9 @@ public class VnptOcrFullResponse {
     @JsonProperty("message")
     private String message;
 
-    // Giả định có trường "status" hoặc "error"
     @JsonProperty("status")
     private String status;
 
     @JsonProperty("object")
-    private VnptOcrDTO object; // <-- Dùng lớp VnptOcrData ở dưới
+    private VnptOcrDTO object;
 }
