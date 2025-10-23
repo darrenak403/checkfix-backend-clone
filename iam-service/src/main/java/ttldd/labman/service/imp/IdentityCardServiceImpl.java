@@ -97,6 +97,7 @@ public class IdentityCardServiceImpl implements IdentityCardService {
                 .features(identityCard.getFeatures())
                 .issuePlace(identityCard.getIssuePlace())
                 .cardImages(mapToCardImgDTOList(identityCard.getCards()))
+                .gender(identityCard.getGender())
                 .build();
     }
 
