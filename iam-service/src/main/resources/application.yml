@@ -44,13 +44,6 @@ spring:
     baseline-on-migrate: true
     baseline-version: 0
 
-  # Email configuration
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: codemaster3979@gmail.com
-
-    password: bnzrqpzdxjfknmxk
 
     properties:
       mail:
@@ -140,6 +133,6 @@ vnpt:
   ekyc:
     api:
       url: https://api.idg.vnpt.vn
-      token-id: xxxxxxxx
-      token-key: xxxxxxxxx
-      access-token: xxxxxxxx
+      token-id: 41ca23f3-3408-72c0-e063-63199f0ade0c
+      token-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALTPPEAfan+kGlGgSutfhag+Q3rL1DJ27Xc+FGpl/MKc5ZVcWizEGwR8ZCd3A2vOCIETwKYNDsy6Vq7X0Sj8wp8CAwEAAQ==
+      access-token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0cmFuc2FjdGlvbl9pZCI6IjlhZWYxNmU1LTYwYWUtNGJjZC1iM2VhLWRiMTU3ZTA2YThjYyIsInN1YiI6IjdhOWI1YjJlLWFmYWQtMTFmMC1hMDI3LWI5YWRlYWNmZjdjYyIsImF1ZCI6WyJyZXN0c2VydmljZSJdLCJ1c2VyX25hbWUiOiJ0cHR2dC4yMDAyQGdtYWlsLmNvbSIsInNjb3BlIjpbInJlYWQiXSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3QiLCJuYW1lIjoidHB0dnQuMjAwMkBnbWFpbC5jb20iLCJleHAiOjE3NjEyNzAxMDcsInV1aWRfYWNjb3VudCI6IjdhOWI1YjJlLWFmYWQtMTFmMC1hMDI3LWI5YWRlYWNmZjdjYyIsImF1dGhvcml0aWVzIjpbIlVTRVIiXSwianRpIjoiNDA3ZTJkMzgtZWU4ZC00MmU1LWE0ZjItMDc2ZDQ4NDUyZTg2IiwiY2xpZW50X2lkIjoiY2xpZW50YXBwIn0.O7Fe82OlhT4j7rEGISI_yqVzzFPRKyqUE8PH38GAz_CkXilkPmP99X986XX-lP34qvVOT9LRB_R7_MW4Xt33xUv18vD_1tq8Z_xn58szzuZ5bYpHfYcT-nUGTabItUXJzNoxnnM2zOy5yEcqprGo73hX-V0rQd1VMxoJ4V7nWcID1nPOmQk7nIs_CUnf1M6ktGf4SV7hBV6K5h70iqIGeXYLgW3yrhk0V97cv9Jc0nJGQJQ6zyJuah7XwK8MiApfBD2nsn7K47-mpoRth57AhDWbdpfi4S6DsgjcsxEK0cjY5dnTBTuLhoNDzqV9M4sauJKamTuqKfYj-ne3c_SWEQ

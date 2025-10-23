@@ -1,6 +1,5 @@
 package ttldd.labman.service.imp;
 
-import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +15,9 @@ import ttldd.labman.entity.User;
 import ttldd.labman.producer.NotificationProducer;
 import ttldd.labman.repo.PasswordResetOtpRepo;
 import ttldd.labman.repo.UserRepo;
-import ttldd.labman.service.EmailService;
 import ttldd.labman.service.PasswordResetService;
 import ttldd.labman.utils.OtpUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
@@ -33,7 +29,6 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
     private final UserRepo userRepo;
     private final PasswordResetOtpRepo passwordResetOtpRepo;
-    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final NotificationProducer notificationProducer;
 

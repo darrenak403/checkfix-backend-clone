@@ -31,6 +31,12 @@ spring:
               - Path=${app.prefix}/orders/**, ${app.prefix}/comments/**, ${app.prefix}/results/**
             filters:
               - StripPrefix=2
+          - id: warehouse-service
+            uri: lb://warehouse-service
+            predicates:
+              - Path=${app.prefix}/warehouse/**
+            filters:
+              - StripPrefix=2
           #swagger
           - id: iam-openapi
             uri: http://localhost:8081
