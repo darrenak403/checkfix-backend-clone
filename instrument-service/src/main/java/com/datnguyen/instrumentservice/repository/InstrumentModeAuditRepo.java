@@ -1,10 +1,9 @@
 package com.datnguyen.instrumentservice.repository;
 
-import com.datnguyen.instrumentservice.entity.InstrumentEntity;
+import com.datnguyen.instrumentservice.entity.InstrumentModeAudit;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
 @Repository
-public interface InstrumentRepo extends MongoRepository<InstrumentEntity, UUID> {
+public interface InstrumentModeAuditRepo extends MongoRepository<InstrumentModeAudit, String> {
 }
