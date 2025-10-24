@@ -1,29 +1,32 @@
+version: '3.9'
+
 services:
+  # ======================================================
+  # KAFKA
+  # ======================================================
   kafka:
-      image: confluentinc/cp-kafka:7.5.5
-      container_name: kafka-confluentinc
-      hostname: kafka
-      ports:
-        - "9092:9092"
-        - "9094:9094"
-      environment:
-        - KAFKA_NODE_ID=1
-        - KAFKA_PROCESS_ROLES=broker,controller
-        - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
-        - KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,PLAINTEXT_HOST://:9094
-        - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9094
-        - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-        - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
-        - KAFKA_LOG_DIRS=/var/lib/kafka/data
-        - CLUSTER_ID=MkU3OEVBNTcwNTJENDM2Qk
-        - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
-        - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
-        - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
-        - KAFKA_NUM_PARTITIONS=3
-      volumes:
-        - kafka_data:/var/lib/kafka/data
-      networks:
-        - app_network
+    image: confluentinc/cp-kafka:7.5.5
+    container_name: kafka
+    hostname: kafka
+    ports:
+      - "9092:9092"
+      - "9094:9094"
+    environment:
+      - KAFKA_NODE_ID=1
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,PLAINTEXT_HOST://:9094
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9094
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - app_network
+
+
+  # MYSQL
 
   mysql:
     image: mysql:lts
@@ -31,10 +34,23 @@ services:
     ports:
       - "3307:3306"
     environment:
-      - MYSQL_DATABASE=lab_manager
       - MYSQL_ROOT_PASSWORD=123456
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - app_network
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=warehouse_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - app_network
 
@@ -52,21 +68,7 @@ services:
       - app_network
 
 
-  postgres:
-    image: postgres:latest
-    container_name: postgres
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=warehouse_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - app_network
-
-
+  # EUREKA SERVER
 
   eureka-server:
     image: datdevv/eureka-service:1.0
@@ -77,16 +79,17 @@ services:
       - app_network
 
 
+  # APPLICATION SERVICES
+
   api-gateway:
     image: datdevv/api-gateway:1.0
     container_name: api-gateway
     ports:
       - "6789:6789"
-    environment:
-        - SPRING_PROFILES_ACTIVE=prod
     depends_on:
-        - eureka-server
-        - zipkin
+      - eureka-server
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
     networks:
       - app_network
 
@@ -100,12 +103,12 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     depends_on:
       - mysql
+      - kafka
       - eureka-server
-      - zipkin
     networks:
       - app_network
 
-  patien-service:
+  patient-service:
     image: datdevv/patient-service:1.0
     container_name: patient-service
     ports:
@@ -115,12 +118,12 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     depends_on:
       - mysql
+      - kafka
       - eureka-server
-      - zipkin
     networks:
       - app_network
 
-  testoder-service:
+  testorder-service:
     image: datdevv/testorder-service:1.0
     container_name: testorder-service
     ports:
@@ -130,10 +133,11 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     depends_on:
       - mysql
+      - kafka
       - eureka-server
-      - zipkin
     networks:
       - app_network
+
   warehouse-service:
     image: datdevv/warehouse-service:1.0
     container_name: warehouse-service
@@ -144,19 +148,70 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     depends_on:
       - postgres
+      - kafka
       - eureka-server
-      - zipkin
     networks:
       - app_network
 
-  zipkin:
-    image: openzipkin/zipkin:latest
-    container_name: zipkin
+  instrument-service:
+    image: datdevv/instrument-service:1.0
+    container_name: instrument-service
     ports:
-      - "9411:9411"
+      - "8085:8085"
     environment:
-      - ES_INDEX=zipkin-index
-      - JAVA_OPTS=-Xms512m -Xmx512m
+      - SPRING_PROFILES_ACTIVE=prod
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
+      - eureka-server
+    networks:
+      - app_network
+
+  monitoring-service:
+    image: datdevv/monitoring-service:1.0
+    container_name: monitoring-service
+    ports:
+      - "8086:8086"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
+      - eureka-server
+
+    networks:
+      - app_network
+
+
+  # ZIPKIN
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - app_network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # ELK STACK + GRAFANA
+
+
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
     networks:
       - app_network
 
@@ -169,3 +224,4 @@ volumes:
   mongodb_data:
   mysql_data:
   postgres_data:
+  es-data:

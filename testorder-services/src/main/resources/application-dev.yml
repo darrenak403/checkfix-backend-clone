@@ -7,6 +7,7 @@ spring:
     #kafka
   kafka:
     bootstrap-servers: localhost:9094
+
     consumer:
       group-id: testOrder-service-group
       auto-offset-reset: latest
@@ -17,6 +18,8 @@ spring:
     #        spring.json.value.default.type: ttldd.event.dto.PatientUpdateEvent
     listener:
       missing-topics-fatal: false
+
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -65,3 +68,9 @@ management:
   health:
     rabbit:
       enabled: false
+
+logging:
+  file:
+    name: logs/${spring.application.name}.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
