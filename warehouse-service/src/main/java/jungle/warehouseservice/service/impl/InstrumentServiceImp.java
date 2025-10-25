@@ -77,6 +77,7 @@ public class InstrumentServiceImp implements InstrumentService {
                 .orElseThrow(() -> new IllegalArgumentException("Instrument not found with id: " + id));
 
         instrument.setStatus(instrumentUpdateRequest.getStatus());
+        instrument.setUpdatedAt(LocalDateTime.now());
 
         instrumentRepo.save(instrument);
 

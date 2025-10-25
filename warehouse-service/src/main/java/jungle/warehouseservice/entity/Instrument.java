@@ -36,4 +36,6 @@ public class Instrument {
 
     private LocalDateTime createdAt;
 
+    private LocalDateTime updatedAt;
+
 }

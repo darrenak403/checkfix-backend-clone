@@ -1,5 +1,6 @@
 package com.datnguyen.instrumentservice.dto.response;
 
+import com.datnguyen.instrumentservice.entity.InstrumentStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,8 +10,8 @@ import java.time.LocalDateTime;
 @Builder
 public class ChangeModeResponse {
     private Long instrumentId;
-    private String previousMode;
-    private String newMode;
+    private InstrumentStatus previousMode;
+    private InstrumentStatus newMode;
     private String changedBy;
     private String reason;
     private LocalDateTime timestamp;
