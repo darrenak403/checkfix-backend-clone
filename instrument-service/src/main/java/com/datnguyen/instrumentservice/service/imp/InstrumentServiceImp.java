@@ -55,7 +55,7 @@ public class InstrumentServiceImp implements InstrumentService {
             if (changeModeRequest.getQcConfirmed() == null || Boolean.FALSE.equals(changeModeRequest.getQcConfirmed())) {
                 throw new IllegalStateException("QC confirmation required before switching to READY mode");
             }
-            System.out.println("✅ QC check confirmed before switching to READY mode");
+            System.out.println(" QC check confirmed before switching to READY mode");
         }
 
         //Update instrument mode nè -_-
@@ -77,7 +77,7 @@ public class InstrumentServiceImp implements InstrumentService {
         instrumentModeAuditRepo.save(instrumentModeAudit);
 
 
-         ChangeModeResponse changeModeResponse = ChangeModeResponse.builder()
+        return ChangeModeResponse.builder()
                 .instrumentId(instrumentUpdate.getData().getId())
                 .previousMode(currentMode)
                 .newMode(instrumentUpdate.getData().getStatus())
@@ -86,10 +86,7 @@ public class InstrumentServiceImp implements InstrumentService {
                 .timestamp(LocalDateTime.now())
                 .message("Instrument mode changed successfully")
                 .build();
-
-        return changeModeResponse;
     }
-
 
 }
 
