@@ -18,11 +18,11 @@ public class InstrumentModeAudit {
     @Id
     private String id;
 
-    private String instrumentId;
+    private Long instrumentId;
 
-    private String previousMode;
+    private InstrumentStatus previousMode;
 
-    private String newMode;
+    private InstrumentStatus newMode;
 
     private String reason;
 

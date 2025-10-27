@@ -1,7 +1,9 @@
 package jungle.warehouseservice.service.impl;
 
 import jungle.warehouseservice.dto.request.InstrumentRequest;
+import jungle.warehouseservice.dto.request.InstrumentUpdateRequest;
 import jungle.warehouseservice.dto.response.InstrumentResponse;
+import jungle.warehouseservice.dto.response.InstrumentUpdateResponse;
 import jungle.warehouseservice.dto.response.PageResponse;
 import jungle.warehouseservice.entity.Instrument;
 import jungle.warehouseservice.entity.InstrumentStatus;
@@ -20,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -58,6 +61,31 @@ public class InstrumentServiceImp implements InstrumentService {
                 .pageSize(size)
                 .totalItems(instrumentPage.getTotalElements())
                 .data(instrumentPage.getContent().stream().map(instrumentMapper::toInstrumentResponse).toList())
+                .build();
+    }
+
+    @Override
+    public InstrumentResponse getInstrumentById(Long id) {
+        Instrument instrument = instrumentRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Instrument not found with id: " + id));
+        return instrumentMapper.toInstrumentResponse(instrument);
+    }
+
+    @Override
+    public InstrumentUpdateResponse updateInstrument(Long id, InstrumentUpdateRequest instrumentUpdateRequest) {
+        Instrument instrument = instrumentRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Instrument not found with id: " + id));
+
+        instrument.setStatus(instrumentUpdateRequest.getStatus());
+        instrument.setUpdatedAt(LocalDateTime.now());
+
+        instrumentRepo.save(instrument);
+
+        return InstrumentUpdateResponse.builder()
+                .id(instrument.getId())
+                .name(instrument.getName())
+                .serialNumber(instrument.getSerialNumber())
+                .status(instrument.getStatus())
                 .build();
     }
 }

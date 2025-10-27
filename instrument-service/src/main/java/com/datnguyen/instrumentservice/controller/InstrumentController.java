@@ -1,31 +1,35 @@
 package com.datnguyen.instrumentservice.controller;
 
-import com.datnguyen.instrumentservice.dto.request.InstrumentModeChangeRequest;
-import com.datnguyen.instrumentservice.dto.response.InstrumentModeChangeResponse;
+import com.datnguyen.instrumentservice.dto.request.ChangeModeRequest;
+import com.datnguyen.instrumentservice.dto.response.BaseResponse;
+import com.datnguyen.instrumentservice.dto.response.ChangeModeResponse;
 import com.datnguyen.instrumentservice.service.InstrumentService;
-import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/instrument")
+@RequestMapping("/instruments")
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class InstrumentController {
-
-    private final InstrumentService instrumentService;
-
-    @PatchMapping("/{id}/mode")
-    public ResponseEntity<InstrumentModeChangeResponse> changeInstrumentMode(
-            @PathVariable String id,
-            @Valid @RequestBody InstrumentModeChangeRequest request) {
-        return ResponseEntity.ok(instrumentService.changeInstrumentMode(id, request));
+    InstrumentService instrumentService;
+    @PutMapping("/change-mode")
+    public ResponseEntity<?> changeInstrumentMode(@RequestBody ChangeModeRequest changeModeRequest) {
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            ChangeModeResponse updateInstrument =  instrumentService.changeInstrumentMode(changeModeRequest);
+            baseResponse.setStatus(200);
+            baseResponse.setMessage("Instrument mode changed successfully");
+            baseResponse.setData(updateInstrument);
+            return ResponseEntity.ok(baseResponse);
+        } catch (Exception e) {
+            baseResponse.setStatus(500);
+            baseResponse.setMessage("Failed to change instrument mode: " + e.getMessage());
+            return ResponseEntity.status(500).body(baseResponse);
+        }
     }
 
-    @GetMapping("/{id}/audit")
-    public ResponseEntity<List<InstrumentModeChangeResponse>> getAuditLogs(@PathVariable String id) {
-        return ResponseEntity.ok(instrumentService.getAuditLogs(id));
-    }
 }
