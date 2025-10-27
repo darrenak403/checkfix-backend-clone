@@ -33,9 +33,14 @@ public class CentralException {
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage()));
 
+        String combinedMessage = errors.entrySet().stream()
+                .map(entry -> entry.getKey() + ": " + entry.getValue())
+                .reduce((m1, m2) -> m1 + "; " + m2)
+                .orElse("Validation failed");
+
         BaseResponse response = BaseResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
-                .message("Validation failed")
+                .message(combinedMessage)
                 .data(errors)
                 .path(request.getRequestURI())
                 .timestamp(LocalDateTime.now())
