@@ -77,16 +77,6 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
-logging:
-  file:
-    name: logs/${spring.application.name}.log
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
-  level:
-    org.springframework.cloud.gateway: INFO
-    org.springframework.web: INFO
-    root: INFO
-
 springdoc:
   swagger-ui:
     urls:
