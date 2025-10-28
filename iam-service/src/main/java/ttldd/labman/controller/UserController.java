@@ -15,6 +15,7 @@ import ttldd.labman.dto.request.UserUpdateRequest;
 import ttldd.labman.dto.response.BaseResponse;
 import ttldd.labman.dto.response.RestResponse;
 import ttldd.labman.dto.response.UserResponse;
+import ttldd.labman.service.IdentityCardService;
 import ttldd.labman.service.UserService;
 import ttldd.labman.service.VnptKycService;
 
@@ -28,6 +29,8 @@ public class UserController {
     private final UserService userService;
 
     private final VnptKycService vnptKycService;
+
+    private final IdentityCardService identityCardService;
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR')  or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_ADMIN')")
@@ -101,12 +104,23 @@ public class UserController {
     }
 
     @PostMapping("/identity")
-    public ResponseEntity<RestResponse<UserResponse>> saveIdentityCard(@RequestBody UserCardRequest rq) {
-        UserResponse savedCard = vnptKycService.saveUserCard(rq);
-        RestResponse<UserResponse> response = RestResponse.<UserResponse>builder()
+    public ResponseEntity<RestResponse<UserCardResponse>> saveIdentityCard(@RequestBody UserCardRequest rq) {
+        UserCardResponse savedCard = identityCardService.saveIdentityCard(rq);
+        RestResponse<UserCardResponse> response = RestResponse.<UserCardResponse>builder()
                 .statusCode(200)
                 .message("ID card saved successfully")
                 .data(savedCard)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/identity")
+    public ResponseEntity<RestResponse<UserCardResponse>> getIdentityCard() {
+        UserCardResponse card = identityCardService.getIdentityCardByUserId();
+        RestResponse<UserCardResponse> response = RestResponse.<UserCardResponse>builder()
+                .statusCode(200)
+                .message("ID card retrieved successfully")
+                .data(card)
                 .build();
         return ResponseEntity.ok(response);
     }

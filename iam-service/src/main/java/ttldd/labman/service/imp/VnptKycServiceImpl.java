@@ -24,8 +24,10 @@ import ttldd.labman.dto.response.VnptClassifyResponse;
 import ttldd.labman.dto.response.VnptOcrFullResponse;
 import ttldd.labman.dto.response.VnptUploadResponse;
 import ttldd.labman.entity.Card;
+import ttldd.labman.entity.IdentityCard;
 import ttldd.labman.entity.User;
 import ttldd.labman.exception.GetException;
+import ttldd.labman.repo.IdentityCardRepo;
 import ttldd.labman.repo.UserRepo;
 import ttldd.labman.service.CloudinaryService;
 import ttldd.labman.service.VnptKycService;
@@ -36,6 +38,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -53,6 +56,7 @@ public class VnptKycServiceImpl implements VnptKycService {
     JwtHelper jwtHelper;
 
     CloudinaryService cloudinaryService;
+
 
     @Override
     public UserCardResponse extractIdCardInfo(MultipartFile frontImage,
@@ -90,36 +94,13 @@ public class VnptKycServiceImpl implements VnptKycService {
             throw new IllegalArgumentException("Không bóc tách được dữ liệu (object is null)");
         }
         VnptOcrDTO data = response.getObject();
+        data.setIssuePlace(data.getIssuePlace().replace("/n", " "));
         UserCardResponse userCardResponse = mapDataToUser(data);
         userCardResponse.setCardImages(generateCardImageDTOs(frontImage, backImage));
         log.info("Bóc tách thành công User: {}", user.getFullName());
         return userCardResponse;
     }
 
-    @Override
-    public UserResponse saveUserCard(UserCardRequest userCardDTO) {
-        User user = userRepo.findById(jwtHelper.getCurrentUserId())
-                .orElseThrow(() -> new GetException("User not found with id: " + jwtHelper.getCurrentUserId()));
-        user.setIdentifyNumber(userCardDTO.getIdentifyNumber());
-        user.setFullName(userCardDTO.getFullName());
-        user.setDateOfBirth(dateUtils.parseVnDate(userCardDTO.getBirthDate()));
-        user.setGender(userCardDTO.getGender());
-        user.setAddress(userCardDTO.getRecentLocation());
-        if (userCardDTO.getCardImages() != null) {
-            for (CardImgDTO img : userCardDTO.getCardImages()) {
-                Card card = Card.builder()
-                        .cardUrl(img.getImageUrl())
-                        .type(img.getType())
-                        .description(img.getDescription())
-                        .user(user)
-                        .build();
-                user.getCards().add(card);
-            }
-        }
-        userRepo.save(user);
-        log.info("Cập nhật thông tin giấy tờ cho User: {}", user.getFullName());
-        return convertUserToUserResponse(user);
-    }
 
     private List<CardImgDTO> generateCardImageDTOs(MultipartFile frontImage,
                                                    MultipartFile backImage) {
@@ -224,7 +205,7 @@ public class VnptKycServiceImpl implements VnptKycService {
 
     private String uploadFile(MultipartFile file) {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file", file.getResource()); // Giả sử key là "file"
+        body.add("file", file.getResource());
         body.add("title", "CCCD Upload");
         body.add("description", "Upload file eKYC cho session: user_123");
 
@@ -260,6 +241,8 @@ public class VnptKycServiceImpl implements VnptKycService {
                 .validDate(data.getValidDate())
                 .issueDate(data.getIssueDate())
                 .gender(data.getGender())
+                .features(data.getFeatures())
+                .issuePlace(data.getIssuePlace())
                 .build();
     }
 
@@ -276,27 +259,15 @@ public class VnptKycServiceImpl implements VnptKycService {
             String ward = addressData.getWard().get(1).toString().trim();
             String district = addressData.getDistrict().get(1).toString().trim();
             String city = addressData.getCity().get(1).toString().trim();
-            return String.join(", ", detail, ward, district, city);
+            return Stream.of(detail, ward, district, city)
+                    .filter(s -> s != null && !s.isBlank())
+                    .collect(Collectors.joining(", "));
         } catch (Exception e) {
             log.warn("Lỗi khi format địa chỉ từ new_post_code: {}", e.getMessage());
             return null;
         }
     }
 
-    private UserResponse convertUserToUserResponse(User user) {
-        return UserResponse.builder()
-                .id(user.getId())
-                .identifyNumber(user.getIdentifyNumber())
-                .email(user.getEmail())
-                .fullName(user.getFullName())
-                .role(user.getRole().getRoleCode())
-                .address(user.getAddress())
-                .gender(user.getGender())
-                .dateOfBirth(user.getDateOfBirth())
-                .phone(user.getPhoneNumber())
-                .avatarUrl(user.getAvatarUrl())
-                .build();
-    }
 
 
 }

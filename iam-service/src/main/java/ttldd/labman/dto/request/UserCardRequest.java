@@ -1,6 +1,7 @@
 package ttldd.labman.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ttldd.labman.dto.CardImgDTO;
@@ -22,6 +23,9 @@ public class UserCardRequest {
     String nationality;
     String issueDate;
     String validDate;
+    String issuePlace;
+
+    String features;
     List<CardImgDTO> cardImages;
 
 }

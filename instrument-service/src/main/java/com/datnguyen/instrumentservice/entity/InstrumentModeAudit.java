@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-
+//hello
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,11 +18,11 @@ public class InstrumentModeAudit {
     @Id
     private String id;
 
-    private String instrumentId;
+    private Long instrumentId;
 
-    private String previousMode;
+    private InstrumentStatus previousMode;
 
-    private String newMode;
+    private InstrumentStatus newMode;
 
     private String reason;
 

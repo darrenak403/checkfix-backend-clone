@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ttldd.labman.config.LogEvent;
 import ttldd.labman.dto.request.IntrospectRequest;
 import ttldd.labman.dto.response.AuthResponse;
 import ttldd.labman.dto.request.UserRequest;
@@ -32,6 +33,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
+
     public ResponseEntity<?> registerAccount(@Valid @RequestBody UserRequest userDTO) {
         BaseResponse baseResponse = new BaseResponse();
         userService.registerUser(userDTO, PATIENT_ROLE);
@@ -42,6 +44,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+
     public ResponseEntity<?> loginAccount(@Valid @RequestBody UserRequest userDTO) {
         AuthResponse token = userService.loginUser(userDTO);
         BaseResponse baseResponse = new BaseResponse();
@@ -52,6 +55,7 @@ public class AuthController {
     }
 
     @GetMapping("/google/social")
+
     public ResponseEntity<?> getAuthorizationUri(@RequestParam String loginType) {
         BaseResponse baseResponse = new BaseResponse();
         String data = userService.generateAuthorizationUri(loginType);

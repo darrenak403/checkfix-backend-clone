@@ -34,7 +34,7 @@ public class User {
 
     private String fullName;
 
-    @Pattern(regexp = "^(\\d{9}|\\d{12})$", message = "Identify number must be 9 or 12 digits")
+//    @Pattern(regexp = "^(\\d{9}|\\d{12})$", message = "Identify number must be 9 or 12 digits")
     private String identifyNumber;
 
     private String gender;
@@ -59,7 +59,8 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Card> cards = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private IdentityCard identityCard;
 }
 

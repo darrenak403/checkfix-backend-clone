@@ -1,9 +1,9 @@
 package ttldd.labman.service.imp;
 
-import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaProducerException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ttldd.labman.dto.request.ForgotPasswordRequest;
@@ -12,14 +12,14 @@ import ttldd.labman.dto.response.ForgotPasswordResponse;
 import ttldd.labman.dto.response.ResetPasswordResponse;
 import ttldd.labman.entity.PasswordResetOtp;
 import ttldd.labman.entity.User;
+import ttldd.labman.producer.NotificationProducer;
 import ttldd.labman.repo.PasswordResetOtpRepo;
 import ttldd.labman.repo.UserRepo;
-import ttldd.labman.service.EmailService;
 import ttldd.labman.service.PasswordResetService;
 import ttldd.labman.utils.OtpUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -29,8 +29,8 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
     private final UserRepo userRepo;
     private final PasswordResetOtpRepo passwordResetOtpRepo;
-    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final NotificationProducer notificationProducer;
 
     @Override
     @Transactional
@@ -66,16 +66,21 @@ public class PasswordResetServiceImpl implements PasswordResetService {
             
             // Gửi email chứa OTP
             try {
-                emailService.sendOtpEmail(request.getEmail(), otp);
-                log.info("Đã gửi mã OTP đến email: {}", request.getEmail());
-                
+                notificationProducer.sendEmail(
+                        "send-email",
+                        userOptional.get().getEmail(),
+                        "[L.M.S] - Mã khôi phục mật khẩu",
+                        "FORGOT_PASSWORD_EMAIL",
+                        Map.of("otp", passwordResetOtp.getOtp())
+                );
+
                 return ForgotPasswordResponse.builder()
                         .success(true)
                         .message("Mã OTP đã được gửi đến email của bạn")
                         .email(request.getEmail())
                         .build();
-                
-            } catch (MessagingException | UnsupportedEncodingException e) {
+
+            } catch (KafkaProducerException e) {
                 log.error("Lỗi khi gửi email OTP: {}", e.getMessage(), e);
                 return ForgotPasswordResponse.builder()
                         .success(false)
@@ -148,14 +153,20 @@ public class PasswordResetServiceImpl implements PasswordResetService {
             
             // Gửi email thông báo mật khẩu đã được thay đổi
             try {
-                emailService.sendPasswordChangedEmail(
-                        request.getEmail(), 
-                        user.getFullName(), 
-                        LocalDateTime.now()
+                String formattedTime = java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+                Map<String, Object> emailParams = Map.of(
+                        "userName", user.getFullName(),
+                        "timeChanged", formattedTime
+                );
+                notificationProducer.sendEmail(
+                        "send-email",
+                        user.getEmail(),
+                        "[L.M.S] - Thông báo đổi mật khẩu",
+                        "RESET_PASSWORD_EMAIL",
+                        emailParams
                 );
             } catch (Exception e) {
                 log.warn("Không thể gửi email thông báo đổi mật khẩu: {}", e.getMessage());
-                // Không cần throw exception vì việc đổi mật khẩu đã thành công
             }
             
             log.info("Đặt lại mật khẩu thành công cho email: {}", request.getEmail());

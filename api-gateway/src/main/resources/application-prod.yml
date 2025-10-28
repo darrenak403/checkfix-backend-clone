@@ -24,6 +24,11 @@ spring:
             - Path=${app.prefix}/orders/**, ${app.prefix}/comments/**, ${app.prefix}/results/**
           filters:
             - StripPrefix=2
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 eureka:
     client:
