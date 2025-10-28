@@ -2566,3 +2566,269 @@ com.netflix.discovery.shared.transport.TransportException: Cannot execute reques
 	at java.base/java.lang.Thread.run(Thread.java:1447) ~[na:na]
 
 2025-10-28T10:56:26.886+07:00  INFO 10568 --- [api-gateway] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
+2025-10-28T11:04:23.455+07:00  INFO 26988 --- [api-gateway] [main] ttldd.apigateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 24.0.1 with PID 26988 (E:\khac_chuaAe\backup2\hcm_cpl_java_09_group_2\api-gateway\target\classes started by thanh in E:\khac_chuaAe\backup2\hcm_cpl_java_09_group_2)
+2025-10-28T11:04:23.457+07:00  INFO 26988 --- [api-gateway] [main] ttldd.apigateway.ApiGatewayApplication   : The following 1 profile is active: "dev"
+2025-10-28T11:04:25.276+07:00  INFO 26988 --- [api-gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=3b48444e-4b99-37ba-90e0-671c8fe5d6b3
+2025-10-28T11:04:26.819+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-10-28T11:04:26.819+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-10-28T11:04:26.819+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-10-28T11:04:26.819+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-10-28T11:04:26.819+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-10-28T11:04:26.820+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-10-28T11:04:26.820+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-10-28T11:04:26.820+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-10-28T11:04:26.820+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-10-28T11:04:26.820+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-10-28T11:04:26.820+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-10-28T11:04:26.820+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-10-28T11:04:26.820+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-10-28T11:04:26.820+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-10-28T11:04:27.349+07:00  INFO 26988 --- [api-gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-10-28T11:04:27.948+07:00  INFO 26988 --- [api-gateway] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2025-10-28T11:04:27.992+07:00  WARN 26988 --- [api-gateway] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-10-28T11:04:28.109+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2025-10-28T11:04:28.140+07:00  INFO 26988 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2025-10-28T11:04:28.147+07:00  INFO 26988 --- [api-gateway] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-10-28T11:04:28.162+07:00  INFO 26988 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-10-28T11:04:28.162+07:00  INFO 26988 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-10-28T11:04:28.162+07:00  INFO 26988 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-10-28T11:04:28.162+07:00  INFO 26988 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-10-28T11:04:28.162+07:00  INFO 26988 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-10-28T11:04:28.162+07:00  INFO 26988 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2025-10-28T11:04:28.163+07:00  INFO 26988 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-10-28T11:04:28.981+07:00  INFO 26988 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-10-28T11:04:28.982+07:00  INFO 26988 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2025-10-28T11:04:28.985+07:00  INFO 26988 --- [api-gateway] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2025-10-28T11:04:28.990+07:00  INFO 26988 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1761624268987 with initial instances count: 0
+2025-10-28T11:04:28.995+07:00  INFO 26988 --- [api-gateway] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application API-GATEWAY with eureka with status UP
+2025-10-28T11:04:28.996+07:00  INFO 26988 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1761624268996, current=UP, previous=STARTING]
+2025-10-28T11:04:29.003+07:00  INFO 26988 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789: registering service...
+2025-10-28T11:04:29.166+07:00  INFO 26988 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789 - registration status: 204
+2025-10-28T11:04:29.310+07:00  INFO 26988 --- [api-gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 6789 (http)
+2025-10-28T11:04:29.311+07:00  INFO 26988 --- [api-gateway] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 6789
+2025-10-28T11:04:29.369+07:00  INFO 26988 --- [api-gateway] [main] ttldd.apigateway.ApiGatewayApplication   : Started ApiGatewayApplication in 6.489 seconds (process running for 7.449)
+2025-10-28T11:04:29.376+07:00  WARN 26988 --- [api-gateway] [main] ServerWebfluxPropertiesMigrationListener : 
+The use of configuration keys that have been renamed was found in the environment:
+
+Property source 'Config resource 'class path resource [application-dev.yml]' via location 'optional:classpath:/'':
+	Key: spring.cloud.gateway.routes[0].id
+		Line: 15
+		Replacement: spring.cloud.gateway.server.webflux.routes[0].id
+	Key: spring.cloud.gateway.routes[0].uri
+		Line: 16
+		Replacement: spring.cloud.gateway.server.webflux.routes[0].uri
+	Key: spring.cloud.gateway.routes[0].predicates[0]
+		Line: 18
+		Replacement: spring.cloud.gateway.server.webflux.routes[0].predicates[0]
+	Key: spring.cloud.gateway.routes[0].filters[0]
+		Line: 20
+		Replacement: spring.cloud.gateway.server.webflux.routes[0].filters[0]
+	Key: spring.cloud.gateway.routes[1].id
+		Line: 23
+		Replacement: spring.cloud.gateway.server.webflux.routes[1].id
+	Key: spring.cloud.gateway.routes[1].uri
+		Line: 24
+		Replacement: spring.cloud.gateway.server.webflux.routes[1].uri
+	Key: spring.cloud.gateway.routes[1].predicates[0]
+		Line: 26
+		Replacement: spring.cloud.gateway.server.webflux.routes[1].predicates[0]
+	Key: spring.cloud.gateway.routes[1].filters[0]
+		Line: 28
+		Replacement: spring.cloud.gateway.server.webflux.routes[1].filters[0]
+	Key: spring.cloud.gateway.routes[2].id
+		Line: 31
+		Replacement: spring.cloud.gateway.server.webflux.routes[2].id
+	Key: spring.cloud.gateway.routes[2].uri
+		Line: 32
+		Replacement: spring.cloud.gateway.server.webflux.routes[2].uri
+	Key: spring.cloud.gateway.routes[2].predicates[0]
+		Line: 34
+		Replacement: spring.cloud.gateway.server.webflux.routes[2].predicates[0]
+	Key: spring.cloud.gateway.routes[2].filters[0]
+		Line: 36
+		Replacement: spring.cloud.gateway.server.webflux.routes[2].filters[0]
+	Key: spring.cloud.gateway.routes[3].id
+		Line: 39
+		Replacement: spring.cloud.gateway.server.webflux.routes[3].id
+	Key: spring.cloud.gateway.routes[3].uri
+		Line: 40
+		Replacement: spring.cloud.gateway.server.webflux.routes[3].uri
+	Key: spring.cloud.gateway.routes[3].predicates[0]
+		Line: 42
+		Replacement: spring.cloud.gateway.server.webflux.routes[3].predicates[0]
+	Key: spring.cloud.gateway.routes[3].filters[0].name
+		Line: 44
+		Replacement: spring.cloud.gateway.server.webflux.routes[3].filters[0].name
+	Key: spring.cloud.gateway.routes[3].filters[0].args.inclass
+		Line: 46
+		Replacement: spring.cloud.gateway.server.webflux.routes[3].filters[0].args.inclass
+	Key: spring.cloud.gateway.routes[3].filters[0].args.outclass
+		Line: 47
+		Replacement: spring.cloud.gateway.server.webflux.routes[3].filters[0].args.outclass
+	Key: spring.cloud.gateway.routes[3].filters[0].args.rewritefunction
+		Line: 48
+		Replacement: spring.cloud.gateway.server.webflux.routes[3].filters[0].args.rewritefunction
+	Key: spring.cloud.gateway.routes[4].id
+		Line: 50
+		Replacement: spring.cloud.gateway.server.webflux.routes[4].id
+	Key: spring.cloud.gateway.routes[4].uri
+		Line: 51
+		Replacement: spring.cloud.gateway.server.webflux.routes[4].uri
+	Key: spring.cloud.gateway.routes[4].predicates[0]
+		Line: 53
+		Replacement: spring.cloud.gateway.server.webflux.routes[4].predicates[0]
+	Key: spring.cloud.gateway.routes[4].filters[0]
+		Line: 55
+		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[0]
+	Key: spring.cloud.gateway.routes[4].filters[1].name
+		Line: 56
+		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[1].name
+	Key: spring.cloud.gateway.routes[4].filters[1].args.inclass
+		Line: 58
+		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[1].args.inclass
+	Key: spring.cloud.gateway.routes[4].filters[1].args.outclass
+		Line: 59
+		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[1].args.outclass
+	Key: spring.cloud.gateway.routes[4].filters[1].args.rewritefunction
+		Line: 60
+		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[1].args.rewritefunction
+	Key: spring.cloud.gateway.routes[5].id
+		Line: 62
+		Replacement: spring.cloud.gateway.server.webflux.routes[5].id
+	Key: spring.cloud.gateway.routes[5].uri
+		Line: 63
+		Replacement: spring.cloud.gateway.server.webflux.routes[5].uri
+	Key: spring.cloud.gateway.routes[5].predicates[0]
+		Line: 65
+		Replacement: spring.cloud.gateway.server.webflux.routes[5].predicates[0]
+	Key: spring.cloud.gateway.routes[5].filters[0]
+		Line: 67
+		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[0]
+	Key: spring.cloud.gateway.routes[5].filters[1].name
+		Line: 68
+		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[1].name
+	Key: spring.cloud.gateway.routes[5].filters[1].args.inclass
+		Line: 70
+		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[1].args.inclass
+	Key: spring.cloud.gateway.routes[5].filters[1].args.outclass
+		Line: 71
+		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[1].args.outclass
+	Key: spring.cloud.gateway.routes[5].filters[1].args.rewritefunction
+		Line: 72
+		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[1].args.rewritefunction
+
+
+Each configuration key has been temporarily mapped to its replacement for your convenience. To silence this warning, please update your configuration to use the new keys.
+
+2025-10-28T11:04:58.983+07:00  INFO 26988 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-10-28T11:04:58.983+07:00  INFO 26988 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-10-28T11:04:58.983+07:00  INFO 26988 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-10-28T11:04:58.983+07:00  INFO 26988 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-10-28T11:04:58.983+07:00  INFO 26988 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-10-28T11:04:58.984+07:00  INFO 26988 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Application version is -1: false
+2025-10-28T11:04:58.984+07:00  INFO 26988 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-10-28T11:04:59.000+07:00  INFO 26988 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-10-28T11:05:48.297+07:00  INFO 26988 --- [api-gateway] [reactor-http-nio-3] o.a.k.clients.producer.ProducerConfig    : ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [localhost:9094]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = api-gateway-producer-1
+	compression.gzip.level = -1
+	compression.lz4.level = 9
+	compression.type = none
+	compression.zstd.level = 3
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	enable.metrics.push = true
+	interceptor.classes = []
+	key.serializer = class org.apache.kafka.common.serialization.StringSerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metadata.recovery.strategy = none
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 60000
+	transactional.id = null
+	value.serializer = class org.springframework.kafka.support.serializer.JsonSerializer
+
+2025-10-28T11:05:48.436+07:00  INFO 26988 --- [api-gateway] [reactor-http-nio-3] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2025-10-28T11:05:48.471+07:00  INFO 26988 --- [api-gateway] [reactor-http-nio-3] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=api-gateway-producer-1] Instantiated an idempotent producer.
+2025-10-28T11:05:48.536+07:00  INFO 26988 --- [api-gateway] [reactor-http-nio-3] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.9.1
+2025-10-28T11:05:48.536+07:00  INFO 26988 --- [api-gateway] [reactor-http-nio-3] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: f745dfdcee2b9851
+2025-10-28T11:05:48.536+07:00  INFO 26988 --- [api-gateway] [reactor-http-nio-3] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1761624348533
+2025-10-28T11:05:49.110+07:00  INFO 26988 --- [api-gateway] [kafka-producer-network-thread | api-gateway-producer-1] org.apache.kafka.clients.Metadata        : [Producer clientId=api-gateway-producer-1] Cluster ID: MkU3OEVBNTcwNTJENDM2Qg
+2025-10-28T11:05:49.111+07:00  INFO 26988 --- [api-gateway] [kafka-producer-network-thread | api-gateway-producer-1] o.a.k.c.p.internals.TransactionManager   : [Producer clientId=api-gateway-producer-1] ProducerId set to 7001 with epoch 0

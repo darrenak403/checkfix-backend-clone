@@ -31,11 +31,6 @@ spring:
         spring.json.trusted.packages: "*"
     listener:
       missing-topics-fatal: false
-logging:
-  file:
-    name: logs/${spring.application.name}.log
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
 
 app:
   user-service:
