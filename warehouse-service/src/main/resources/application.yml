@@ -1,7 +1,5 @@
 server:
   port: 8084
-  servlet:
-    context-path: /warehouse
 
 spring:
   application:
@@ -19,7 +17,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-
+  
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
@@ -29,7 +27,7 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka/
   instance:
-    prefer-ip-address: true
+    hostname: localhost
 
 management:
   endpoints:

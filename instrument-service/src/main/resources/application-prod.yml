@@ -1,0 +1,8 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://mongodb:27017/instrument_service
+      database: instrument_service
+
+server:
+   port: 8085

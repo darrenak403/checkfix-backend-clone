@@ -53,11 +53,11 @@ public  class UserServiceImp implements UserService {
     private String googleClientSecret;
     @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
     private String googleRedirectUri;
-    @Value("${spring.security.oauth2.client.registration.google.auth-uri}")
+    @Value("${google.auth-uri}")
     private String googleAuthUri;
-    @Value("${spring.security.oauth2.client.registration.google.token-uri}")
+    @Value("${google.token-uri}")
     private String googleTokenUri;
-    @Value("${spring.security.oauth2.client.registration.google.user-info-uri}")
+    @Value("${google.user-info-uri}")
     private String googleUserInfoUri;
 
     // Facebook OAuth2 configuration
@@ -67,15 +67,15 @@ public  class UserServiceImp implements UserService {
     private String clientSecret;
     @Value("${spring.security.oauth2.client.registration.facebook.redirect-uri}")
     private String redirectUri;
-    @Value("${spring.security.oauth2.client.registration.facebook.auth-uri}")
+    @Value("${facebook.auth-uri}")
     private String authUri;
-    @Value("${spring.security.oauth2.client.registration.facebook.token-uri}")
+    @Value("${facebook.token-uri}")
     private String tokenUri;
     @Value("${spring.security.oauth2.client.registration.facebook.scope:email,public_profile}")
     private String facebookScope;
-    @Value("${spring.security.oauth2.client.registration.facebook.user-info-uri}")
+    @Value("${facebook.user-info-uri}")
     private String facebookUserInfoUri;
-    @Value("${spring.security.oauth2.client.registration.facebook.response-type}")
+    @Value("${facebook.response-type}")
     private String responseType;
 
     @Autowired
