@@ -1,45 +1,45 @@
-2025-10-24T20:43:18.561+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] c.d.apigateway.ApiGatewayApplication     : Starting ApiGatewayApplication using Java 24.0.1 with PID 19728 (E:\khac_chuaAe\hcm_cpl_java_09_group_2\api-gateway\target\classes started by thanh in E:\khac_chuaAe\hcm_cpl_java_09_group_2)
-2025-10-24T20:43:18.563+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] c.d.apigateway.ApiGatewayApplication     : The following 1 profile is active: "dev"
-2025-10-24T20:43:19.652+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.cloud.context.scope.GenericScope     : BeanFactory id=e06f036b-b302-32dc-a236-1a4076d609bd
-2025-10-24T20:43:20.510+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
-2025-10-24T20:43:20.510+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
-2025-10-24T20:43:20.510+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
-2025-10-24T20:43:20.510+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
-2025-10-24T20:43:20.510+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
-2025-10-24T20:43:20.510+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
-2025-10-24T20:43:20.510+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
-2025-10-24T20:43:20.510+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
-2025-10-24T20:43:20.510+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
-2025-10-24T20:43:20.510+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
-2025-10-24T20:43:20.510+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
-2025-10-24T20:43:20.510+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
-2025-10-24T20:43:20.511+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
-2025-10-24T20:43:20.511+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
-2025-10-24T20:43:20.777+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 18 endpoints beneath base path '/actuator'
-2025-10-24T20:43:21.223+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
-2025-10-24T20:43:21.245+07:00  WARN 19728 --- [api-gateway] [main] [                                                 ] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
-2025-10-24T20:43:21.302+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
-2025-10-24T20:43:21.319+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
-2025-10-24T20:43:21.322+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T20:43:21.328+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
-2025-10-24T20:43:21.328+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
-2025-10-24T20:43:21.328+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
-2025-10-24T20:43:21.328+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Application is null : false
-2025-10-24T20:43:21.328+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
-2025-10-24T20:43:21.328+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
-2025-10-24T20:43:21.329+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
-2025-10-24T20:43:21.676+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : The response status is 200
-2025-10-24T20:43:21.677+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
-2025-10-24T20:43:21.678+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
-2025-10-24T20:43:21.679+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1761313401678 with initial instances count: 0
-2025-10-24T20:43:21.681+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application API-GATEWAY with eureka with status UP
-2025-10-24T20:43:21.682+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1761313401682, current=UP, previous=STARTING]
-2025-10-24T20:43:21.683+07:00  INFO 19728 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789: registering service...
-2025-10-24T20:43:21.766+07:00  INFO 19728 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789 - registration status: 204
-2025-10-24T20:43:21.835+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 6789 (http)
-2025-10-24T20:43:21.835+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 6789
-2025-10-24T20:43:21.870+07:00  INFO 19728 --- [api-gateway] [main] [                                                 ] c.d.apigateway.ApiGatewayApplication     : Started ApiGatewayApplication in 3.774 seconds (process running for 4.537)
-2025-10-24T20:43:21.873+07:00  WARN 19728 --- [api-gateway] [main] [                                                 ] ServerWebfluxPropertiesMigrationListener : 
+2025-10-28T08:09:29.190+07:00  INFO 6032 --- [api-gateway] [main] ttldd.apigateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 24.0.1 with PID 6032 (E:\khac_chuaAe\backup2\hcm_cpl_java_09_group_2\api-gateway\target\classes started by thanh in E:\khac_chuaAe\backup2\hcm_cpl_java_09_group_2)
+2025-10-28T08:09:29.192+07:00  INFO 6032 --- [api-gateway] [main] ttldd.apigateway.ApiGatewayApplication   : The following 1 profile is active: "dev"
+2025-10-28T08:09:30.507+07:00  INFO 6032 --- [api-gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=3b48444e-4b99-37ba-90e0-671c8fe5d6b3
+2025-10-28T08:09:31.429+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-10-28T08:09:31.429+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-10-28T08:09:31.429+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-10-28T08:09:31.429+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-10-28T08:09:31.429+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-10-28T08:09:31.429+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-10-28T08:09:31.429+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-10-28T08:09:31.429+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-10-28T08:09:31.429+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-10-28T08:09:31.429+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-10-28T08:09:31.429+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-10-28T08:09:31.430+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-10-28T08:09:31.430+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-10-28T08:09:31.430+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-10-28T08:09:31.697+07:00  INFO 6032 --- [api-gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-10-28T08:09:31.994+07:00  INFO 6032 --- [api-gateway] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2025-10-28T08:09:32.014+07:00  WARN 6032 --- [api-gateway] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-10-28T08:09:32.073+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2025-10-28T08:09:32.091+07:00  INFO 6032 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2025-10-28T08:09:32.095+07:00  INFO 6032 --- [api-gateway] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-10-28T08:09:32.101+07:00  INFO 6032 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-10-28T08:09:32.101+07:00  INFO 6032 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-10-28T08:09:32.101+07:00  INFO 6032 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-10-28T08:09:32.101+07:00  INFO 6032 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-10-28T08:09:32.101+07:00  INFO 6032 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-10-28T08:09:32.101+07:00  INFO 6032 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2025-10-28T08:09:32.102+07:00  INFO 6032 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-10-28T08:09:32.541+07:00  INFO 6032 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-10-28T08:09:32.542+07:00  INFO 6032 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2025-10-28T08:09:32.543+07:00  INFO 6032 --- [api-gateway] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2025-10-28T08:09:32.545+07:00  INFO 6032 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1761613772544 with initial instances count: 0
+2025-10-28T08:09:32.547+07:00  INFO 6032 --- [api-gateway] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application API-GATEWAY with eureka with status UP
+2025-10-28T08:09:32.547+07:00  INFO 6032 --- [api-gateway] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1761613772547, current=UP, previous=STARTING]
+2025-10-28T08:09:32.548+07:00  INFO 6032 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789: registering service...
+2025-10-28T08:09:32.655+07:00  INFO 6032 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789 - registration status: 204
+2025-10-28T08:09:32.721+07:00  INFO 6032 --- [api-gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 6789 (http)
+2025-10-28T08:09:32.722+07:00  INFO 6032 --- [api-gateway] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 6789
+2025-10-28T08:09:32.756+07:00  INFO 6032 --- [api-gateway] [main] ttldd.apigateway.ApiGatewayApplication   : Started ApiGatewayApplication in 4.055 seconds (process running for 4.928)
+2025-10-28T08:09:32.760+07:00  WARN 6032 --- [api-gateway] [main] ServerWebfluxPropertiesMigrationListener : 
 The use of configuration keys that have been renamed was found in the environment:
 
 Property source 'Config resource 'class path resource [application-dev.yml]' via location 'optional:classpath:/'':
@@ -152,744 +152,7 @@ Property source 'Config resource 'class path resource [application-dev.yml]' via
 
 Each configuration key has been temporarily mapped to its replacement for your convenience. To silence this warning, please update your configuration to use the new keys.
 
-2025-10-24T20:43:45.799+07:00 ERROR 19728 --- [api-gateway] [reactor-http-nio-6] [                                                 ] a.w.r.e.AbstractErrorWebExceptionHandler : [77de18aa-8]  500 Server Error for HTTP GET "/iam/v3/api-docs"
-
-io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:8081
-	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
-Error has been observed at the following site(s):
-	*__checkpoint ⇢ org.springframework.web.cors.reactive.CorsWebFilter [DefaultWebFilterChain]
-	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
-	*__checkpoint ⇢ HTTP GET "/iam/v3/api-docs" [ExceptionHandlingWebHandler]
-Original Stack Trace:
-Caused by: java.net.ConnectException: Connection refused: getsockopt
-	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
-	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:628) ~[na:na]
-	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:1046) ~[na:na]
-	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.127.Final.jar:4.1.127.Final]
-	at java.base/java.lang.Thread.run(Thread.java:1447) ~[na:na]
-
-2025-10-24T20:43:51.678+07:00  INFO 19728 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
-2025-10-24T20:43:51.678+07:00  INFO 19728 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
-2025-10-24T20:43:51.678+07:00  INFO 19728 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
-2025-10-24T20:43:51.678+07:00  INFO 19728 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : Application is null : false
-2025-10-24T20:43:51.678+07:00  INFO 19728 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
-2025-10-24T20:43:51.678+07:00  INFO 19728 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : Application version is -1: false
-2025-10-24T20:43:51.678+07:00  INFO 19728 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
-2025-10-24T20:43:51.694+07:00  INFO 19728 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : The response status is 200
-2025-10-24T20:45:30.007+07:00 ERROR 19728 --- [api-gateway] [reactor-http-nio-4] [                                                 ] a.w.r.e.AbstractErrorWebExceptionHandler : [bf1f1b07-12]  500 Server Error for HTTP GET "/iam/v3/api-docs"
-
-io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:8081
-	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
-Error has been observed at the following site(s):
-	*__checkpoint ⇢ org.springframework.web.cors.reactive.CorsWebFilter [DefaultWebFilterChain]
-	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
-	*__checkpoint ⇢ HTTP GET "/iam/v3/api-docs" [ExceptionHandlingWebHandler]
-Original Stack Trace:
-Caused by: java.net.ConnectException: Connection refused: getsockopt
-	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
-	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:628) ~[na:na]
-	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:1046) ~[na:na]
-	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.127.Final.jar:4.1.127.Final]
-	at java.base/java.lang.Thread.run(Thread.java:1447) ~[na:na]
-
-2025-10-24T20:48:21.332+07:00  INFO 19728 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T20:53:21.332+07:00  INFO 19728 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T20:55:01.228+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.a.k.clients.producer.ProducerConfig    : ProducerConfig values: 
-	acks = -1
-	auto.include.jmx.reporter = true
-	batch.size = 16384
-	bootstrap.servers = [9092]
-	buffer.memory = 33554432
-	client.dns.lookup = use_all_dns_ips
-	client.id = api-gateway-producer-1
-	compression.gzip.level = -1
-	compression.lz4.level = 9
-	compression.type = none
-	compression.zstd.level = 3
-	connections.max.idle.ms = 540000
-	delivery.timeout.ms = 120000
-	enable.idempotence = true
-	enable.metrics.push = true
-	interceptor.classes = []
-	key.serializer = class com.fasterxml.jackson.databind.ser.std.StringSerializer
-	linger.ms = 0
-	max.block.ms = 60000
-	max.in.flight.requests.per.connection = 5
-	max.request.size = 1048576
-	metadata.max.age.ms = 300000
-	metadata.max.idle.ms = 300000
-	metadata.recovery.strategy = none
-	metric.reporters = []
-	metrics.num.samples = 2
-	metrics.recording.level = INFO
-	metrics.sample.window.ms = 30000
-	partitioner.adaptive.partitioning.enable = true
-	partitioner.availability.timeout.ms = 0
-	partitioner.class = null
-	partitioner.ignore.keys = false
-	receive.buffer.bytes = 32768
-	reconnect.backoff.max.ms = 1000
-	reconnect.backoff.ms = 50
-	request.timeout.ms = 30000
-	retries = 2147483647
-	retry.backoff.max.ms = 1000
-	retry.backoff.ms = 100
-	sasl.client.callback.handler.class = null
-	sasl.jaas.config = null
-	sasl.kerberos.kinit.cmd = /usr/bin/kinit
-	sasl.kerberos.min.time.before.relogin = 60000
-	sasl.kerberos.service.name = null
-	sasl.kerberos.ticket.renew.jitter = 0.05
-	sasl.kerberos.ticket.renew.window.factor = 0.8
-	sasl.login.callback.handler.class = null
-	sasl.login.class = null
-	sasl.login.connect.timeout.ms = null
-	sasl.login.read.timeout.ms = null
-	sasl.login.refresh.buffer.seconds = 300
-	sasl.login.refresh.min.period.seconds = 60
-	sasl.login.refresh.window.factor = 0.8
-	sasl.login.refresh.window.jitter = 0.05
-	sasl.login.retry.backoff.max.ms = 10000
-	sasl.login.retry.backoff.ms = 100
-	sasl.mechanism = GSSAPI
-	sasl.oauthbearer.clock.skew.seconds = 30
-	sasl.oauthbearer.expected.audience = null
-	sasl.oauthbearer.expected.issuer = null
-	sasl.oauthbearer.header.urlencode = false
-	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
-	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
-	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
-	sasl.oauthbearer.jwks.endpoint.url = null
-	sasl.oauthbearer.scope.claim.name = scope
-	sasl.oauthbearer.sub.claim.name = sub
-	sasl.oauthbearer.token.endpoint.url = null
-	security.protocol = PLAINTEXT
-	security.providers = null
-	send.buffer.bytes = 131072
-	socket.connection.setup.timeout.max.ms = 30000
-	socket.connection.setup.timeout.ms = 10000
-	ssl.cipher.suites = null
-	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
-	ssl.endpoint.identification.algorithm = https
-	ssl.engine.factory.class = null
-	ssl.key.password = null
-	ssl.keymanager.algorithm = SunX509
-	ssl.keystore.certificate.chain = null
-	ssl.keystore.key = null
-	ssl.keystore.location = null
-	ssl.keystore.password = null
-	ssl.keystore.type = JKS
-	ssl.protocol = TLSv1.3
-	ssl.provider = null
-	ssl.secure.random.implementation = null
-	ssl.trustmanager.algorithm = PKIX
-	ssl.truststore.certificates = null
-	ssl.truststore.location = null
-	ssl.truststore.password = null
-	ssl.truststore.type = JKS
-	transaction.timeout.ms = 60000
-	transactional.id = null
-	value.serializer = class com.fasterxml.jackson.databind.JsonSerializer
-
-2025-10-24T20:55:01.261+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
-2025-10-24T20:55:01.268+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=api-gateway-producer-1] Closing the Kafka producer with timeoutMillis = 0 ms.
-2025-10-24T20:55:01.269+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
-2025-10-24T20:55:01.269+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
-2025-10-24T20:55:01.269+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
-2025-10-24T20:55:01.269+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
-2025-10-24T20:55:01.270+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.a.kafka.common.utils.AppInfoParser     : App info kafka.producer for api-gateway-producer-1 unregistered
-2025-10-24T20:55:01.272+07:00 ERROR 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.s.w.s.adapter.HttpWebHandlerAdapter    : [6beab0ae-15] Error [org.apache.kafka.common.KafkaException: Failed to construct kafka producer] for HTTP GET "/iam/v3/api-docs", but ServerHttpResponse already committed (200 OK)
-2025-10-24T20:55:35.797+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.a.k.clients.producer.ProducerConfig    : ProducerConfig values: 
-	acks = -1
-	auto.include.jmx.reporter = true
-	batch.size = 16384
-	bootstrap.servers = [9092]
-	buffer.memory = 33554432
-	client.dns.lookup = use_all_dns_ips
-	client.id = api-gateway-producer-2
-	compression.gzip.level = -1
-	compression.lz4.level = 9
-	compression.type = none
-	compression.zstd.level = 3
-	connections.max.idle.ms = 540000
-	delivery.timeout.ms = 120000
-	enable.idempotence = true
-	enable.metrics.push = true
-	interceptor.classes = []
-	key.serializer = class com.fasterxml.jackson.databind.ser.std.StringSerializer
-	linger.ms = 0
-	max.block.ms = 60000
-	max.in.flight.requests.per.connection = 5
-	max.request.size = 1048576
-	metadata.max.age.ms = 300000
-	metadata.max.idle.ms = 300000
-	metadata.recovery.strategy = none
-	metric.reporters = []
-	metrics.num.samples = 2
-	metrics.recording.level = INFO
-	metrics.sample.window.ms = 30000
-	partitioner.adaptive.partitioning.enable = true
-	partitioner.availability.timeout.ms = 0
-	partitioner.class = null
-	partitioner.ignore.keys = false
-	receive.buffer.bytes = 32768
-	reconnect.backoff.max.ms = 1000
-	reconnect.backoff.ms = 50
-	request.timeout.ms = 30000
-	retries = 2147483647
-	retry.backoff.max.ms = 1000
-	retry.backoff.ms = 100
-	sasl.client.callback.handler.class = null
-	sasl.jaas.config = null
-	sasl.kerberos.kinit.cmd = /usr/bin/kinit
-	sasl.kerberos.min.time.before.relogin = 60000
-	sasl.kerberos.service.name = null
-	sasl.kerberos.ticket.renew.jitter = 0.05
-	sasl.kerberos.ticket.renew.window.factor = 0.8
-	sasl.login.callback.handler.class = null
-	sasl.login.class = null
-	sasl.login.connect.timeout.ms = null
-	sasl.login.read.timeout.ms = null
-	sasl.login.refresh.buffer.seconds = 300
-	sasl.login.refresh.min.period.seconds = 60
-	sasl.login.refresh.window.factor = 0.8
-	sasl.login.refresh.window.jitter = 0.05
-	sasl.login.retry.backoff.max.ms = 10000
-	sasl.login.retry.backoff.ms = 100
-	sasl.mechanism = GSSAPI
-	sasl.oauthbearer.clock.skew.seconds = 30
-	sasl.oauthbearer.expected.audience = null
-	sasl.oauthbearer.expected.issuer = null
-	sasl.oauthbearer.header.urlencode = false
-	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
-	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
-	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
-	sasl.oauthbearer.jwks.endpoint.url = null
-	sasl.oauthbearer.scope.claim.name = scope
-	sasl.oauthbearer.sub.claim.name = sub
-	sasl.oauthbearer.token.endpoint.url = null
-	security.protocol = PLAINTEXT
-	security.providers = null
-	send.buffer.bytes = 131072
-	socket.connection.setup.timeout.max.ms = 30000
-	socket.connection.setup.timeout.ms = 10000
-	ssl.cipher.suites = null
-	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
-	ssl.endpoint.identification.algorithm = https
-	ssl.engine.factory.class = null
-	ssl.key.password = null
-	ssl.keymanager.algorithm = SunX509
-	ssl.keystore.certificate.chain = null
-	ssl.keystore.key = null
-	ssl.keystore.location = null
-	ssl.keystore.password = null
-	ssl.keystore.type = JKS
-	ssl.protocol = TLSv1.3
-	ssl.provider = null
-	ssl.secure.random.implementation = null
-	ssl.trustmanager.algorithm = PKIX
-	ssl.truststore.certificates = null
-	ssl.truststore.location = null
-	ssl.truststore.password = null
-	ssl.truststore.type = JKS
-	transaction.timeout.ms = 60000
-	transactional.id = null
-	value.serializer = class com.fasterxml.jackson.databind.JsonSerializer
-
-2025-10-24T20:55:35.797+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
-2025-10-24T20:55:35.798+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=api-gateway-producer-2] Closing the Kafka producer with timeoutMillis = 0 ms.
-2025-10-24T20:55:35.799+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
-2025-10-24T20:55:35.799+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
-2025-10-24T20:55:35.799+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
-2025-10-24T20:55:35.799+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
-2025-10-24T20:55:35.799+07:00  INFO 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.a.kafka.common.utils.AppInfoParser     : App info kafka.producer for api-gateway-producer-2 unregistered
-2025-10-24T20:55:35.800+07:00 ERROR 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.s.w.s.adapter.HttpWebHandlerAdapter    : [6beab0ae-16] Error [org.apache.kafka.common.KafkaException: Failed to construct kafka producer] for HTTP POST "/v1/api/iam/auth/login", but ServerHttpResponse already committed (200 OK)
-2025-10-24T20:55:35.803+07:00 ERROR 19728 --- [api-gateway] [reactor-http-nio-7] [                                                 ] r.n.http.server.HttpServerOperations     : [6beab0ae-4, L:/[0:0:0:0:0:0:0:1]:6789 - R:/[0:0:0:0:0:0:0:1]:49616] Error finishing response. Closing connection
-
-org.apache.kafka.common.KafkaException: Failed to construct kafka producer
-	at org.apache.kafka.clients.producer.KafkaProducer.<init>(KafkaProducer.java:476) ~[kafka-clients-3.9.1.jar:na]
-	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
-Error has been observed at the following site(s):
-	*__checkpoint ⇢ org.springframework.web.cors.reactive.CorsWebFilter [DefaultWebFilterChain]
-	*__checkpoint ⇢ org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter [DefaultWebFilterChain]
-	*__checkpoint ⇢ HTTP POST "/v1/api/iam/auth/login" [ExceptionHandlingWebHandler]
-Original Stack Trace:
-		at org.apache.kafka.clients.producer.KafkaProducer.<init>(KafkaProducer.java:476) ~[kafka-clients-3.9.1.jar:na]
-		at org.apache.kafka.clients.producer.KafkaProducer.<init>(KafkaProducer.java:297) ~[kafka-clients-3.9.1.jar:na]
-		at org.springframework.kafka.core.DefaultKafkaProducerFactory.createRawProducer(DefaultKafkaProducerFactory.java:944) ~[spring-kafka-3.3.10.jar:3.3.10]
-		at org.springframework.kafka.core.DefaultKafkaProducerFactory.createKafkaProducer(DefaultKafkaProducerFactory.java:826) ~[spring-kafka-3.3.10.jar:3.3.10]
-		at org.springframework.kafka.core.DefaultKafkaProducerFactory.doCreateProducer(DefaultKafkaProducerFactory.java:793) ~[spring-kafka-3.3.10.jar:3.3.10]
-		at org.springframework.kafka.core.DefaultKafkaProducerFactory.createProducer(DefaultKafkaProducerFactory.java:768) ~[spring-kafka-3.3.10.jar:3.3.10]
-		at org.springframework.kafka.core.DefaultKafkaProducerFactory.createProducer(DefaultKafkaProducerFactory.java:762) ~[spring-kafka-3.3.10.jar:3.3.10]
-		at org.springframework.kafka.core.KafkaTemplate.getTheProducer(KafkaTemplate.java:991) ~[spring-kafka-3.3.10.jar:3.3.10]
-		at org.springframework.kafka.core.KafkaTemplate.doSend(KafkaTemplate.java:843) ~[spring-kafka-3.3.10.jar:3.3.10]
-		at org.springframework.kafka.core.KafkaTemplate.observeSend(KafkaTemplate.java:820) ~[spring-kafka-3.3.10.jar:3.3.10]
-		at org.springframework.kafka.core.KafkaTemplate.send(KafkaTemplate.java:597) ~[spring-kafka-3.3.10.jar:3.3.10]
-		at com.datnguyen.apigateway.service.LoggingFilter.lambda$filter$0(LoggingFilter.java:40) ~[classes/:na]
-		at reactor.core.publisher.MonoRunnable.call(MonoRunnable.java:73) ~[reactor-core-3.7.11.jar:3.7.11]
-		at reactor.core.publisher.MonoRunnable.call(MonoRunnable.java:32) ~[reactor-core-3.7.11.jar:3.7.11]
-		at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.subscribeNext(MonoIgnoreThen.java:229) ~[reactor-core-3.7.11.jar:3.7.11]
-		at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.onComplete(MonoIgnoreThen.java:204) ~[reactor-core-3.7.11.jar:3.7.11]
-		at reactor.core.publisher.FluxDoFinally$DoFinallySubscriber.onComplete(FluxDoFinally.java:128) ~[reactor-core-3.7.11.jar:3.7.11]
-		at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.onComplete(MonoIgnoreThen.java:210) ~[reactor-core-3.7.11.jar:3.7.11]
-		at reactor.core.publisher.MonoPeekTerminal$MonoTerminalPeekSubscriber.onComplete(MonoPeekTerminal.java:299) ~[reactor-core-3.7.11.jar:3.7.11]
-		at org.springframework.http.server.reactive.ChannelSendOperator$WriteCompletionBarrier.onComplete(ChannelSendOperator.java:428) ~[spring-web-6.2.11.jar:6.2.11]
-		at reactor.core.publisher.MonoIgnoreElements$IgnoreElementsSubscriber.onComplete(MonoIgnoreElements.java:89) ~[reactor-core-3.7.11.jar:3.7.11]
-		at reactor.core.publisher.FluxConcatArray$ConcatArraySubscriber.onComplete(FluxConcatArray.java:209) ~[reactor-core-3.7.11.jar:3.7.11]
-		at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.onComplete(MonoIgnoreThen.java:210) ~[reactor-core-3.7.11.jar:3.7.11]
-		at reactor.netty.channel.MonoSendMany$SendManyInner.run(MonoSendMany.java:349) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-		at reactor.netty.channel.MonoSendMany$SendManyInner.trySchedule(MonoSendMany.java:434) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-		at reactor.netty.channel.MonoSendMany$SendManyInner.onComplete(MonoSendMany.java:184) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-		at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144) ~[reactor-core-3.7.11.jar:3.7.11]
-		at org.springframework.http.server.reactive.ChannelSendOperator$WriteBarrier.onComplete(ChannelSendOperator.java:231) ~[spring-web-6.2.11.jar:6.2.11]
-		at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144) ~[reactor-core-3.7.11.jar:3.7.11]
-		at reactor.core.publisher.FluxPeek$PeekSubscriber.onComplete(FluxPeek.java:260) ~[reactor-core-3.7.11.jar:3.7.11]
-		at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144) ~[reactor-core-3.7.11.jar:3.7.11]
-		at reactor.netty.channel.FluxReceive.terminateReceiver(FluxReceive.java:481) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-		at reactor.netty.channel.FluxReceive.drainReceiver(FluxReceive.java:273) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-		at reactor.netty.channel.FluxReceive.onInboundComplete(FluxReceive.java:417) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-		at reactor.netty.channel.ChannelOperations.onInboundComplete(ChannelOperations.java:455) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-		at reactor.netty.channel.ChannelOperations.terminate(ChannelOperations.java:509) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-		at reactor.netty.http.client.HttpClientOperations.onInboundNext(HttpClientOperations.java:847) ~[reactor-netty-http-1.2.10.jar:1.2.10]
-		at reactor.netty.channel.ChannelOperationsHandler.channelRead(ChannelOperationsHandler.java:115) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346) ~[netty-codec-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:318) ~[netty-codec-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:796) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.127.Final.jar:4.1.127.Final]
-		at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.127.Final.jar:4.1.127.Final]
-		at java.base/java.lang.Thread.run(Thread.java:1447) ~[na:na]
-Caused by: org.apache.kafka.common.KafkaException: class com.fasterxml.jackson.databind.ser.std.StringSerializer is not an instance of org.apache.kafka.common.serialization.Serializer
-	at org.apache.kafka.common.config.AbstractConfig.getConfiguredInstance(AbstractConfig.java:401) ~[kafka-clients-3.9.1.jar:na]
-	at org.apache.kafka.common.config.AbstractConfig.getConfiguredInstance(AbstractConfig.java:435) ~[kafka-clients-3.9.1.jar:na]
-	at org.apache.kafka.common.config.AbstractConfig.getConfiguredInstance(AbstractConfig.java:420) ~[kafka-clients-3.9.1.jar:na]
-	at org.apache.kafka.clients.producer.KafkaProducer.<init>(KafkaProducer.java:390) ~[kafka-clients-3.9.1.jar:na]
-	at org.apache.kafka.clients.producer.KafkaProducer.<init>(KafkaProducer.java:297) ~[kafka-clients-3.9.1.jar:na]
-	at org.springframework.kafka.core.DefaultKafkaProducerFactory.createRawProducer(DefaultKafkaProducerFactory.java:944) ~[spring-kafka-3.3.10.jar:3.3.10]
-	at org.springframework.kafka.core.DefaultKafkaProducerFactory.createKafkaProducer(DefaultKafkaProducerFactory.java:826) ~[spring-kafka-3.3.10.jar:3.3.10]
-	at org.springframework.kafka.core.DefaultKafkaProducerFactory.doCreateProducer(DefaultKafkaProducerFactory.java:793) ~[spring-kafka-3.3.10.jar:3.3.10]
-	at org.springframework.kafka.core.DefaultKafkaProducerFactory.createProducer(DefaultKafkaProducerFactory.java:768) ~[spring-kafka-3.3.10.jar:3.3.10]
-	at org.springframework.kafka.core.DefaultKafkaProducerFactory.createProducer(DefaultKafkaProducerFactory.java:762) ~[spring-kafka-3.3.10.jar:3.3.10]
-	at org.springframework.kafka.core.KafkaTemplate.getTheProducer(KafkaTemplate.java:991) ~[spring-kafka-3.3.10.jar:3.3.10]
-	at org.springframework.kafka.core.KafkaTemplate.doSend(KafkaTemplate.java:843) ~[spring-kafka-3.3.10.jar:3.3.10]
-	at org.springframework.kafka.core.KafkaTemplate.observeSend(KafkaTemplate.java:820) ~[spring-kafka-3.3.10.jar:3.3.10]
-	at org.springframework.kafka.core.KafkaTemplate.send(KafkaTemplate.java:597) ~[spring-kafka-3.3.10.jar:3.3.10]
-	at com.datnguyen.apigateway.service.LoggingFilter.lambda$filter$0(LoggingFilter.java:40) ~[classes/:na]
-	at reactor.core.publisher.MonoRunnable.call(MonoRunnable.java:73) ~[reactor-core-3.7.11.jar:3.7.11]
-	at reactor.core.publisher.MonoRunnable.call(MonoRunnable.java:32) ~[reactor-core-3.7.11.jar:3.7.11]
-	at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.subscribeNext(MonoIgnoreThen.java:229) ~[reactor-core-3.7.11.jar:3.7.11]
-	at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.onComplete(MonoIgnoreThen.java:204) ~[reactor-core-3.7.11.jar:3.7.11]
-	at reactor.core.publisher.FluxDoFinally$DoFinallySubscriber.onComplete(FluxDoFinally.java:128) ~[reactor-core-3.7.11.jar:3.7.11]
-	at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.onComplete(MonoIgnoreThen.java:210) ~[reactor-core-3.7.11.jar:3.7.11]
-	at reactor.core.publisher.MonoPeekTerminal$MonoTerminalPeekSubscriber.onComplete(MonoPeekTerminal.java:299) ~[reactor-core-3.7.11.jar:3.7.11]
-	at org.springframework.http.server.reactive.ChannelSendOperator$WriteCompletionBarrier.onComplete(ChannelSendOperator.java:428) ~[spring-web-6.2.11.jar:6.2.11]
-	at reactor.core.publisher.MonoIgnoreElements$IgnoreElementsSubscriber.onComplete(MonoIgnoreElements.java:89) ~[reactor-core-3.7.11.jar:3.7.11]
-	at reactor.core.publisher.FluxConcatArray$ConcatArraySubscriber.onComplete(FluxConcatArray.java:209) ~[reactor-core-3.7.11.jar:3.7.11]
-	at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.onComplete(MonoIgnoreThen.java:210) ~[reactor-core-3.7.11.jar:3.7.11]
-	at reactor.netty.channel.MonoSendMany$SendManyInner.run(MonoSendMany.java:349) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-	at reactor.netty.channel.MonoSendMany$SendManyInner.trySchedule(MonoSendMany.java:434) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-	at reactor.netty.channel.MonoSendMany$SendManyInner.onComplete(MonoSendMany.java:184) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-	at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144) ~[reactor-core-3.7.11.jar:3.7.11]
-	at org.springframework.http.server.reactive.ChannelSendOperator$WriteBarrier.onComplete(ChannelSendOperator.java:231) ~[spring-web-6.2.11.jar:6.2.11]
-	at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144) ~[reactor-core-3.7.11.jar:3.7.11]
-	at reactor.core.publisher.FluxPeek$PeekSubscriber.onComplete(FluxPeek.java:260) ~[reactor-core-3.7.11.jar:3.7.11]
-	at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:144) ~[reactor-core-3.7.11.jar:3.7.11]
-	at reactor.netty.channel.FluxReceive.terminateReceiver(FluxReceive.java:481) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-	at reactor.netty.channel.FluxReceive.drainReceiver(FluxReceive.java:273) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-	at reactor.netty.channel.FluxReceive.onInboundComplete(FluxReceive.java:417) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-	at reactor.netty.channel.ChannelOperations.onInboundComplete(ChannelOperations.java:455) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-	at reactor.netty.channel.ChannelOperations.terminate(ChannelOperations.java:509) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-	at reactor.netty.http.client.HttpClientOperations.onInboundNext(HttpClientOperations.java:847) ~[reactor-netty-http-1.2.10.jar:1.2.10]
-	at reactor.netty.channel.ChannelOperationsHandler.channelRead(ChannelOperationsHandler.java:115) ~[reactor-netty-core-1.2.10.jar:1.2.10]
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346) ~[netty-codec-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:318) ~[netty-codec-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:796) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.127.Final.jar:4.1.127.Final]
-	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.127.Final.jar:4.1.127.Final]
-	at java.base/java.lang.Thread.run(Thread.java:1447) ~[na:na]
-
-2025-10-24T20:58:21.333+07:00  INFO 19728 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T21:03:21.335+07:00  INFO 19728 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T21:08:21.335+07:00  INFO 19728 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T21:13:21.339+07:00  INFO 19728 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T21:17:13.148+07:00  INFO 19728 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application API-GATEWAY with eureka with status DOWN
-2025-10-24T21:17:13.149+07:00  INFO 19728 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1761315433149, current=DOWN, previous=UP]
-2025-10-24T21:17:13.149+07:00  INFO 19728 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789: registering service...
-2025-10-24T21:17:13.151+07:00  INFO 19728 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
-2025-10-24T21:17:13.153+07:00  INFO 19728 --- [api-gateway] [netty-shutdown] [                                                 ] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
-2025-10-24T21:17:13.156+07:00  INFO 19728 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789 - registration status: 204
-2025-10-24T21:17:16.127+07:00  INFO 19728 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
-2025-10-24T21:17:19.128+07:00  INFO 19728 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : Unregistering ...
-2025-10-24T21:17:19.137+07:00  INFO 19728 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789 - deregister  status: 200
-2025-10-24T21:17:19.138+07:00  INFO 19728 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
-2025-10-24T21:17:22.596+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] c.d.apigateway.ApiGatewayApplication     : Starting ApiGatewayApplication using Java 24.0.1 with PID 23204 (E:\khac_chuaAe\hcm_cpl_java_09_group_2\api-gateway\target\classes started by thanh in E:\khac_chuaAe\hcm_cpl_java_09_group_2)
-2025-10-24T21:17:22.599+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] c.d.apigateway.ApiGatewayApplication     : The following 1 profile is active: "dev"
-2025-10-24T21:17:23.670+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.cloud.context.scope.GenericScope     : BeanFactory id=e06f036b-b302-32dc-a236-1a4076d609bd
-2025-10-24T21:17:24.460+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
-2025-10-24T21:17:24.460+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
-2025-10-24T21:17:24.460+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
-2025-10-24T21:17:24.460+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
-2025-10-24T21:17:24.460+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
-2025-10-24T21:17:24.460+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
-2025-10-24T21:17:24.460+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
-2025-10-24T21:17:24.461+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
-2025-10-24T21:17:24.461+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
-2025-10-24T21:17:24.461+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
-2025-10-24T21:17:24.461+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
-2025-10-24T21:17:24.461+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
-2025-10-24T21:17:24.461+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
-2025-10-24T21:17:24.461+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
-2025-10-24T21:17:24.733+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 18 endpoints beneath base path '/actuator'
-2025-10-24T21:17:25.151+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
-2025-10-24T21:17:25.177+07:00  WARN 23204 --- [api-gateway] [main] [                                                 ] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
-2025-10-24T21:17:25.240+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
-2025-10-24T21:17:25.260+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
-2025-10-24T21:17:25.264+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T21:17:25.271+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
-2025-10-24T21:17:25.271+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
-2025-10-24T21:17:25.271+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
-2025-10-24T21:17:25.271+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Application is null : false
-2025-10-24T21:17:25.271+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
-2025-10-24T21:17:25.271+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
-2025-10-24T21:17:25.271+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
-2025-10-24T21:17:25.491+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : The response status is 200
-2025-10-24T21:17:25.493+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
-2025-10-24T21:17:25.494+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
-2025-10-24T21:17:25.496+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1761315445495 with initial instances count: 2
-2025-10-24T21:17:25.498+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application API-GATEWAY with eureka with status UP
-2025-10-24T21:17:25.498+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1761315445498, current=UP, previous=STARTING]
-2025-10-24T21:17:25.499+07:00  INFO 23204 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789: registering service...
-2025-10-24T21:17:25.524+07:00  INFO 23204 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789 - registration status: 204
-2025-10-24T21:17:25.639+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 6789 (http)
-2025-10-24T21:17:25.640+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 6789
-2025-10-24T21:17:25.674+07:00  INFO 23204 --- [api-gateway] [main] [                                                 ] c.d.apigateway.ApiGatewayApplication     : Started ApiGatewayApplication in 3.525 seconds (process running for 4.233)
-2025-10-24T21:17:25.678+07:00  WARN 23204 --- [api-gateway] [main] [                                                 ] ServerWebfluxPropertiesMigrationListener : 
-The use of configuration keys that have been renamed was found in the environment:
-
-Property source 'Config resource 'class path resource [application-dev.yml]' via location 'optional:classpath:/'':
-	Key: spring.cloud.gateway.routes[0].id
-		Line: 15
-		Replacement: spring.cloud.gateway.server.webflux.routes[0].id
-	Key: spring.cloud.gateway.routes[0].uri
-		Line: 16
-		Replacement: spring.cloud.gateway.server.webflux.routes[0].uri
-	Key: spring.cloud.gateway.routes[0].predicates[0]
-		Line: 18
-		Replacement: spring.cloud.gateway.server.webflux.routes[0].predicates[0]
-	Key: spring.cloud.gateway.routes[0].filters[0]
-		Line: 20
-		Replacement: spring.cloud.gateway.server.webflux.routes[0].filters[0]
-	Key: spring.cloud.gateway.routes[1].id
-		Line: 23
-		Replacement: spring.cloud.gateway.server.webflux.routes[1].id
-	Key: spring.cloud.gateway.routes[1].uri
-		Line: 24
-		Replacement: spring.cloud.gateway.server.webflux.routes[1].uri
-	Key: spring.cloud.gateway.routes[1].predicates[0]
-		Line: 26
-		Replacement: spring.cloud.gateway.server.webflux.routes[1].predicates[0]
-	Key: spring.cloud.gateway.routes[1].filters[0]
-		Line: 28
-		Replacement: spring.cloud.gateway.server.webflux.routes[1].filters[0]
-	Key: spring.cloud.gateway.routes[2].id
-		Line: 31
-		Replacement: spring.cloud.gateway.server.webflux.routes[2].id
-	Key: spring.cloud.gateway.routes[2].uri
-		Line: 32
-		Replacement: spring.cloud.gateway.server.webflux.routes[2].uri
-	Key: spring.cloud.gateway.routes[2].predicates[0]
-		Line: 34
-		Replacement: spring.cloud.gateway.server.webflux.routes[2].predicates[0]
-	Key: spring.cloud.gateway.routes[2].filters[0]
-		Line: 36
-		Replacement: spring.cloud.gateway.server.webflux.routes[2].filters[0]
-	Key: spring.cloud.gateway.routes[3].id
-		Line: 39
-		Replacement: spring.cloud.gateway.server.webflux.routes[3].id
-	Key: spring.cloud.gateway.routes[3].uri
-		Line: 40
-		Replacement: spring.cloud.gateway.server.webflux.routes[3].uri
-	Key: spring.cloud.gateway.routes[3].predicates[0]
-		Line: 42
-		Replacement: spring.cloud.gateway.server.webflux.routes[3].predicates[0]
-	Key: spring.cloud.gateway.routes[3].filters[0].name
-		Line: 44
-		Replacement: spring.cloud.gateway.server.webflux.routes[3].filters[0].name
-	Key: spring.cloud.gateway.routes[3].filters[0].args.inclass
-		Line: 46
-		Replacement: spring.cloud.gateway.server.webflux.routes[3].filters[0].args.inclass
-	Key: spring.cloud.gateway.routes[3].filters[0].args.outclass
-		Line: 47
-		Replacement: spring.cloud.gateway.server.webflux.routes[3].filters[0].args.outclass
-	Key: spring.cloud.gateway.routes[3].filters[0].args.rewritefunction
-		Line: 48
-		Replacement: spring.cloud.gateway.server.webflux.routes[3].filters[0].args.rewritefunction
-	Key: spring.cloud.gateway.routes[4].id
-		Line: 50
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].id
-	Key: spring.cloud.gateway.routes[4].uri
-		Line: 51
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].uri
-	Key: spring.cloud.gateway.routes[4].predicates[0]
-		Line: 53
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].predicates[0]
-	Key: spring.cloud.gateway.routes[4].filters[0]
-		Line: 55
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[0]
-	Key: spring.cloud.gateway.routes[4].filters[1].name
-		Line: 56
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[1].name
-	Key: spring.cloud.gateway.routes[4].filters[1].args.inclass
-		Line: 58
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[1].args.inclass
-	Key: spring.cloud.gateway.routes[4].filters[1].args.outclass
-		Line: 59
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[1].args.outclass
-	Key: spring.cloud.gateway.routes[4].filters[1].args.rewritefunction
-		Line: 60
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[1].args.rewritefunction
-	Key: spring.cloud.gateway.routes[5].id
-		Line: 62
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].id
-	Key: spring.cloud.gateway.routes[5].uri
-		Line: 63
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].uri
-	Key: spring.cloud.gateway.routes[5].predicates[0]
-		Line: 65
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].predicates[0]
-	Key: spring.cloud.gateway.routes[5].filters[0]
-		Line: 67
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[0]
-	Key: spring.cloud.gateway.routes[5].filters[1].name
-		Line: 68
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[1].name
-	Key: spring.cloud.gateway.routes[5].filters[1].args.inclass
-		Line: 70
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[1].args.inclass
-	Key: spring.cloud.gateway.routes[5].filters[1].args.outclass
-		Line: 71
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[1].args.outclass
-	Key: spring.cloud.gateway.routes[5].filters[1].args.rewritefunction
-		Line: 72
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[1].args.rewritefunction
-
-
-Each configuration key has been temporarily mapped to its replacement for your convenience. To silence this warning, please update your configuration to use the new keys.
-
-2025-10-24T21:20:16.951+07:00  INFO 23204 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application API-GATEWAY with eureka with status DOWN
-2025-10-24T21:20:16.951+07:00  INFO 23204 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1761315616951, current=DOWN, previous=UP]
-2025-10-24T21:20:16.951+07:00  INFO 23204 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789: registering service...
-2025-10-24T21:20:16.953+07:00  INFO 23204 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
-2025-10-24T21:20:16.956+07:00  INFO 23204 --- [api-gateway] [netty-shutdown] [                                                 ] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
-2025-10-24T21:20:16.956+07:00  INFO 23204 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789 - registration status: 204
-2025-10-24T21:20:19.979+07:00  INFO 23204 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
-2025-10-24T21:20:22.982+07:00  INFO 23204 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : Unregistering ...
-2025-10-24T21:20:22.988+07:00  INFO 23204 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789 - deregister  status: 200
-2025-10-24T21:20:22.988+07:00  INFO 23204 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
-2025-10-24T21:20:25.044+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] c.d.apigateway.ApiGatewayApplication     : Starting ApiGatewayApplication using Java 24.0.1 with PID 16216 (E:\khac_chuaAe\hcm_cpl_java_09_group_2\api-gateway\target\classes started by thanh in E:\khac_chuaAe\hcm_cpl_java_09_group_2)
-2025-10-24T21:20:25.046+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] c.d.apigateway.ApiGatewayApplication     : The following 1 profile is active: "dev"
-2025-10-24T21:20:26.171+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.cloud.context.scope.GenericScope     : BeanFactory id=e06f036b-b302-32dc-a236-1a4076d609bd
-2025-10-24T21:20:27.007+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
-2025-10-24T21:20:27.008+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
-2025-10-24T21:20:27.008+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
-2025-10-24T21:20:27.008+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
-2025-10-24T21:20:27.008+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
-2025-10-24T21:20:27.008+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
-2025-10-24T21:20:27.008+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
-2025-10-24T21:20:27.008+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
-2025-10-24T21:20:27.008+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
-2025-10-24T21:20:27.008+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
-2025-10-24T21:20:27.008+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
-2025-10-24T21:20:27.008+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
-2025-10-24T21:20:27.008+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
-2025-10-24T21:20:27.008+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
-2025-10-24T21:20:27.362+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 18 endpoints beneath base path '/actuator'
-2025-10-24T21:20:27.915+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
-2025-10-24T21:20:27.950+07:00  WARN 16216 --- [api-gateway] [main] [                                                 ] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
-2025-10-24T21:20:28.040+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
-2025-10-24T21:20:28.058+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
-2025-10-24T21:20:28.062+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T21:20:28.069+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
-2025-10-24T21:20:28.069+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
-2025-10-24T21:20:28.069+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
-2025-10-24T21:20:28.069+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Application is null : false
-2025-10-24T21:20:28.069+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
-2025-10-24T21:20:28.070+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
-2025-10-24T21:20:28.070+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
-2025-10-24T21:20:28.324+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : The response status is 200
-2025-10-24T21:20:28.326+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
-2025-10-24T21:20:28.328+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
-2025-10-24T21:20:28.329+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1761315628328 with initial instances count: 2
-2025-10-24T21:20:28.331+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application API-GATEWAY with eureka with status UP
-2025-10-24T21:20:28.332+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1761315628331, current=UP, previous=STARTING]
-2025-10-24T21:20:28.333+07:00  INFO 16216 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789: registering service...
-2025-10-24T21:20:28.363+07:00  INFO 16216 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789 - registration status: 204
-2025-10-24T21:20:28.479+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 6789 (http)
-2025-10-24T21:20:28.481+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 6789
-2025-10-24T21:20:28.515+07:00  INFO 16216 --- [api-gateway] [main] [                                                 ] c.d.apigateway.ApiGatewayApplication     : Started ApiGatewayApplication in 3.888 seconds (process running for 4.604)
-2025-10-24T21:20:28.518+07:00  WARN 16216 --- [api-gateway] [main] [                                                 ] ServerWebfluxPropertiesMigrationListener : 
-The use of configuration keys that have been renamed was found in the environment:
-
-Property source 'Config resource 'class path resource [application-dev.yml]' via location 'optional:classpath:/'':
-	Key: spring.cloud.gateway.routes[0].id
-		Line: 15
-		Replacement: spring.cloud.gateway.server.webflux.routes[0].id
-	Key: spring.cloud.gateway.routes[0].uri
-		Line: 16
-		Replacement: spring.cloud.gateway.server.webflux.routes[0].uri
-	Key: spring.cloud.gateway.routes[0].predicates[0]
-		Line: 18
-		Replacement: spring.cloud.gateway.server.webflux.routes[0].predicates[0]
-	Key: spring.cloud.gateway.routes[0].filters[0]
-		Line: 20
-		Replacement: spring.cloud.gateway.server.webflux.routes[0].filters[0]
-	Key: spring.cloud.gateway.routes[1].id
-		Line: 23
-		Replacement: spring.cloud.gateway.server.webflux.routes[1].id
-	Key: spring.cloud.gateway.routes[1].uri
-		Line: 24
-		Replacement: spring.cloud.gateway.server.webflux.routes[1].uri
-	Key: spring.cloud.gateway.routes[1].predicates[0]
-		Line: 26
-		Replacement: spring.cloud.gateway.server.webflux.routes[1].predicates[0]
-	Key: spring.cloud.gateway.routes[1].filters[0]
-		Line: 28
-		Replacement: spring.cloud.gateway.server.webflux.routes[1].filters[0]
-	Key: spring.cloud.gateway.routes[2].id
-		Line: 31
-		Replacement: spring.cloud.gateway.server.webflux.routes[2].id
-	Key: spring.cloud.gateway.routes[2].uri
-		Line: 32
-		Replacement: spring.cloud.gateway.server.webflux.routes[2].uri
-	Key: spring.cloud.gateway.routes[2].predicates[0]
-		Line: 34
-		Replacement: spring.cloud.gateway.server.webflux.routes[2].predicates[0]
-	Key: spring.cloud.gateway.routes[2].filters[0]
-		Line: 36
-		Replacement: spring.cloud.gateway.server.webflux.routes[2].filters[0]
-	Key: spring.cloud.gateway.routes[3].id
-		Line: 39
-		Replacement: spring.cloud.gateway.server.webflux.routes[3].id
-	Key: spring.cloud.gateway.routes[3].uri
-		Line: 40
-		Replacement: spring.cloud.gateway.server.webflux.routes[3].uri
-	Key: spring.cloud.gateway.routes[3].predicates[0]
-		Line: 42
-		Replacement: spring.cloud.gateway.server.webflux.routes[3].predicates[0]
-	Key: spring.cloud.gateway.routes[3].filters[0].name
-		Line: 44
-		Replacement: spring.cloud.gateway.server.webflux.routes[3].filters[0].name
-	Key: spring.cloud.gateway.routes[3].filters[0].args.inclass
-		Line: 46
-		Replacement: spring.cloud.gateway.server.webflux.routes[3].filters[0].args.inclass
-	Key: spring.cloud.gateway.routes[3].filters[0].args.outclass
-		Line: 47
-		Replacement: spring.cloud.gateway.server.webflux.routes[3].filters[0].args.outclass
-	Key: spring.cloud.gateway.routes[3].filters[0].args.rewritefunction
-		Line: 48
-		Replacement: spring.cloud.gateway.server.webflux.routes[3].filters[0].args.rewritefunction
-	Key: spring.cloud.gateway.routes[4].id
-		Line: 50
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].id
-	Key: spring.cloud.gateway.routes[4].uri
-		Line: 51
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].uri
-	Key: spring.cloud.gateway.routes[4].predicates[0]
-		Line: 53
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].predicates[0]
-	Key: spring.cloud.gateway.routes[4].filters[0]
-		Line: 55
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[0]
-	Key: spring.cloud.gateway.routes[4].filters[1].name
-		Line: 56
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[1].name
-	Key: spring.cloud.gateway.routes[4].filters[1].args.inclass
-		Line: 58
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[1].args.inclass
-	Key: spring.cloud.gateway.routes[4].filters[1].args.outclass
-		Line: 59
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[1].args.outclass
-	Key: spring.cloud.gateway.routes[4].filters[1].args.rewritefunction
-		Line: 60
-		Replacement: spring.cloud.gateway.server.webflux.routes[4].filters[1].args.rewritefunction
-	Key: spring.cloud.gateway.routes[5].id
-		Line: 62
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].id
-	Key: spring.cloud.gateway.routes[5].uri
-		Line: 63
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].uri
-	Key: spring.cloud.gateway.routes[5].predicates[0]
-		Line: 65
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].predicates[0]
-	Key: spring.cloud.gateway.routes[5].filters[0]
-		Line: 67
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[0]
-	Key: spring.cloud.gateway.routes[5].filters[1].name
-		Line: 68
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[1].name
-	Key: spring.cloud.gateway.routes[5].filters[1].args.inclass
-		Line: 70
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[1].args.inclass
-	Key: spring.cloud.gateway.routes[5].filters[1].args.outclass
-		Line: 71
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[1].args.outclass
-	Key: spring.cloud.gateway.routes[5].filters[1].args.rewritefunction
-		Line: 72
-		Replacement: spring.cloud.gateway.server.webflux.routes[5].filters[1].args.rewritefunction
-
-
-Each configuration key has been temporarily mapped to its replacement for your convenience. To silence this warning, please update your configuration to use the new keys.
-
-2025-10-24T21:20:41.706+07:00  INFO 16216 --- [api-gateway] [reactor-http-nio-2] [                                                 ] o.a.k.clients.producer.ProducerConfig    : ProducerConfig values: 
+2025-10-28T08:09:59.312+07:00  INFO 6032 --- [api-gateway] [reactor-http-nio-3] o.a.k.clients.producer.ProducerConfig    : ProducerConfig values: 
 	acks = -1
 	auto.include.jmx.reporter = true
 	batch.size = 16384
@@ -986,45 +249,37 @@ Each configuration key has been temporarily mapped to its replacement for your c
 	transactional.id = null
 	value.serializer = class org.springframework.kafka.support.serializer.JsonSerializer
 
-2025-10-24T21:20:41.733+07:00  INFO 16216 --- [api-gateway] [reactor-http-nio-2] [                                                 ] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
-2025-10-24T21:20:41.751+07:00  INFO 16216 --- [api-gateway] [reactor-http-nio-2] [                                                 ] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=api-gateway-producer-1] Instantiated an idempotent producer.
-2025-10-24T21:20:41.788+07:00  INFO 16216 --- [api-gateway] [reactor-http-nio-2] [                                                 ] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.9.1
-2025-10-24T21:20:41.788+07:00  INFO 16216 --- [api-gateway] [reactor-http-nio-2] [                                                 ] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: f745dfdcee2b9851
-2025-10-24T21:20:41.788+07:00  INFO 16216 --- [api-gateway] [reactor-http-nio-2] [                                                 ] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1761315641787
-2025-10-24T21:20:42.081+07:00  INFO 16216 --- [api-gateway] [kafka-producer-network-thread | api-gateway-producer-1] [                                                 ] org.apache.kafka.clients.Metadata        : [Producer clientId=api-gateway-producer-1] Cluster ID: MkU3OEVBNTcwNTJENDM2Qg
-2025-10-24T21:20:42.175+07:00  INFO 16216 --- [api-gateway] [kafka-producer-network-thread | api-gateway-producer-1] [                                                 ] o.a.k.c.p.internals.TransactionManager   : [Producer clientId=api-gateway-producer-1] ProducerId set to 0 with epoch 0
-2025-10-24T21:25:28.073+07:00  INFO 16216 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T21:30:28.074+07:00  INFO 16216 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T21:35:28.075+07:00  INFO 16216 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T21:40:28.076+07:00  INFO 16216 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T21:45:28.078+07:00  INFO 16216 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T21:49:00.077+07:00  WARN 16216 --- [api-gateway] [reactor-http-nio-4] [                                                 ] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: iam-service
-2025-10-24T21:49:04.468+07:00  WARN 16216 --- [api-gateway] [reactor-http-nio-4] [                                                 ] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: iam-service
-2025-10-24T21:49:11.458+07:00  WARN 16216 --- [api-gateway] [reactor-http-nio-4] [                                                 ] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: iam-service
-2025-10-24T21:49:22.565+07:00  WARN 16216 --- [api-gateway] [reactor-http-nio-4] [                                                 ] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: iam-service
-2025-10-24T21:50:28.079+07:00  INFO 16216 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T21:55:12.866+07:00  WARN 16216 --- [api-gateway] [reactor-http-nio-7] [                                                 ] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: iam-service
-2025-10-24T21:55:27.317+07:00  WARN 16216 --- [api-gateway] [reactor-http-nio-10] [                                                 ] o.s.c.l.core.RoundRobinLoadBalancer      : No servers available for service: iam-service
-2025-10-24T21:55:28.080+07:00  INFO 16216 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T22:00:28.081+07:00  INFO 16216 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T22:05:28.083+07:00  INFO 16216 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T22:10:28.084+07:00  INFO 16216 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T22:15:28.086+07:00  INFO 16216 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] [                                                 ] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2025-10-24T22:17:47.380+07:00  INFO 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application API-GATEWAY with eureka with status DOWN
-2025-10-24T22:17:47.381+07:00  INFO 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1761319067381, current=DOWN, previous=UP]
-2025-10-24T22:17:47.381+07:00  INFO 16216 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789: registering service...
-2025-10-24T22:17:47.384+07:00  INFO 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
-2025-10-24T22:17:47.387+07:00  INFO 16216 --- [api-gateway] [netty-shutdown] [                                                 ] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
-2025-10-24T22:17:47.391+07:00  INFO 16216 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789 - registration status: 204
-2025-10-24T22:17:49.407+07:00  INFO 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=api-gateway-producer-1] Closing the Kafka producer with timeoutMillis = 30000 ms.
-2025-10-24T22:17:49.413+07:00  INFO 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
-2025-10-24T22:17:49.413+07:00  INFO 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
-2025-10-24T22:17:49.413+07:00  INFO 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
-2025-10-24T22:17:49.413+07:00  INFO 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
-2025-10-24T22:17:49.414+07:00  INFO 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] o.a.kafka.common.utils.AppInfoParser     : App info kafka.producer for api-gateway-producer-1 unregistered
-2025-10-24T22:17:50.003+07:00  INFO 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
-2025-10-24T22:17:53.006+07:00  INFO 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : Unregistering ...
-2025-10-24T22:17:53.012+07:00  INFO 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] c.n.d.s.t.d.RedirectingEurekaHttpClient  : Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/} exception=I/O error on DELETE request for "http://localhost:8761/eureka/apps/API-GATEWAY/MSI.mshome.net:api-gateway:6789": Connect to http://localhost:8761 failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on DELETE request for "http://localhost:8761/eureka/apps/API-GATEWAY/MSI.mshome.net:api-gateway:6789": Connect to http://localhost:8761 failed: Connection refused: getsockopt
+2025-10-28T08:09:59.356+07:00  INFO 6032 --- [api-gateway] [reactor-http-nio-3] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2025-10-28T08:09:59.376+07:00  INFO 6032 --- [api-gateway] [reactor-http-nio-3] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=api-gateway-producer-1] Instantiated an idempotent producer.
+2025-10-28T08:09:59.430+07:00  INFO 6032 --- [api-gateway] [reactor-http-nio-3] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.9.1
+2025-10-28T08:09:59.431+07:00  INFO 6032 --- [api-gateway] [reactor-http-nio-3] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: f745dfdcee2b9851
+2025-10-28T08:09:59.431+07:00  INFO 6032 --- [api-gateway] [reactor-http-nio-3] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1761613799427
+2025-10-28T08:09:59.944+07:00  INFO 6032 --- [api-gateway] [kafka-producer-network-thread | api-gateway-producer-1] org.apache.kafka.clients.Metadata        : [Producer clientId=api-gateway-producer-1] Cluster ID: MkU3OEVBNTcwNTJENDM2Qg
+2025-10-28T08:09:59.945+07:00  INFO 6032 --- [api-gateway] [kafka-producer-network-thread | api-gateway-producer-1] o.a.k.c.p.internals.TransactionManager   : [Producer clientId=api-gateway-producer-1] ProducerId set to 6001 with epoch 0
+2025-10-28T08:10:02.544+07:00  INFO 6032 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2025-10-28T08:10:02.544+07:00  INFO 6032 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2025-10-28T08:10:02.544+07:00  INFO 6032 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2025-10-28T08:10:02.544+07:00  INFO 6032 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2025-10-28T08:10:02.544+07:00  INFO 6032 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2025-10-28T08:10:02.544+07:00  INFO 6032 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Application version is -1: false
+2025-10-28T08:10:02.544+07:00  INFO 6032 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2025-10-28T08:10:02.561+07:00  INFO 6032 --- [api-gateway] [DiscoveryClient-CacheRefreshExecutor-%d] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2025-10-28T08:14:32.086+07:00  INFO 6032 --- [api-gateway] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-10-28T08:14:39.535+07:00  INFO 6032 --- [api-gateway] [SpringApplicationShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application API-GATEWAY with eureka with status DOWN
+2025-10-28T08:14:39.535+07:00  INFO 6032 --- [api-gateway] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1761614079535, current=DOWN, previous=UP]
+2025-10-28T08:14:39.536+07:00  INFO 6032 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789: registering service...
+2025-10-28T08:14:39.539+07:00  INFO 6032 --- [api-gateway] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-28T08:14:39.543+07:00  INFO 6032 --- [api-gateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
+2025-10-28T08:14:39.547+07:00  INFO 6032 --- [api-gateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789 - registration status: 204
+2025-10-28T08:14:41.576+07:00  INFO 6032 --- [api-gateway] [SpringApplicationShutdownHook] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=api-gateway-producer-1] Closing the Kafka producer with timeoutMillis = 30000 ms.
+2025-10-28T08:14:41.582+07:00  INFO 6032 --- [api-gateway] [SpringApplicationShutdownHook] o.apache.kafka.common.metrics.Metrics    : Metrics scheduler closed
+2025-10-28T08:14:41.582+07:00  INFO 6032 --- [api-gateway] [SpringApplicationShutdownHook] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.metrics.JmxReporter
+2025-10-28T08:14:41.582+07:00  INFO 6032 --- [api-gateway] [SpringApplicationShutdownHook] o.apache.kafka.common.metrics.Metrics    : Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter
+2025-10-28T08:14:41.582+07:00  INFO 6032 --- [api-gateway] [SpringApplicationShutdownHook] o.apache.kafka.common.metrics.Metrics    : Metrics reporters closed
+2025-10-28T08:14:41.583+07:00  INFO 6032 --- [api-gateway] [SpringApplicationShutdownHook] o.a.kafka.common.utils.AppInfoParser     : App info kafka.producer for api-gateway-producer-1 unregistered
+2025-10-28T08:14:41.591+07:00  INFO 6032 --- [api-gateway] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2025-10-28T08:14:44.592+07:00  INFO 6032 --- [api-gateway] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Unregistering ...
+2025-10-28T08:14:44.618+07:00  INFO 6032 --- [api-gateway] [SpringApplicationShutdownHook] c.n.d.s.t.d.RedirectingEurekaHttpClient  : Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/} exception=I/O error on DELETE request for "http://localhost:8761/eureka/apps/API-GATEWAY/MSI.mshome.net:api-gateway:6789": Connect to http://localhost:8761 failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on DELETE request for "http://localhost:8761/eureka/apps/API-GATEWAY/MSI.mshome.net:api-gateway:6789": Connect to http://localhost:8761 failed: Connection refused: getsockopt
 	at org.springframework.web.client.RestTemplate.createResourceAccessException(RestTemplate.java:926)
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:906)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:841)
@@ -1101,8 +356,8 @@ Caused by: org.apache.hc.client5.http.HttpHostConnectException: Connect to http:
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:900)
 	... 37 more
 
-2025-10-24T22:17:53.013+07:00  WARN 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] c.n.d.s.t.d.RetryableEurekaHttpClient    : Request execution failed with message: I/O error on DELETE request for "http://localhost:8761/eureka/apps/API-GATEWAY/MSI.mshome.net:api-gateway:6789": Connect to http://localhost:8761 failed: Connection refused: getsockopt
-2025-10-24T22:17:53.016+07:00  INFO 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] c.n.d.s.t.d.RedirectingEurekaHttpClient  : Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/}, exception=I/O error on DELETE request for "http://localhost:8761/eureka/apps/API-GATEWAY/MSI.mshome.net:api-gateway:6789": Connect to http://localhost:8761 failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on DELETE request for "http://localhost:8761/eureka/apps/API-GATEWAY/MSI.mshome.net:api-gateway:6789": Connect to http://localhost:8761 failed: Connection refused: getsockopt
+2025-10-28T08:14:44.618+07:00  WARN 6032 --- [api-gateway] [SpringApplicationShutdownHook] c.n.d.s.t.d.RetryableEurekaHttpClient    : Request execution failed with message: I/O error on DELETE request for "http://localhost:8761/eureka/apps/API-GATEWAY/MSI.mshome.net:api-gateway:6789": Connect to http://localhost:8761 failed: Connection refused: getsockopt
+2025-10-28T08:14:44.642+07:00  INFO 6032 --- [api-gateway] [SpringApplicationShutdownHook] c.n.d.s.t.d.RedirectingEurekaHttpClient  : Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/}, exception=I/O error on DELETE request for "http://localhost:8761/eureka/apps/API-GATEWAY/MSI.mshome.net:api-gateway:6789": Connect to http://localhost:8761 failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on DELETE request for "http://localhost:8761/eureka/apps/API-GATEWAY/MSI.mshome.net:api-gateway:6789": Connect to http://localhost:8761 failed: Connection refused: getsockopt
 	at org.springframework.web.client.RestTemplate.createResourceAccessException(RestTemplate.java:926)
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:906)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:841)
@@ -1180,8 +435,8 @@ Caused by: org.apache.hc.client5.http.HttpHostConnectException: Connect to http:
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:900)
 	... 38 more
 
-2025-10-24T22:17:53.017+07:00  WARN 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] c.n.d.s.t.d.RetryableEurekaHttpClient    : Request execution failed with message: I/O error on DELETE request for "http://localhost:8761/eureka/apps/API-GATEWAY/MSI.mshome.net:api-gateway:6789": Connect to http://localhost:8761 failed: Connection refused: getsockopt
-2025-10-24T22:17:53.017+07:00 ERROR 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789 - de-registration failedCannot execute request on any known server
+2025-10-28T08:14:44.642+07:00  WARN 6032 --- [api-gateway] [SpringApplicationShutdownHook] c.n.d.s.t.d.RetryableEurekaHttpClient    : Request execution failed with message: I/O error on DELETE request for "http://localhost:8761/eureka/apps/API-GATEWAY/MSI.mshome.net:api-gateway:6789": Connect to http://localhost:8761 failed: Connection refused: getsockopt
+2025-10-28T08:14:44.642+07:00 ERROR 6032 --- [api-gateway] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_API-GATEWAY/MSI.mshome.net:api-gateway:6789 - de-registration failedCannot execute request on any known server
 
 com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
 	at com.netflix.discovery.shared.transport.decorator.RetryableEurekaHttpClient.execute(RetryableEurekaHttpClient.java:112) ~[eureka-client-2.0.4.jar:2.0.4]
@@ -1215,4 +470,4 @@ com.netflix.discovery.shared.transport.TransportException: Cannot execute reques
 	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116) ~[spring-boot-3.5.6.jar:3.5.6]
 	at java.base/java.lang.Thread.run(Thread.java:1447) ~[na:na]
 
-2025-10-24T22:17:53.020+07:00  INFO 16216 --- [api-gateway] [SpringApplicationShutdownHook] [                                                 ] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
+2025-10-28T08:14:44.645+07:00  INFO 6032 --- [api-gateway] [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
