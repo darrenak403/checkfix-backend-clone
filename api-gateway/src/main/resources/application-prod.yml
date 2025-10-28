@@ -1,0 +1,47 @@
+app:
+  prefix: /v1/api
+server:
+  port: 6789
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: iam-service
+          uri: lb://iam-service
+          predicates:
+            - Path=${app.prefix}/iam/**
+          filters:
+            - StripPrefix=2
+        - id: patient-service
+          uri: lb://patient-service
+          predicates:
+            - Path=${app.prefix}/patient/**
+          filters:
+            - StripPrefix=2
+        - id: testOrder-service
+          uri: lb://testorder-service
+          predicates:
+            - Path=${app.prefix}/orders/**, ${app.prefix}/comments/**, ${app.prefix}/results/**
+          filters:
+            - StripPrefix=2
+
+eureka:
+    client:
+      service-url:
+        defaultZone: http://eureka-server:8761/eureka/
+    instance:
+      hostname: eureka-server
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+

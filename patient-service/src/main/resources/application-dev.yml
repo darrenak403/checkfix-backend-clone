@@ -1,0 +1,62 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/patient_db
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  #kafka
+  kafka:
+    bootstrap-servers: localhost:9094
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    #      properties:
+    #        spring.json.add.type.headers: false
+    #      acks: all
+    #      retries: 3
+    consumer:
+      group-id: patient-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    listener:
+      missing-topics-fatal: false
+logging:
+  file:
+    name: logs/${spring.application.name}.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
+
+app:
+  user-service:
+    url: http://localhost:8081/iam
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  tracing:
+    sampling:
+      probability: 1.0 # 100% request được tracking (nếu hệ thống lớn, có thể giảm xuống 0.5)
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
