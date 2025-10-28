@@ -1,0 +1,33 @@
+package com.datnguyen.instrumentservice.entity;
+
+
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
+//hello
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Document(collection = "instrument_mode_audit")
+public class InstrumentModeAudit {
+
+    @Id
+    private String id;
+
+    private Long instrumentId;
+
+    private InstrumentStatus previousMode;
+
+    private InstrumentStatus newMode;
+
+    private String reason;
+
+    private String changedBy;
+
+    private LocalDateTime changedAt;
+
+}

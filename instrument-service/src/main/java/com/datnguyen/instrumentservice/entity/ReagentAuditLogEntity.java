@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-//hello
+//xin chao
 @Document(collection = "audit_log")
 @Data
 @NoArgsConstructor
