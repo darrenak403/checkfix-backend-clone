@@ -1,26 +1,36 @@
 package ttldd.labman.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ttldd.labman.dto.request.UserCardRequest;
+import ttldd.labman.dto.response.UserCardResponse;
 import ttldd.labman.dto.request.UpdateAvatarRequest;
 import ttldd.labman.dto.request.UserCreationRequest;
-import ttldd.labman.dto.request.UserRequest;
 import ttldd.labman.dto.request.UserUpdateRequest;
 import ttldd.labman.dto.response.BaseResponse;
 import ttldd.labman.dto.response.RestResponse;
 import ttldd.labman.dto.response.UserResponse;
+import ttldd.labman.service.IdentityCardService;
 import ttldd.labman.service.UserService;
+import ttldd.labman.service.VnptKycService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
+
+    private final VnptKycService vnptKycService;
+
+    private final IdentityCardService identityCardService;
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR')  or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_ADMIN')")
@@ -77,6 +87,40 @@ public class UserController {
                 .statusCode(200)
                 .message("User avatar updated successfully")
                 .data(updatedUser)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(value = "/extract-id-card", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<RestResponse<UserCardResponse>> extractIdCard(@RequestParam("frontImage") MultipartFile frontImage,
+                                                                        @RequestParam("backImage") MultipartFile backImage) {
+        UserCardResponse userResponse = vnptKycService.extractIdCardInfo(frontImage, backImage);
+        RestResponse<UserCardResponse> response = RestResponse.<UserCardResponse>builder()
+                .statusCode(200)
+                .message("ID card extracted successfully")
+                .data(userResponse)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/identity")
+    public ResponseEntity<RestResponse<UserCardResponse>> saveIdentityCard(@RequestBody UserCardRequest rq) {
+        UserCardResponse savedCard = identityCardService.saveIdentityCard(rq);
+        RestResponse<UserCardResponse> response = RestResponse.<UserCardResponse>builder()
+                .statusCode(200)
+                .message("ID card saved successfully")
+                .data(savedCard)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/identity")
+    public ResponseEntity<RestResponse<UserCardResponse>> getIdentityCard() {
+        UserCardResponse card = identityCardService.getIdentityCardByUserId();
+        RestResponse<UserCardResponse> response = RestResponse.<UserCardResponse>builder()
+                .statusCode(200)
+                .message("ID card retrieved successfully")
+                .data(card)
                 .build();
         return ResponseEntity.ok(response);
     }

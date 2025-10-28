@@ -11,6 +11,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,7 +20,6 @@ import java.time.LocalDate;
 @Entity
 @Data
 @Table(name = "user")
-
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +37,6 @@ public class User {
     @Pattern(regexp = "^(\\d{9}|\\d{12})$", message = "Identify number must be 9 or 12 digits")
     private String identifyNumber;
 
-    @Pattern(regexp = "^(male|female)$", message = "Gender must be male or female")
     private String gender;
 
     @Min(18)
@@ -58,5 +58,9 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private IdentityCard identityCard;
 }
 
