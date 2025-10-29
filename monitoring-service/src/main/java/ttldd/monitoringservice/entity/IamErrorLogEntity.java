@@ -1,27 +1,30 @@
-package com.datnguyen.instrumentservice.entity;
+package ttldd.monitoringservice.entity;
 
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-//hello
-@Document(collection = "audit_log")
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReagentAuditLogEntity {
+@Document(collection = "iam_errors")
+public class IamErrorLogEntity {
     @Id
     private String id;
-
-    private String username;
+    private String serviceName;
+    private String user;
     private String action;
-    private String reagentName;
-    private String reagentId;
-    private LocalDateTime timestamp;
     private String description;
+    private String exception;
+    private String stackTrace;
+    private String path;
+    private String ip;
+    private String requestId;
+    private LocalDateTime timestamp;
 }
