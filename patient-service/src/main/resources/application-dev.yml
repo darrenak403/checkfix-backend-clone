@@ -24,18 +24,18 @@ spring:
     #      retries: 3
     consumer:
       group-id: patient-service-group
-      auto-offset-reset: earliest
+      auto-offset-reset: latest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
     listener:
       missing-topics-fatal: false
-logging:
-  file:
-    name: logs/${spring.application.name}.log
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
+#logging:
+#  file:
+#    name: logs/${spring.application.name}.log
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
 
 app:
   user-service:
