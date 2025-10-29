@@ -93,10 +93,7 @@ public  class UserServiceImp implements UserService {
     @Autowired
     private JwtHelper jwtHelper;
 
-    @Value("${admin.email}")
-    private String adminEmail;
-    @Value("${admin.password}")
-    private String adminPassword;
+
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
@@ -134,12 +131,15 @@ public  class UserServiceImp implements UserService {
             // Lưu vào database
             userRepo.save(user);
             //send mail notification
+            String safeFullName = (user.getFullName() == null || user.getFullName().trim().isEmpty())
+                    ? "Bạn"
+                    : user.getFullName();
             notificationProducer.sendEmail(
                     "send-email",
                     user.getEmail(),
                     "Chào mừng đến với Laboratory Management System",
                     "WELCOME_EMAIL",
-                    Map.of("userName", user.getFullName())
+                    Map.of("userName", safeFullName)
             );
 
 
