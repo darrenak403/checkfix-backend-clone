@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class InstrumentResponse {
-
+    Long id;
     String name;
     String serialNumber;
     InstrumentStatus status;

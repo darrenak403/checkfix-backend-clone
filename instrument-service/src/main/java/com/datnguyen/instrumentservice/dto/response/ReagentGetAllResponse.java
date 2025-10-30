@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Data
 @Builder
 public class ReagentGetAllResponse {
+    private String id;
     private ReagentType reagentType;
     private String reagentName;
     private String lotNumber;

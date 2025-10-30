@@ -128,6 +128,7 @@ public class ReagentServiceImp implements ReagentService {
 
     private ReagentGetAllResponse convertToReagentGetAllResponse(ReagentEntity reagentEntity) {
         return ReagentGetAllResponse.builder()
+                .id(reagentEntity.getId())
                 .reagentType(reagentEntity.getReagentType())
                 .reagentName(reagentEntity.getReagentName())
                 .lotNumber(reagentEntity.getLotNumber())
