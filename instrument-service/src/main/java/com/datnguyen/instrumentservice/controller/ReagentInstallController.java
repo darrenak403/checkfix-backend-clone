@@ -2,15 +2,17 @@ package com.datnguyen.instrumentservice.controller;
 
 import com.datnguyen.instrumentservice.dto.request.ReagentInstallRequest;
 import com.datnguyen.instrumentservice.dto.response.BaseResponse;
+import com.datnguyen.instrumentservice.dto.response.ReagentGetAllResponse;
 import com.datnguyen.instrumentservice.dto.response.ReagentInstallResponse;
 import com.datnguyen.instrumentservice.service.imp.ReagentServiceImp;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 //hello
 @RestController
 @RequestMapping("/reagents")
@@ -19,6 +21,7 @@ public class ReagentInstallController {
     private ReagentServiceImp reagentServiceImp;
 
     @PostMapping("/install")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF')")
     public ResponseEntity<?> installReagent(@Valid @RequestBody ReagentInstallRequest reagentInstallRequest) {
         BaseResponse baseResponse = new BaseResponse();
         try {
@@ -33,5 +36,22 @@ public class ReagentInstallController {
             return ResponseEntity.status(500).body(baseResponse);
         }
 
+    }
+
+    @GetMapping("/all" )
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF')")
+    public ResponseEntity<?> getAllReagents() {
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            List<ReagentGetAllResponse> reagents =  reagentServiceImp.getALlReagents();
+            baseResponse.setStatus(200);
+            baseResponse.setMessage("Get all reagents successfully");
+            baseResponse.setData(reagents);
+            return ResponseEntity.ok(baseResponse);
+        } catch (Exception e) {
+            baseResponse.setStatus(500);
+            baseResponse.setMessage("Failed to get all reagents: " + e.getMessage());
+            return ResponseEntity.status(500).body(baseResponse);
+        }
     }
 }

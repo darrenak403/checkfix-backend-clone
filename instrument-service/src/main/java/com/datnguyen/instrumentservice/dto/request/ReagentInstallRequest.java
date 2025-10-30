@@ -36,10 +36,6 @@ public class ReagentInstallRequest {
     private String vendorName;
 
     private String vendorContact;
-    private String instrumentId;
-
-    @NotBlank
-    private String installedBy;
 
     private String remarks;
 

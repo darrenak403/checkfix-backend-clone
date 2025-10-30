@@ -1,11 +1,9 @@
 package com.datnguyen.instrumentservice.service.imp;
 
 import com.datnguyen.instrumentservice.dto.request.ReagentInstallRequest;
+import com.datnguyen.instrumentservice.dto.response.ReagentGetAllResponse;
 import com.datnguyen.instrumentservice.dto.response.ReagentInstallResponse;
-import com.datnguyen.instrumentservice.entity.ReagentAuditLogEntity;
-import com.datnguyen.instrumentservice.entity.ReagentEntity;
-import com.datnguyen.instrumentservice.entity.ReagentHistoryEntity;
-import com.datnguyen.instrumentservice.entity.ReagentStatus;
+import com.datnguyen.instrumentservice.entity.*;
 import com.datnguyen.instrumentservice.repository.ReagentAuditLogRepo;
 import com.datnguyen.instrumentservice.repository.ReagentHistoryRepo;
 import com.datnguyen.instrumentservice.repository.ReagentRepo;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 //hello
 @Service
@@ -54,7 +53,6 @@ public class ReagentServiceImp implements ReagentService {
                 .vendorId(reagentInstallRequest.getVendorId())
                 .vendorName(reagentInstallRequest.getVendorName())
                 .vendorContact(reagentInstallRequest.getVendorContact() == null ? "" : reagentInstallRequest.getVendorContact())
-                .instrumentId(reagentInstallRequest.getInstrumentId())
                 .installedBy(jwtUtils.getFullName())
                 .installDate(LocalDate.now())
                 .status(ReagentStatus.AVAILABLE)
@@ -115,6 +113,33 @@ public class ReagentServiceImp implements ReagentService {
                 .installedBy(reagentEntity.getInstalledBy())
                 .installDate(reagentEntity.getInstallDate())
                 .status(reagentEntity.getStatus().toString())
+                .build();
+    }
+
+    @Override
+    public List<ReagentGetAllResponse> getALlReagents() {
+        List<ReagentEntity> reagentEntity = reagentRepo.findByStatus(ReagentStatus.AVAILABLE);
+        //convert list
+        List<ReagentGetAllResponse> reagentGetAllResponses = reagentEntity.stream()
+                .map(this::convertToReagentGetAllResponse)
+                .toList();
+        return  reagentGetAllResponses;
+    }
+
+    private ReagentGetAllResponse convertToReagentGetAllResponse(ReagentEntity reagentEntity) {
+        return ReagentGetAllResponse.builder()
+                .reagentType(reagentEntity.getReagentType())
+                .reagentName(reagentEntity.getReagentName())
+                .lotNumber(reagentEntity.getLotNumber())
+                .quantity(reagentEntity.getQuantity())
+                .unit(reagentEntity.getUnit())
+                .expiryDate(reagentEntity.getExpiryDate())
+                .vendorId(reagentEntity.getVendorId())
+                .vendorName(reagentEntity.getVendorName())
+                .installedBy(reagentEntity.getInstalledBy())
+                .installDate(reagentEntity.getInstallDate())
+                .status(reagentEntity.getStatus())
+                .remarks(reagentEntity.getRemarks())
                 .build();
     }
 }
