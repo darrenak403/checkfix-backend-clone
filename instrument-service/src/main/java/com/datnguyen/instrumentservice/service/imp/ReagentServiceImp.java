@@ -57,7 +57,7 @@ public class ReagentServiceImp implements ReagentService {
                 .instrumentId(reagentInstallRequest.getInstrumentId())
                 .installedBy(jwtUtils.getFullName())
                 .installDate(LocalDate.now())
-                .status(ReagentStatus.INSTALLED)
+                .status(ReagentStatus.AVAILABLE)
                 .remarks(reagentInstallRequest.getRemarks())
                 .build();
 

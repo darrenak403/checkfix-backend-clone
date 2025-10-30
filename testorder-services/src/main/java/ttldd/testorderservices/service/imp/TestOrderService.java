@@ -4,6 +4,7 @@ import ttldd.event.dto.PatientUpdateEvent;
 import ttldd.testorderservices.client.PatientClient;
 import ttldd.testorderservices.client.PatientDTO;
 import ttldd.testorderservices.client.UserClient;
+import ttldd.testorderservices.dto.TestOrderDTO;
 import ttldd.testorderservices.dto.UserUpdatedEvent;
 import ttldd.testorderservices.dto.request.TestOrderCreateRequest;
 import ttldd.testorderservices.dto.request.TestOrderUpdateRequest;
@@ -229,6 +230,11 @@ public class TestOrderService {
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu xét nghiệm với số accession number đã cho"));
         return getPatient(order.getPatientId());
     }
+    public TestOrderDTO getTestOrderByAccessionNumber(String accessionNumber) {
+        TestOrder order = orderRepo.findByAccessionNumberAndDeletedFalse(accessionNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu xét nghiệm với số accession number đã cho"));
+        return convertToTestOrderDTO(order);
+    }
 
 
     public PageResponse<TestOrderResponse> getAllOrdersByPatientId(Long patientId, int page, int size) {
@@ -287,5 +293,29 @@ public class TestOrderService {
         } catch (Exception e) {
             return "\"<json-error>\"";
         }
+    }
+
+    private TestOrderDTO convertToTestOrderDTO(TestOrder order) {
+        return TestOrderDTO.builder()
+                .id(order.getId())
+                .patientId(order.getPatientId())
+                .patientName(order.getPatientName())
+                .email(order.getEmail())
+                .address(order.getAddress())
+                .phone(order.getPhone())
+                .accessionNumber(order.getAccessionNumber())
+                .gender(order.getGender())
+                .yob(order.getYob())
+                .age(order.getAge())
+                .status(order.getStatus())
+                .createdAt(order.getCreatedAt())
+                .priority(order.getPriority())
+                .testType(order.getTestType())
+                .instrument(order.getInstrument())
+                .runAt(order.getRunAt())
+                .runBy(order.getRunBy())
+                .createdBy(order.getCreatedBy())
+                .deleted(order.getDeleted())
+                .build();
     }
 }

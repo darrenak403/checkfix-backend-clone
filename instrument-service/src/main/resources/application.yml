@@ -1,5 +1,21 @@
 spring:
   application:
     name: instrument-service
+
+  data:
+    mongodb:
+      uri: mongodb://admin:123456@localhost:27018/instrument_service?authSource=admin
+app:
+  user-service:
+    url: http://localhost:8081/iam
+  testOrder-service:
+    url: http://localhost:8083
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
   profiles:
    active: ${SPRING_PROFILES_ACTIVE:dev}

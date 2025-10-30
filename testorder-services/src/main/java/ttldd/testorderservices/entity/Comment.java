@@ -47,6 +47,9 @@ public class Comment {
             createdAt = LocalDateTime.now(); // Tự động gán thời gian khi lưu mới
         }
     }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_comment_id")
+    private Comment parentComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "test_order_id", nullable = true)
@@ -55,4 +58,8 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "test_result_id", nullable = true)
     private TestResult testResult;
+
+    public int getLevel() {
+        return (parentComment == null) ? 1 : 2;
+    }
 }
