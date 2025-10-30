@@ -21,11 +21,9 @@ public class TestOrderCreateRequest {
     // mức độ ưu tiên :
     private PriorityStatus priority;
 
-    @NotBlank(message = "testType is required")
-    private String testType;
 
-    @NotBlank(message = "instrument is required")
-    private String instrument;
+    @NotNull(message = "instrumentId is required")
+    private Long instrumentId;
 
     private Long runBy;
 

@@ -4,6 +4,7 @@ import ttldd.event.dto.PatientUpdateEvent;
 import ttldd.testorderservices.client.PatientClient;
 import ttldd.testorderservices.client.PatientDTO;
 import ttldd.testorderservices.client.UserClient;
+import ttldd.testorderservices.client.WareHouseClient;
 import ttldd.testorderservices.dto.TestOrderDTO;
 import ttldd.testorderservices.dto.UserUpdatedEvent;
 import ttldd.testorderservices.dto.request.TestOrderCreateRequest;
@@ -44,6 +45,7 @@ public class TestOrderService {
     private final ObjectMapper om = new ObjectMapper().findAndRegisterModules();
     private final JwtUtils jwtUtils;
     private final UserClient userClient;
+    private final WareHouseClient wareHouseClient;
 
     private static Integer ageFrom(LocalDate dob) {
         return (dob == null) ? null : Period.between(dob, LocalDate.now()).getYears();
@@ -80,6 +82,7 @@ public class TestOrderService {
     public TestOrderCreationResponse create(TestOrderCreateRequest req) {
         var patientResponse = getPatient(req.getPatientId());
         RestResponse<UserResponse> user = userClient.getUser(req.getRunBy());
+        RestResponse<InstrumentResponse> instrumentResponse = wareHouseClient.getById(req.getInstrumentId());
 
         String accessionNumber = generateAccessionNumber();
         TestOrder order = TestOrder.builder()
@@ -94,9 +97,9 @@ public class TestOrderService {
                 .createdBy(jwtUtils.getFullName())
                 .runBy(user.getData().getFullName())
                 .priority(req.getPriority())
-                .testType(req.getTestType())
                 .accessionNumber(accessionNumber)
-                .instrument(req.getInstrument())
+                .instrumentName(instrumentResponse.getData().getName())
+                .instrumentId(req.getInstrumentId())
                 .age(ageFrom(patientResponse.getYob()))
                 .deleted(false)
                 .build();
@@ -310,8 +313,8 @@ public class TestOrderService {
                 .status(order.getStatus())
                 .createdAt(order.getCreatedAt())
                 .priority(order.getPriority())
-                .testType(order.getTestType())
-                .instrument(order.getInstrument())
+                .instrumentId(order.getInstrumentId())
+                .instrumentName(order.getInstrumentName())
                 .runAt(order.getRunAt())
                 .runBy(order.getRunBy())
                 .createdBy(order.getCreatedBy())

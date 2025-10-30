@@ -34,9 +34,9 @@ public class TestOrderResponse {
 
     private String priority;
 
-    private String testType;
+    private Long instrumentId;
 
-    private String instrument;
+    private String instrumentName;
 
     private String createdBy;
 

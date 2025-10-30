@@ -40,9 +40,9 @@ public class TestOrderDTO {
 
     private PriorityStatus priority;
 
-    private String testType;
+    private Long instrumentId;
 
-    private String instrument;
+    private String instrumentName;
 
     private LocalDateTime runAt;
 
