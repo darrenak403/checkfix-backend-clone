@@ -1,5 +1,5 @@
 package com.datnguyen.instrumentservice.entity;
 //hello
 public enum ReagentStatus {
-     AVAILABLE, USED, EXPIRED
+     AVAILABLE, OUT_OF_STOCK, EXPIRED
 }

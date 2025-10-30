@@ -13,4 +13,6 @@ public interface ReagentRepo extends MongoRepository<ReagentEntity, String> {
     Optional<ReagentEntity> findByLotNumber(String lotNumber);
     ReagentEntity findFirstByStatusOrderByExpiryDateAsc(ReagentStatus status);
     List<ReagentEntity> findByStatus(ReagentStatus status);
+
+    Optional<ReagentEntity> findByIdAndStatus(String id, ReagentStatus status);
 }

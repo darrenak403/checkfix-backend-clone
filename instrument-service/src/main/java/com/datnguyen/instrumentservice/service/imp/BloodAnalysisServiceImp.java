@@ -10,6 +10,8 @@ import com.datnguyen.instrumentservice.entity.ReagentStatus;
 import com.datnguyen.instrumentservice.repository.ReagentRepo;
 import com.datnguyen.instrumentservice.service.BloodAnalysisService;
 import com.datnguyen.instrumentservice.utils.HL7Utils;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,13 +37,20 @@ public class BloodAnalysisServiceImp implements BloodAnalysisService {
     }
 
     @Override
+    @Transactional
     public BloodAnalysisResponse bloodAnalysisHL7(BloodAnalysisRequest bloodAnalysisRequest) {
-        ReagentEntity reagentEntity = reagentRepo.findFirstByStatusOrderByExpiryDateAsc(ReagentStatus.AVAILABLE);
+        ReagentEntity reagentEntity = reagentRepo
+                .findByIdAndStatus(bloodAnalysisRequest.getReagentId(), ReagentStatus.AVAILABLE)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Reagent not found with ID: " + bloodAnalysisRequest.getReagentId()
+                ));
         if (reagentEntity == null || reagentEntity.getQuantity() < 5.0) {
             throw new RuntimeException("Not enough Quantity or Reagent USED for blood analysis.");
         }
         reagentEntity.setQuantity(reagentEntity.getQuantity() - (int) 5.0);
-        reagentEntity.setStatus(ReagentStatus.USED);
+        if (reagentEntity.getQuantity() <= 0) {
+            reagentEntity.setStatus(ReagentStatus.OUT_OF_STOCK);
+        }
         reagentRepo.save(reagentEntity);
 
         RestResponse<TestOrderDTO> testOrder = testOrderClient.getTestOrdersByAccessionNumber(bloodAnalysisRequest.getAccessionNumber());
