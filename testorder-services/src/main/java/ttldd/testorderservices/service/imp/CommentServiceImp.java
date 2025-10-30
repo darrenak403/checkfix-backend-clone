@@ -62,29 +62,36 @@ public class CommentServiceImp implements CommentService {
             }
 
             Comment comment = new Comment();
+
+            TestResult result = testResultRepository.findById(commentRequest.getTestResultId())
+                    .orElseThrow(() -> new IllegalArgumentException("Test Result not found"));
+
+            comment.setTestResult(result);
             comment.setDoctorId(clientUser.getData().getId());
             comment.setContent(commentRequest.getContent());
             comment.setStatus(CommentStatus.ACTIVE);
+            comment.setTestResult(result);
 
+            // Kiểm tra nếu là reply
+            if (commentRequest.getParentCommentId() != null) {
+                Comment parent = commentRepository.findById(commentRequest.getParentCommentId())
+                        .orElseThrow(() -> new IllegalArgumentException("Parent comment not found."));
 
-            if (commentRequest.getTestOrderId() != null) {
-                TestOrder order = testOrderRepository.findById(commentRequest.getTestOrderId())
-                        .orElseThrow(() -> new IllegalArgumentException("Test Order not found"));
-                comment.setTestOrder(order);
-            } else if (commentRequest.getTestResultId() != null) {
-                TestResult result = testResultRepository.findById(commentRequest.getTestResultId())
-                        .orElseThrow(() -> new IllegalArgumentException("Test Result not found"));
-                comment.setTestResult(result);
-            } else {
-                throw new IllegalArgumentException("Comment must be attached to either a Test Order or a Test Result.");
+                // kiểm tra không cho reply quá 2 cấp
+                if (parent.getLevel() >= 2) {
+                    throw new IllegalArgumentException("Only two levels of comments are allowed.");
+                }
+
+                comment.setParentComment(parent);
             }
+
+
             Comment saved = commentRepository.save(comment);
 
 
             return CommentResponse.builder()
                     .commentId(saved.getId())
                     .doctorName(clientUser.getData().getFullName())
-                    .testOrderId(saved.getTestOrder() != null ? saved.getTestOrder().getId() : 0L)
                     .testResultId(saved.getTestResult() != null ? saved.getTestResult().getId() : 0L)
                     .commentContent(saved.getContent())
                     .createdAt(saved.getCreatedAt())

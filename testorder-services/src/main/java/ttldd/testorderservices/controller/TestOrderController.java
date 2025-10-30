@@ -1,6 +1,7 @@
 package ttldd.testorderservices.controller;
 
 import ttldd.testorderservices.client.PatientDTO;
+import ttldd.testorderservices.dto.TestOrderDTO;
 import ttldd.testorderservices.dto.request.TestOrderCreateRequest;
 import ttldd.testorderservices.dto.request.TestOrderUpdateRequest;
 import ttldd.testorderservices.dto.request.TestOrderUpdateStatusRequest;
@@ -101,6 +102,13 @@ public class TestOrderController {
     public ResponseEntity<RestResponse<?>> getOrdersByAccessionNumber(@PathVariable String accessionNumber){
         PatientDTO patientDTO = service.getPatientByAccessionNumber(accessionNumber);
         return ResponseEntity.ok(RestResponse.success(patientDTO));
+    }
+
+    @GetMapping("/accessionNumber/testOrder/{accessionNumber}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_STAFF') or hasAnyAuthority('ROLE_DOCTOR')")
+    public ResponseEntity<RestResponse<?>> getTestOrdersByAccessionNumber(@PathVariable String accessionNumber){
+        TestOrderDTO testOrderDTO = service.getTestOrderByAccessionNumber(accessionNumber);
+        return ResponseEntity.ok(RestResponse.success(testOrderDTO));
     }
 
 }

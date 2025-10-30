@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class CommentRequest {
-    private Long testOrderId;
     private Long testResultId;
+    private Long parentCommentId;
     private String content;
 }
