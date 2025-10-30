@@ -1,23 +1,15 @@
-package com.datnguyen.instrumentservice.entity;
+package com.datnguyen.instrumentservice.dto.response;
 
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import com.datnguyen.instrumentservice.entity.ReagentStatus;
+import com.datnguyen.instrumentservice.entity.ReagentType;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
-//hello
-@Document(collection = "reagent_inventory")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class ReagentEntity {
-    @Id
-    private String id;
 
+@Data
+@Builder
+public class ReagentGetAllResponse {
     private ReagentType reagentType;
     private String reagentName;
     private String lotNumber;
@@ -32,6 +24,6 @@ public class ReagentEntity {
     private String installedBy;
     private LocalDate installDate;
 
-    private ReagentStatus status; // INSTALLED, AVAILABLE, USED, EXPIRED
+    private ReagentStatus status;
     private String remarks;
 }

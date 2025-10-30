@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: monitoring-service
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
