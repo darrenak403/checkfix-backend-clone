@@ -1,7 +1,9 @@
 package com.datnguyen.instrumentservice.utils;
 
+import com.datnguyen.instrumentservice.client.PatientClient;
 import com.datnguyen.instrumentservice.client.TestOrderDTO;
 import com.datnguyen.instrumentservice.dto.response.RestResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -9,11 +11,15 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 @Component
 public class HL7Utils {
+    @Autowired
+    private PatientClient patientClient;
+
     public String generateHL7(RestResponse<TestOrderDTO> testOrderDTO, String sampleData) {
         LocalDateTime now = LocalDateTime.now();
         String timestamp = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
@@ -38,11 +44,14 @@ public class HL7Utils {
                 .append("|P|2.5.1\r");
 
         // === PID Segment ===
+
         String HL7YOB = testOrderDTO.getData().getYob()
                 .format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
-        hl7.append("PID|1||PAT-")
-                .append(testOrderDTO.getData().getAccessionNumber())
+        String patientCode = Objects.requireNonNull(patientClient.getPatient(testOrderDTO.getData().getPatientId())).getData().getPatientCode();
+
+        hl7.append("PID|1||")
+                .append(patientCode)
                 .append("||")
                 .append(testOrderDTO.getData().getPatientName())
                 .append("||")
