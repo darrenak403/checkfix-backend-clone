@@ -63,7 +63,8 @@ public class HL7Utils {
         // === OBR Segment ===
         hl7.append("OBR|1|")
                 .append(testOrderDTO.getData().getAccessionNumber())
-                .append("|CBC^Complete Blood Count|||")
+                .append("|CBC^Complete Blood Count|||").append("||||||||||||")
+                .append(testOrderDTO.getData().getInstrumentId()).append("^").append(testOrderDTO.getData().getInstrumentName()).append("||")
                 .append(timestamp)
                 .append("\r");
 

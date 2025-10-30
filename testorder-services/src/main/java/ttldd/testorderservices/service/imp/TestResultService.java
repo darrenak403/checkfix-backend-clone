@@ -48,7 +48,7 @@ public class TestResultService {
 
             String[] lines = rawHl7.split("\\r?\\n");
             String accession = null;
-            String instrument = "Sysmex XN-1000";
+            String instrument = "";
             List<TestResultParameter> params = new ArrayList<>();
 
             for (String line : lines) {
@@ -102,8 +102,8 @@ public class TestResultService {
             TestResult result = TestResult.builder()
                     .testOrder(order)
                     .patientId(order.getPatientId())
-                    .accessionNumber(finalAccession)
-                    .instrumentName(instrument)
+                    .accessionNumber(order.getAccessionNumber())
+                    .instrumentName(order.getInstrumentName())
                     .parseHl7(rawHl7)
                     .status("COMPLETE")
                     .build();
