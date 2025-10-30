@@ -34,6 +34,20 @@ spring:
             - Path=${app.prefix}/orders/**, ${app.prefix}/comments/**, ${app.prefix}/results/**
           filters:
             - StripPrefix=2
+        # WAREHOUSE SERVICE
+        - id: warehouse-service
+          uri: lb://warehouse-service
+          predicates:
+            - Path=${app.prefix}/warehouse/**
+          filters:
+            - StripPrefix=2
+        # INSTRUMENT SERVICE
+        - id: instrument-service
+          uri: lb://instrument-service
+          predicates:
+            - Path=${app.prefix}/instrument/**
+          filters:
+            - StripPrefix=2
 
         # SWAGGER DOCS
         - id: iam-openapi
@@ -71,6 +85,28 @@ spring:
                 outClass: java.lang.String
                 rewriteFunction: "#{@swaggerRewrite}"
 
+        - id: warehouse-openapi
+          uri: http://localhost:8084
+          predicates:
+            - Path=/warehouse/v3/api-docs
+          filters:
+            - name: ModifyResponseBody
+              args:
+                inClass: java.lang.String
+                outClass: java.lang.String
+                rewriteFunction: "#{@swaggerRewrite}"
+
+        - id: instrument-openapi
+          uri: http://localhost:8085
+          predicates:
+            - Path=/instrument/v3/api-docs
+          filters:
+            - name: ModifyResponseBody
+              args:
+                inClass: java.lang.String
+                outClass: java.lang.String
+                rewriteFunction: "#{@swaggerRewrite}"
+
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9094}
     producer:
@@ -86,6 +122,10 @@ springdoc:
         url: /patient/v3/api-docs
       - name: TestOrder Service
         url: /testOrder/v3/api-docs
+      - name: Warehouse Service
+        url: /warehouse/v3/api-docs
+      - name: Instrument Service
+        url: /instrument/v3/api-docs
   api-docs:
     enabled: true
 

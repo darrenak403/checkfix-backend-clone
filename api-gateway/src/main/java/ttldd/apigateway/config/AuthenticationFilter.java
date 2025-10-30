@@ -39,13 +39,14 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
     @NonFinal
     private String[] swaggerList = {
-
             "/swagger-ui/.*",
             "/v3/api-docs/.*",
             "/swagger-ui.html",
             "/iam/v3/api-docs",
             "/patient/v3/api-docs",
             "/testOrder/v3/api-docs",
+            "/warehouse/v3/api-docs",
+            "/instrument/v3/api-docs"
     };
 
     @Value("${app.prefix}")
