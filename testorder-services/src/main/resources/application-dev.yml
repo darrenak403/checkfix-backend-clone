@@ -4,7 +4,6 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-    #kafka
   kafka:
     bootstrap-servers: localhost:9094
 
@@ -15,7 +14,6 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
-    #        spring.json.value.default.type: ttldd.event.dto.PatientUpdateEvent
     listener:
       missing-topics-fatal: false
 
@@ -38,7 +36,7 @@ server:
 app:
   patient-service:
     url: http://localhost:8082
-  user-service:
+  iam-service:
     url: http://localhost:8081/iam
 
 springdoc:
