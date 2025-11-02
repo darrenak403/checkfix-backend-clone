@@ -1,6 +1,5 @@
 package ttldd.labman.controller;
 
-import ttldd.labman.config.LogEvent;
 import ttldd.labman.dto.request.ForgotPasswordRequest;
 import ttldd.labman.dto.request.ResetPasswordRequest;
 import ttldd.labman.dto.response.ForgotPasswordResponse;
@@ -24,11 +23,6 @@ public class PasswordResetController {
 
     private final PasswordResetService passwordResetService;
 
-    /**
-     * API để gửi mã OTP qua email khi người dùng quên mật khẩu
-     */
-
-
     @PostMapping("/forgot")
 
     public ResponseEntity<ForgotPasswordResponse> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
@@ -51,11 +45,6 @@ public class PasswordResetController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
-
-    /**
-     * API để xác thực mã OTP và đặt lại mật khẩu mới
-     */
-
 
     @PostMapping("/reset")
     public ResponseEntity<ResetPasswordResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {

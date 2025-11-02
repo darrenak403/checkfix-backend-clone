@@ -51,33 +51,6 @@ public class TestOrderService {
         return (dob == null) ? null : Period.between(dob, LocalDate.now()).getYears();
     }
 
-    //    @Transactional
-//    public TestOrderCreationResponse create(TestOrderCreateRequest req) {
-//        var patientResponse = getPatient(req.getPatientId());
-//        RestResponse<UserResponse> user = userClient.getUser(req.getRunBy());
-//        TestOrder order = TestOrder.builder()
-//                .patientId(req.getPatientId())
-//                .patientName(patientResponse.getFullName())
-//                .email(patientResponse.getEmail())
-//                .address(patientResponse.getAddress())
-//                .phone(patientResponse.getPhone())
-//                .yob(patientResponse.getYob())
-//                .gender(patientResponse.getGender())
-//                .status(OrderStatus.PENDING)
-//                .createdBy(jwtUtils.getFullName())
-//                .runBy(user.getData().getFullName())
-//                .priority(req.getPriority())
-//                .testType(req.getTestType())
-//                .instrument(req.getInstrument())
-//                .age(ageFrom(patientResponse.getYob()))
-//                .deleted(false)
-//                .build();
-//
-//        TestOrder saved = orderRepo.save(order);
-//        logAudit(saved.getId(), "CREATE", safeJson(req), jwtUtils.getCurrentUserId());
-//        return mapper.toTestOrderCreationResponse(saved);
-//    }
-
     @Transactional
     public TestOrderCreationResponse create(TestOrderCreateRequest req) {
         var patientResponse = getPatient(req.getPatientId());
@@ -287,8 +260,6 @@ public class TestOrderService {
         return String.format("ACC%03d", count);
     }
 
-
-    // 🛠️ Helper: convert object sang JSON an toàn
 
     private String safeJson(Object obj) {
         try {

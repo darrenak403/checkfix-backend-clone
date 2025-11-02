@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ttldd.labman.config.LogEvent;
 import ttldd.labman.dto.request.IntrospectRequest;
 import ttldd.labman.dto.response.AuthResponse;
 import ttldd.labman.dto.request.UserRequest;
