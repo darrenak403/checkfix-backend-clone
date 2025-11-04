@@ -1,0 +1,24 @@
+package ttldd.warehouseservice.dto.response;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import ttldd.warehouseservice.entity.InstrumentStatus;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDateTime;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class InstrumentResponse {
+    Long id;
+    String name;
+    String serialNumber;
+    InstrumentStatus status;
+    String createdBy;
+
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    LocalDateTime createdAt;
+}

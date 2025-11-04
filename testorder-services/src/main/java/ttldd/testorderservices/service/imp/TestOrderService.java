@@ -51,33 +51,6 @@ public class TestOrderService {
         return (dob == null) ? null : Period.between(dob, LocalDate.now()).getYears();
     }
 
-    //    @Transactional
-//    public TestOrderCreationResponse create(TestOrderCreateRequest req) {
-//        var patientResponse = getPatient(req.getPatientId());
-//        RestResponse<UserResponse> user = userClient.getUser(req.getRunBy());
-//        TestOrder order = TestOrder.builder()
-//                .patientId(req.getPatientId())
-//                .patientName(patientResponse.getFullName())
-//                .email(patientResponse.getEmail())
-//                .address(patientResponse.getAddress())
-//                .phone(patientResponse.getPhone())
-//                .yob(patientResponse.getYob())
-//                .gender(patientResponse.getGender())
-//                .status(OrderStatus.PENDING)
-//                .createdBy(jwtUtils.getFullName())
-//                .runBy(user.getData().getFullName())
-//                .priority(req.getPriority())
-//                .testType(req.getTestType())
-//                .instrument(req.getInstrument())
-//                .age(ageFrom(patientResponse.getYob()))
-//                .deleted(false)
-//                .build();
-//
-//        TestOrder saved = orderRepo.save(order);
-//        logAudit(saved.getId(), "CREATE", safeJson(req), jwtUtils.getCurrentUserId());
-//        return mapper.toTestOrderCreationResponse(saved);
-//    }
-
     @Transactional
     public TestOrderCreationResponse create(TestOrderCreateRequest req) {
         var patientResponse = getPatient(req.getPatientId());
@@ -180,14 +153,17 @@ public class TestOrderService {
         TestOrder o = orderRepo.findById(id)
                 .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
                 .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại"));
-        RestResponse<UserResponse> user = userClient.getUser(req.getRunBy());
+
         if (StringUtils.hasText(req.getFullName())) o.setPatientName(req.getFullName());
         if (StringUtils.hasText(req.getPhone())) o.setPhone(req.getPhone());
         if (StringUtils.hasText(req.getAddress())) o.setAddress(req.getAddress());
         if (req.getYob() != null) o.setYob(req.getYob());
         if (StringUtils.hasText(req.getGender())) o.setGender(req.getGender());
         o.setAge(ageFrom(req.getYob()));
-        if (req.getRunBy() != null) o.setRunBy(user.getData().getFullName());
+        if (req.getRunBy() != null) {
+            RestResponse<UserResponse> user = userClient.getUser(req.getRunBy());
+            o.setRunBy(user.getData().getFullName());
+        }
         logAudit(o.getId(), "UPDATE", safeJson(o), jwtUtils.getCurrentUserId());
         orderRepo.save(o);
         return mapper.toTestOrderCreationResponse(o);
@@ -287,8 +263,6 @@ public class TestOrderService {
         return String.format("ACC%03d", count);
     }
 
-
-    // 🛠️ Helper: convert object sang JSON an toàn
 
     private String safeJson(Object obj) {
         try {
