@@ -66,11 +66,13 @@ public class CommentServiceImp implements CommentService {
             TestResult result = testResultRepository.findById(commentRequest.getTestResultId())
                     .orElseThrow(() -> new IllegalArgumentException("Test Result not found"));
 
+            TestOrder testOrder = testOrderRepository.findById(result.getTestOrder().getId()).orElseThrow(() -> new IllegalArgumentException("Test Order not found"));
             comment.setTestResult(result);
             comment.setDoctorId(clientUser.getData().getId());
             comment.setContent(commentRequest.getContent());
             comment.setStatus(CommentStatus.ACTIVE);
             comment.setTestResult(result);
+            comment.setTestOrder(testOrder);
 
             // Kiểm tra nếu là reply
             if (commentRequest.getParentCommentId() != null) {
