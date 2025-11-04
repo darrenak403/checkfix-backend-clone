@@ -50,7 +50,9 @@ public class EventLogConsumer {
 
     private final EventLogRepo eventLogRepo;
 
-    @KafkaListener(topics = "event-logs-topic", groupId = "monitoring-group")
+    @KafkaListener(topics = "event-logs-topic"
+//            groupId = "monitoring-group"
+    )
     public void consume(EventLogDTO event) {
         log.info("📥 Received EventLog from Kafka: {}", event);
 

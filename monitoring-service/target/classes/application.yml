@@ -1,9 +1,0 @@
-server:
-  port: 8088
-
-spring:
-  application:
-    name: monitoring-service
-
-  profiles:
-    active: ${SPRING_PROFILES_ACTIVE:dev}

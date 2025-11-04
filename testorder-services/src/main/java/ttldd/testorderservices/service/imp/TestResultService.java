@@ -41,12 +41,13 @@ public class TestResultService {
     @Transactional
     public RestResponse<?> receiveHl7(String rawHl7) {
         try {
-            if (rawHl7 == null || rawHl7.isBlank()) {
+            String hl7Formatted = formatHL7(rawHl7);
+            if (hl7Formatted.isBlank()) {
                 throw new IllegalArgumentException("HL7 message is empty");
             }
 
 
-            String[] lines = rawHl7.split("\\r?\\n");
+            String[] lines = hl7Formatted.split("\\r?\\n");
             String accession = null;
             String instrument = "";
             List<TestResultParameter> params = new ArrayList<>();
@@ -127,6 +128,30 @@ public class TestResultService {
             log.error(" HL7 parse error: {}", e.getMessage(), e);
             return RestResponse.error(400, "ParseError", "HL7 parse failed: " + e.getMessage());
         }
+    }
+
+    private String formatHL7(String rawHl7) {
+        if (rawHl7 == null || rawHl7.isBlank()) {
+            return "";
+        }
+
+        String formatted = rawHl7;
+
+        formatted = formatted.replaceAll("\\\\\\\\&", "\\\\&");
+        formatted = formatted.replaceAll("\\\\\\&", "\\&");
+
+        formatted = formatted
+                .replace("\\r\\n", "\n")
+                .replace("\\r", "\n")
+                .replace("\\n", "\n")
+                .replace("\r\n", "\n")
+                .replace("\r", "\n");
+
+        formatted = formatted.trim();
+
+        formatted = formatted.replaceAll("\n+", "\n");
+
+        return formatted;
     }
 
     private int safeInt(String[] parts, int index) {

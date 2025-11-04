@@ -5,15 +5,14 @@ spring:
       database: instrument_service
 
 
+  kafka:
+    bootstrap-servers: localhost:9094
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: true
 
-#  data:
-#      mongodb:
-#        uri: mongodb://admin:123456@localhost:27018/instrument_service?authSource=admin
-#  app:
-#    user-service:
-#      url: http://localhost:8081/iam
-#    testOrder-service:
-#      url: http://localhost:8083
 
 eureka:
     client:
@@ -22,3 +21,7 @@ eureka:
     instance:
       hostname: localhost
       prefer-ip-address: true
+logging:
+  level:
+    org.springframework.kafka: DEBUG
+    org.apache.kafka: INFO
