@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class TestResultResponse {
+    private Long id;
     private String accessionNumber;
     private String instrument;
     private String status;

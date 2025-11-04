@@ -29,9 +29,10 @@ public class TestOrderDetailResponse {
     private String address;
     private String priority;
 
-    private String testType;
 
-    private String instrument;
+    private Long instrumentId;
+
+    private String instrumentName;
 
     private String createdBy;
     private String runBy;
