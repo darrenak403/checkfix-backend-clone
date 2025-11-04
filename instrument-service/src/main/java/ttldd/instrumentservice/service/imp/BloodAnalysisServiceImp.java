@@ -10,9 +10,11 @@ import ttldd.instrumentservice.dto.request.BloodAnalysisRequest;
 import ttldd.instrumentservice.dto.response.BloodAnalysisResponse;
 import ttldd.instrumentservice.dto.response.InstrumentResponse;
 import ttldd.instrumentservice.dto.response.RestResponse;
+import ttldd.instrumentservice.entity.RawHL7TestResult;
 import ttldd.instrumentservice.entity.ReagentEntity;
 import ttldd.instrumentservice.entity.ReagentStatus;
 import ttldd.instrumentservice.producer.RawHL7Producer;
+import ttldd.instrumentservice.repository.RawHL7TestResultRepo;
 import ttldd.instrumentservice.repository.ReagentRepo;
 import ttldd.instrumentservice.service.BloodAnalysisService;
 import ttldd.instrumentservice.utils.HL7Utils;
@@ -39,7 +41,7 @@ public class BloodAnalysisServiceImp implements BloodAnalysisService {
 
 
     private final RawHL7Producer rawHL7Producer;
-
+    private final RawHL7TestResultRepo rawHL7TestResultRepo;
 
     private final JwtUtils jwtUtils;
 
@@ -80,6 +82,7 @@ public class BloodAnalysisServiceImp implements BloodAnalysisService {
         String hl7Message = hl7Util.generateHL7(testOrder, sampleData);
 
 
+
         RawHL7MessageDTO hl7DTO = RawHL7MessageDTO.builder()
                 .service("instrument-service")
                 .accessionNumber(bloodAnalysisRequest.getAccessionNumber())
@@ -90,6 +93,16 @@ public class BloodAnalysisServiceImp implements BloodAnalysisService {
                 .timestamp(LocalDateTime.now())
                 .traceId(UUID.randomUUID().toString())
                 .build();
+        RawHL7TestResult rw = RawHL7TestResult.builder()
+                .accessionNumber(hl7DTO.getAccessionNumber())
+                .instrumentName(hl7DTO.getInstrumentName())
+                .hl7Message(hl7DTO.getHl7Message())
+                .generatedBy(hl7DTO.getGeneratedBy())
+                .createdAt(hl7DTO.getTimestamp())
+                .traceId(hl7DTO.getTraceId())
+                .build();
+        rawHL7TestResultRepo.save(rw);
+
         rawHL7Producer.sendRawHL7(hl7DTO);
         log.info("📤 Sent HL7 message to Monitoring for accession {}", bloodAnalysisRequest.getAccessionNumber());
 

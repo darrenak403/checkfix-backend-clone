@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ttldd.instrumentservice.service.imp.RawHl7Service;
+
 //hello
 @RestController
 @RequestMapping
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class InstrumentController {
     InstrumentService instrumentService;
+    private final RawHl7Service rawHl7Service;
+
+
     @PutMapping("/change-mode")
     public ResponseEntity<?> changeInstrumentMode(@RequestBody ChangeModeRequest changeModeRequest) {
         BaseResponse baseResponse = new BaseResponse();
@@ -30,6 +35,11 @@ public class InstrumentController {
             baseResponse.setMessage("Failed to change instrument mode: " + e.getMessage());
             return ResponseEntity.status(500).body(baseResponse);
         }
+    }
+
+    @PostMapping("/hl7/raw")
+    public void autoDelete() {
+        rawHl7Service.autoDelete();
     }
 
 }

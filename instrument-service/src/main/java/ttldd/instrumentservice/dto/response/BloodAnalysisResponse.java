@@ -10,5 +10,5 @@ public class BloodAnalysisResponse {
     private String hl7Message;
     private Long testOrderId;
     private String instrumentStatus;
-   private Object data;
+    private Object data;
 }
