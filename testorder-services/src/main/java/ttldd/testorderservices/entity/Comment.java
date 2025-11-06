@@ -36,6 +36,8 @@ public class Comment {
     @Column(name = "updated_by")
     private String updatedBy;
 
+    @Column(name = "level", nullable = false)
+    private int level;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -59,7 +61,4 @@ public class Comment {
     @JoinColumn(name = "test_result_id", nullable = true)
     private TestResult testResult;
 
-    public int getLevel() {
-        return (parentComment == null) ? 1 : 2;
-    }
 }

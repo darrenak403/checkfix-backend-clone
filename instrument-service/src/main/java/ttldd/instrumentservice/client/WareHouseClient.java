@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-//hello
+
 @FeignClient(name = "warehouse-service", path = "/warehouse",
  configuration = AuthenticationRequestInterceptor.class)
 
