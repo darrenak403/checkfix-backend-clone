@@ -65,6 +65,10 @@ public class BloodAnalysisServiceImp implements BloodAnalysisService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Reagent not found with ID: " + bloodAnalysisRequest.getReagentId()
                 ));
+        if(rawHL7TestResultRepo.existsByAccessionNumber(bloodAnalysisRequest.getAccessionNumber())) {
+            throw new RuntimeException("HL7 message for accession number " + bloodAnalysisRequest.getAccessionNumber() + " already exists.");
+        }
+
         if (reagentEntity == null || reagentEntity.getQuantity() < 5.0) {
             throw new RuntimeException("Not enough Quantity or Reagent USED for blood analysis.");
         }
@@ -87,7 +91,7 @@ public class BloodAnalysisServiceImp implements BloodAnalysisService {
                 .service("instrument-service")
                 .accessionNumber(bloodAnalysisRequest.getAccessionNumber())
                 .testOrderId(String.valueOf(testOrder.getData().getId()))
-                .instrumentName(getInstrumentName(bloodAnalysisRequest.getAccessionNumber()))
+                .instrumentName(testOrder.getData().getInstrumentName())
                 .hl7Message(hl7Message)
                 .generatedBy(jwtUtils.getFullName() != null ? jwtUtils.getFullName() : "SYSTEM")
                 .timestamp(LocalDateTime.now())
@@ -114,13 +118,13 @@ public class BloodAnalysisServiceImp implements BloodAnalysisService {
                 .build();
     }
 
-    private String getInstrumentName(String accessionNumber) {
-        RestResponse<TestOrderDTO> testOrderResponse = testOrderClient.getTestOrdersByAccessionNumber(accessionNumber);
-        if (testOrderResponse == null || testOrderResponse.getData() == null) {
-            throw new RuntimeException("Test order not found for accession number: " + accessionNumber);
-        }
-        RestResponse<InstrumentResponse> instrument = wareHouseClient.getById(testOrderResponse.getData().getInstrumentId());
-        return instrument.getData().getName();
-    }
+//    private String getInstrumentName(String accessionNumber) {
+//        RestResponse<TestOrderDTO> testOrderResponse = testOrderClient.getTestOrdersByAccessionNumber(accessionNumber);
+//        if (testOrderResponse == null || testOrderResponse.getData() == null) {
+//            throw new RuntimeException("Test order not found for accession number: " + accessionNumber);
+//        }
+//        RestResponse<InstrumentResponse> instrument = wareHouseClient.getById(testOrderResponse.getData().getInstrumentId());
+//        return instrument.getData().getName();
+//    }
 
 }

@@ -42,7 +42,7 @@ public class BloodAnalysisController {
             return ResponseEntity.ok(baseResponse);
         } catch (Exception e) {
             baseResponse.setStatus(500);
-            baseResponse.setMessage("Failed to Blood sample analyzed successfully.: " + e.getMessage());
+            baseResponse.setMessage("Failed to Blood sample analyzed: " + e.getMessage());
             return ResponseEntity.status(500).body(baseResponse);
         }
     }

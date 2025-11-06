@@ -12,5 +12,6 @@ import java.util.List;
 @Repository
 public interface RawHL7TestResultRepo  extends MongoRepository<RawHL7TestResult, String> {
         long deleteByCreatedAtBefore(LocalDateTime dateTime);
+        boolean existsByAccessionNumber(String accessionNumber);
 
 }

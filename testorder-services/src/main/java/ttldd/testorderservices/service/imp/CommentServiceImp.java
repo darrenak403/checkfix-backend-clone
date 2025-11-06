@@ -79,12 +79,14 @@ public class CommentServiceImp implements CommentService {
                 Comment parent = commentRepository.findById(commentRequest.getParentCommentId())
                         .orElseThrow(() -> new IllegalArgumentException("Parent comment not found."));
 
-                // kiểm tra không cho reply quá 2 cấp
                 if (parent.getLevel() >= 2) {
                     throw new IllegalArgumentException("Only two levels of comments are allowed.");
                 }
 
                 comment.setParentComment(parent);
+                comment.setLevel(parent.getLevel() + 1);
+            } else {
+                comment.setLevel(1);
             }
 
 
