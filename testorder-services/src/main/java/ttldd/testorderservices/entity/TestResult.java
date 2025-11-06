@@ -20,10 +20,9 @@ public class TestResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "test_order_id", nullable = false)
     @JsonIgnore
-
     private TestOrder testOrder;
 
     private Long patientId;

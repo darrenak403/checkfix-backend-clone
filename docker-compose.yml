@@ -50,7 +50,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=warehouse_db
+#      - POSTGRES_DB=warehouse_db
     ports:
       - "5432:5432"
     volumes:
@@ -181,6 +181,8 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     depends_on:
       - kafka
+      - postgres
+      - eureka-server
 
 
     networks:
@@ -203,10 +205,6 @@ services:
       - app_network
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
-  # ELK STACK + GRAFANA
-
-
 
   grafana:
     image: grafana/grafana:latest

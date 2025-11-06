@@ -68,8 +68,11 @@ public class TestOrder {
 
     private Boolean deleted = false;
 
-    @OneToMany(mappedBy = "testOrder", cascade = CascadeType.ALL)
-    private List<TestResult> testResults;
+//    @OneToMany(mappedBy = "testOrder", cascade = CascadeType.ALL)
+//    private List<TestResult> testResults;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "testOrder")
+    private TestResult testResult;
 
 
     @PrePersist

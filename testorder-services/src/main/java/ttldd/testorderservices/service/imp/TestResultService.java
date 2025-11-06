@@ -38,7 +38,7 @@ public class TestResultService {
     }
 
 
-    @Transactional
+//    @Transactional
     public RestResponse<?> receiveHl7(String rawHl7) {
         try {
             String hl7Formatted = formatHL7(rawHl7);
@@ -115,9 +115,8 @@ public class TestResultService {
             }
             result.setParameters(params);
 
-            resultRepo.save(result);
-
-
+//            resultRepo.save(result);
+            order.setTestResult(result);
             order.setStatus(OrderStatus.COMPLETED);
             orderRepo.save(order);
 
