@@ -175,7 +175,7 @@ services:
     image: datdevv/monitoring-service:1.0
     container_name: monitoring-service
     ports:
-      - "8086:8086"
+      - "8088:8088"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
@@ -184,7 +184,19 @@ services:
       - postgres
       - eureka-server
 
+    networks:
+      - app_network
 
+  notification-service:
+    image: datdevv/notification-service:1.0
+    container_name: notification-service
+    ports:
+      - "8086:8086"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - kafka
     networks:
       - app_network
 
