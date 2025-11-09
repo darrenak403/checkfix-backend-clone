@@ -9,7 +9,7 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
-
+EXPOSE 8761
 # dùng đúng tên stage: build
 COPY --from=build /app/target/*.jar app.jar
 
