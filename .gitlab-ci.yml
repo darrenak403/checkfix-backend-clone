@@ -1,0 +1,39 @@
+stages:
+  - build
+  - dockerize
+  - deploy
+
+variables:
+  DOCKER_REPO: $DOCKER_USERNAME
+  TAG: 1.0
+# --- BUILD ---
+build:
+  stage: build
+  image: maven:3.9.9-amazoncorretto-21
+  script:
+    - echo "🚀 Building all microservices..."
+    - mvn clean package -DskipTests
+  artifacts:
+    paths:
+      - **/target/*.jar
+
+# --- DOCKERIZE ---
+dockerize:
+  stage: dockerize
+  image: docker:25.0.3
+  services:
+    - docker:dind
+  script:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - for service in api-gateway discovery-server iam-service patient-service testorder-services warehouse-service instrument-service monitoring-service ; do
+        echo "📦 Building image for $service ...";
+        docker build -t $DOCKER_REPO/$service:$TAG $service;
+        docker push $DOCKER_REPO/$service:$TAG;
+      done
+
+# --- DEPLOY ---
+deploy:
+  stage: deploy
+  script:
+    - echo "🚀 Triggering Jenkins deploy job..."
+    - curl -X POST http://http://13.251.35.36/:8080/job/deploy-labman/build?token=datdevdeloy
