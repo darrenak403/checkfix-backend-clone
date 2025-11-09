@@ -4,18 +4,21 @@ stages:
   - deploy
 
 variables:
-  DOCKER_REPO: $DOCKER_USERNAME
-  TAG: 1.0
+  DOCKER_REPO: "$DOCKER_USERNAME"
+  TAG: "1.0"
+
 # --- BUILD ---
 build:
   stage: build
   image: maven:3.9.9-amazoncorretto-21
   script:
-    - echo "🚀 Building all microservices..."
+    - echo "Building all microservices..."
     - mvn clean package -DskipTests
   artifacts:
     paths:
-      - **/target/*.jar
+      - "**/target/*.jar"
+  only:
+    - main
 
 # --- DOCKERIZE ---
 dockerize:
@@ -23,17 +26,26 @@ dockerize:
   image: docker:25.0.3
   services:
     - docker:dind
+  variables:
+    DOCKER_TLS_CERTDIR: ""
   script:
+    - echo "Logging in to DockerHub..."
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    - for service in api-gateway discovery-server iam-service patient-service testorder-services warehouse-service instrument-service monitoring-service ; do
-        echo "📦 Building image for $service ...";
+    - for service in api-gateway discovery-server iam-service patient-service testorder-services warehouse-service instrument-service monitoring-service; do
+        echo "Building image for $service ...";
         docker build -t $DOCKER_REPO/$service:$TAG $service;
         docker push $DOCKER_REPO/$service:$TAG;
       done
+  only:
+    - main
 
 # --- DEPLOY ---
 deploy:
   stage: deploy
+  image: curlimages/curl:latest
   script:
-    - echo "🚀 Triggering Jenkins deploy job..."
-    - curl -X POST http://http://13.251.35.36/:8080/job/deploy-labman/build?token=datdevdeloy
+    - echo "Triggering Jenkins deploy job..."
+    - >
+      curl -X POST "http://13.251.35.36:8080/job/deploy-labman/build?token=datdevdeloy"
+  only:
+    - main
