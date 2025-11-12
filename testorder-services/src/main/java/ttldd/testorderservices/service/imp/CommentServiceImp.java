@@ -77,10 +77,10 @@ public class CommentServiceImp implements CommentService {
             // Kiểm tra nếu là reply
             if (commentRequest.getParentCommentId() != null) {
                 Comment parent = commentRepository.findById(commentRequest.getParentCommentId())
-                        .orElseThrow(() -> new IllegalArgumentException("Parent comment not found."));
+                        .orElseThrow(() -> new RuntimeException("Parent comment not found."));
 
                 if (parent.getLevel() >= 2) {
-                    throw new IllegalArgumentException("Only two levels of comments are allowed.");
+                    throw new RuntimeException("Only two levels of comments are allowed.");
                 }
 
                 comment.setParentComment(parent);
@@ -105,6 +105,7 @@ public class CommentServiceImp implements CommentService {
             throw e;
         }
     }
+
 
 
     @Transactional
