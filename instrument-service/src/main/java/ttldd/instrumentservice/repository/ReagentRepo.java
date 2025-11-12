@@ -15,4 +15,6 @@ public interface ReagentRepo extends MongoRepository<ReagentEntity, String> {
     List<ReagentEntity> findByStatus(ReagentStatus status);
 
     Optional<ReagentEntity> findByIdAndStatus(String id, ReagentStatus status);
+
+    Optional<ReagentEntity> findByReagentNameAndLotNumber(String name, String lotNumber);
 }
