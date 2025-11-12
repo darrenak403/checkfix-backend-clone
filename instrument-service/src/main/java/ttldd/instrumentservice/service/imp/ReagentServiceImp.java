@@ -41,7 +41,7 @@ public class ReagentServiceImp implements ReagentService {
     @Override
     public ReagentInstallResponse installReagent(ReagentInstallRequest reagentInstallRequest) {
         //Kiểm tra trùng lô
-        reagentRepo.findByLotNumber(reagentInstallRequest.getLotNumber()).ifPresent(reagentEntity -> {
+        reagentRepo.findByLotNumberAndDeletedFalse(reagentInstallRequest.getLotNumber()).ifPresent(reagentEntity -> {
             throw new RuntimeException("Reagent with lot number " + reagentInstallRequest.getLotNumber() + " already exists for another reagent.");
         });
 
