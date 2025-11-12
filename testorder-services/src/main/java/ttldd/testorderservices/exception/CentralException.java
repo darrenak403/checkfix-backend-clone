@@ -50,16 +50,31 @@ public class CentralException {
         return ResponseEntity.badRequest().body(response);
     }
 
-    // Bắt tất cả exception chưa được xử lý riêng
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleAllExceptions(Exception ex, HttpServletRequest request) {
+    public ResponseEntity<?> handleIllegalArgument(RuntimeException ex, HttpServletRequest request) {
         BaseResponse response = BaseResponse.builder()
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .status(HttpStatus.BAD_REQUEST.value())
                 .message(ex.getMessage())
-                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .path(request.getRequestURI())
                 .timestamp(LocalDateTime.now())
                 .build();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+
+
+
+   // Bắt tất cả exception chưa được xử lý riêng
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<?> handleAllExceptions(Exception ex, HttpServletRequest request) {
+//        BaseResponse response = BaseResponse.builder()
+//                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+//                .message(ex.getMessage())
+//                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+//                .path(request.getRequestURI())
+//                .timestamp(LocalDateTime.now())
+//                .build();
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+//    }
 }

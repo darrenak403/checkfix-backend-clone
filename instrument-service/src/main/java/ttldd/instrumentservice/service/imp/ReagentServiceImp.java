@@ -1,12 +1,15 @@
 package ttldd.instrumentservice.service.imp;
 
 import ttldd.instrumentservice.dto.request.ReagentInstallRequest;
+import ttldd.instrumentservice.dto.request.UpdateReagentStatusRequest;
 import ttldd.instrumentservice.dto.response.ReagentGetAllResponse;
 import ttldd.instrumentservice.dto.response.ReagentInstallResponse;
+import ttldd.instrumentservice.dto.response.UpdateReagentStatusResponse;
 import ttldd.instrumentservice.entity.*;
 import ttldd.instrumentservice.repository.ReagentAuditLogRepo;
 import ttldd.instrumentservice.repository.ReagentHistoryRepo;
 import ttldd.instrumentservice.repository.ReagentRepo;
+import ttldd.instrumentservice.repository.ReagentUpdateAuditLogRepo;
 import ttldd.instrumentservice.service.ReagentService;
 import ttldd.instrumentservice.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,9 @@ public class ReagentServiceImp implements ReagentService {
 
     @Autowired
     private ReagentAuditLogRepo reagentAuditLogRepo;
+
+    @Autowired
+    private ReagentUpdateAuditLogRepo reagentUpdateAuditLogRepo;
 
     @Override
     public ReagentInstallResponse installReagent(ReagentInstallRequest reagentInstallRequest) {
@@ -124,6 +130,47 @@ public class ReagentServiceImp implements ReagentService {
                 .map(this::convertToReagentGetAllResponse)
                 .toList();
         return  reagentGetAllResponses;
+    }
+
+    @Override
+    public UpdateReagentStatusResponse updateReagentStatus(UpdateReagentStatusRequest updateReagentRequest) {
+        ReagentEntity reagentEntity = reagentRepo
+                .findByReagentNameAndLotNumber(updateReagentRequest.getReagentName(), updateReagentRequest.getLotNumber())
+                .orElseThrow(() -> new RuntimeException("Reagent with name " + updateReagentRequest.getReagentName() + " and lot number " + updateReagentRequest.getLotNumber() + " not found."));
+
+        if(reagentEntity.getStatus() == updateReagentRequest.getReagentStatus()) {
+            throw new RuntimeException("Reagent " + updateReagentRequest.getReagentName() + " is already in status " + updateReagentRequest.getReagentStatus());
+        }
+        if(updateReagentRequest.getQuantity() < 5 && updateReagentRequest.getReagentStatus() == ReagentStatus.AVAILABLE) {
+            throw new RuntimeException("Quantity must be at least 5 to set status to AVAILABLE.");
+        }
+        reagentEntity.setStatus(updateReagentRequest.getReagentStatus());
+        reagentEntity.setQuantity(updateReagentRequest.getQuantity());
+        reagentRepo.save(reagentEntity);
+
+        //ghi lịch sử
+
+        ReagentUpdateAuditLogEntity reagentUpdateAuditLogEntity = ReagentUpdateAuditLogEntity.builder()
+                .id(UUID.randomUUID().toString())
+                .reagentName(reagentEntity.getReagentName())
+                .updatedBy(jwtUtils.getFullName())
+                .oldStatus(reagentEntity.getStatus())
+                .newStatus(updateReagentRequest.getReagentStatus())
+                .oldValue(reagentEntity.getQuantity())
+                .newValue(updateReagentRequest.getQuantity())
+                .timestamp(LocalDateTime.now())
+                .build();
+        reagentUpdateAuditLogRepo.save(reagentUpdateAuditLogEntity);
+
+        return UpdateReagentStatusResponse.builder()
+                .reagentName(reagentEntity.getReagentName())
+                .oldStatus(reagentEntity.getStatus())
+                .newStatus(updateReagentRequest.getReagentStatus())
+                .oldQuantity(reagentEntity.getQuantity())
+                .newQuantity(updateReagentRequest.getQuantity())
+                .timestamp(LocalDateTime.now())
+                .updatedBy(jwtUtils.getFullName())
+                .build();
     }
 
     private ReagentGetAllResponse convertToReagentGetAllResponse(ReagentEntity reagentEntity) {
