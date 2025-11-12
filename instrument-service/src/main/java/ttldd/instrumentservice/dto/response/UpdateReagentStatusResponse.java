@@ -19,5 +19,6 @@ public class UpdateReagentStatusResponse {
     private int oldQuantity;
     private int newQuantity;
     private String updatedBy;
+    private String action;
     private LocalDateTime timestamp;
 }

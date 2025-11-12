@@ -2,12 +2,8 @@ package ttldd.instrumentservice.controller;
 
 import ttldd.instrumentservice.dto.request.ReagentInstallRequest;
 import ttldd.instrumentservice.dto.request.UpdateReagentStatusRequest;
-import ttldd.instrumentservice.dto.response.BaseResponse;
-import ttldd.instrumentservice.dto.response.ReagentGetAllResponse;
-import ttldd.instrumentservice.dto.response.ReagentInstallResponse;
-import ttldd.instrumentservice.dto.response.UpdateReagentStatusResponse;
+import ttldd.instrumentservice.dto.response.*;
 import ttldd.instrumentservice.service.ReagentService;
-import ttldd.instrumentservice.service.imp.ReagentServiceImp;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +14,7 @@ import java.util.List;
 
 //hello
 @RestController
-@RequestMapping("/reagents")
+    @RequestMapping("/reagents")
 public class ReagentInstallController {
     @Autowired
     private ReagentService reagentService;
@@ -72,6 +68,23 @@ public class ReagentInstallController {
         } catch (Exception e) {
             baseResponse.setStatus(500);
             baseResponse.setMessage("Failed to update reagent status: " + e.getMessage());
+            return ResponseEntity.status(500).body(baseResponse);
+        }
+    }
+
+    @DeleteMapping("/{reagentId}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF')")
+    public ResponseEntity<?> deleteReagent(@PathVariable("reagentId") String reagentId) {
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            ReagentDeleteResponse response = reagentService.deleteReagent(reagentId);
+            baseResponse.setStatus(200);
+            baseResponse.setMessage("Reagent deleted successfully");
+            baseResponse.setData(response);
+            return ResponseEntity.ok(baseResponse);
+        } catch (Exception e) {
+            baseResponse.setStatus(500);
+            baseResponse.setMessage("Failed to delete reagent: " + e.getMessage());
             return ResponseEntity.status(500).body(baseResponse);
         }
     }

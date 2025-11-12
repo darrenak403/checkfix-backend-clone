@@ -2,6 +2,7 @@ package ttldd.instrumentservice.service.imp;
 
 import ttldd.instrumentservice.dto.request.ReagentInstallRequest;
 import ttldd.instrumentservice.dto.request.UpdateReagentStatusRequest;
+import ttldd.instrumentservice.dto.response.ReagentDeleteResponse;
 import ttldd.instrumentservice.dto.response.ReagentGetAllResponse;
 import ttldd.instrumentservice.dto.response.ReagentInstallResponse;
 import ttldd.instrumentservice.dto.response.UpdateReagentStatusResponse;
@@ -124,12 +125,12 @@ public class ReagentServiceImp implements ReagentService {
 
     @Override
     public List<ReagentGetAllResponse> getALlReagents() {
-        List<ReagentEntity> reagentEntity = reagentRepo.findByStatus(ReagentStatus.AVAILABLE);
+        List<ReagentEntity> reagentEntity = reagentRepo.findByStatusAndDeletedFalse(ReagentStatus.AVAILABLE);
+
         //convert list
-        List<ReagentGetAllResponse> reagentGetAllResponses = reagentEntity.stream()
+        return reagentEntity.stream()
                 .map(this::convertToReagentGetAllResponse)
                 .toList();
-        return  reagentGetAllResponses;
     }
 
     @Override
@@ -158,6 +159,7 @@ public class ReagentServiceImp implements ReagentService {
                 .newStatus(updateReagentRequest.getReagentStatus())
                 .oldValue(reagentEntity.getQuantity())
                 .newValue(updateReagentRequest.getQuantity())
+                .action("UPDATE")
                 .timestamp(LocalDateTime.now())
                 .build();
         reagentUpdateAuditLogRepo.save(reagentUpdateAuditLogEntity);
@@ -169,9 +171,41 @@ public class ReagentServiceImp implements ReagentService {
                 .oldQuantity(reagentEntity.getQuantity())
                 .newQuantity(updateReagentRequest.getQuantity())
                 .timestamp(LocalDateTime.now())
+                .action(reagentUpdateAuditLogEntity.getAction())
                 .updatedBy(jwtUtils.getFullName())
                 .build();
     }
+
+    @Override
+    public ReagentDeleteResponse deleteReagent(String reagentId) {
+        ReagentEntity reagentEntity = reagentRepo.findByIdAndDeletedFalse(reagentId).orElseThrow(() -> new RuntimeException("Reagent with ID " + reagentId + " not found."));
+        reagentEntity.setDeleted(true);
+        reagentRepo.save(reagentEntity);
+
+        //ghi log
+        ReagentUpdateAuditLogEntity reagentUpdateAuditLogEntity = ReagentUpdateAuditLogEntity.builder()
+                .id(UUID.randomUUID().toString())
+                .reagentName(reagentEntity.getReagentName())
+                .updatedBy(jwtUtils.getFullName())
+                .oldStatus(reagentEntity.getStatus())
+                .newStatus(reagentEntity.getStatus())
+                .oldValue(reagentEntity.getQuantity())
+                .newValue(reagentEntity.getQuantity())
+                .action("DELETE")
+                .timestamp(LocalDateTime.now())
+                .build();
+        reagentUpdateAuditLogRepo.save(reagentUpdateAuditLogEntity);
+
+        return ReagentDeleteResponse.builder()
+                .reagentId(reagentEntity.getId())
+                .reagentName(reagentEntity.getReagentName())
+                .action("DELETED")
+                .lotNumber(reagentEntity.getLotNumber())
+                .deletedBy(jwtUtils.getFullName())
+                .deletedAt(LocalDateTime.now())
+                .build();
+    }
+
 
     private ReagentGetAllResponse convertToReagentGetAllResponse(ReagentEntity reagentEntity) {
         return ReagentGetAllResponse.builder()

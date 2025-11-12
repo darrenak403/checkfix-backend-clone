@@ -12,9 +12,11 @@ import java.util.Optional;
 public interface ReagentRepo extends MongoRepository<ReagentEntity, String> {
     Optional<ReagentEntity> findByLotNumber(String lotNumber);
     ReagentEntity findFirstByStatusOrderByExpiryDateAsc(ReagentStatus status);
-    List<ReagentEntity> findByStatus(ReagentStatus status);
+    List<ReagentEntity> findByStatusAndDeletedFalse(ReagentStatus status);
 
     Optional<ReagentEntity> findByIdAndStatus(String id, ReagentStatus status);
 
     Optional<ReagentEntity> findByReagentNameAndLotNumber(String name, String lotNumber);
+
+    Optional<ReagentEntity> findByIdAndDeletedFalse(String id);
 }

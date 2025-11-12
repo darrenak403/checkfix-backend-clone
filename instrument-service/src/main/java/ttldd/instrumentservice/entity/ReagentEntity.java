@@ -32,6 +32,8 @@ public class ReagentEntity {
     private String installedBy;
     private LocalDate installDate;
 
+    private boolean deleted = false;
+
     private ReagentStatus status; // INSTALLED, AVAILABLE, USED, EXPIRED
     private String remarks;
 }
