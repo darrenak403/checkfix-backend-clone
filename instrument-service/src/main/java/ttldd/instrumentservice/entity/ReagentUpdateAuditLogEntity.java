@@ -25,5 +25,7 @@ public class ReagentUpdateAuditLogEntity {
     private int oldValue;
     private int newValue;
 
+    private String action;
+
     private LocalDateTime timestamp;
 }

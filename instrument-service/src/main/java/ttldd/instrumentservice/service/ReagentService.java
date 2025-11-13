@@ -2,6 +2,7 @@ package ttldd.instrumentservice.service;
 
 import ttldd.instrumentservice.dto.request.ReagentInstallRequest;
 import ttldd.instrumentservice.dto.request.UpdateReagentStatusRequest;
+import ttldd.instrumentservice.dto.response.ReagentDeleteResponse;
 import ttldd.instrumentservice.dto.response.ReagentGetAllResponse;
 import ttldd.instrumentservice.dto.response.ReagentInstallResponse;
 import org.springframework.stereotype.Service;
@@ -16,4 +17,6 @@ public interface ReagentService {
     List<ReagentGetAllResponse> getALlReagents();
 
     UpdateReagentStatusResponse updateReagentStatus(UpdateReagentStatusRequest updateReagentRequest);
+
+    ReagentDeleteResponse deleteReagent(String reagentId );
 }

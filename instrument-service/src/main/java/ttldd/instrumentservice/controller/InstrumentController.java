@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ttldd.instrumentservice.service.imp.RawHl7Service;
 
-//hello
+
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
