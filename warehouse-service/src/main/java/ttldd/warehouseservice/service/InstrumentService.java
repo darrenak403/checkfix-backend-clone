@@ -13,4 +13,5 @@ public interface InstrumentService {
     PageResponse<InstrumentResponse> getInstruments(int page, int size);
     InstrumentResponse getInstrumentById(Long id);
     InstrumentUpdateResponse updateInstrument(Long id, InstrumentUpdateRequest instrumentUpdateRequest);
+    void deleteInstrument(Long id);
 }

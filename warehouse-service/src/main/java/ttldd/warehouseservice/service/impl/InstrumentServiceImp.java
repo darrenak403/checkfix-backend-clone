@@ -84,4 +84,12 @@ public class InstrumentServiceImp implements InstrumentService {
                 .status(instrument.getStatus())
                 .build();
     }
+
+    @Override
+    public void deleteInstrument(Long id) {
+        Instrument instrument = instrumentRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Instrument not found with id: " + id));
+        instrument.setActive(false);
+        instrumentRepo.save(instrument);
+    }
 }

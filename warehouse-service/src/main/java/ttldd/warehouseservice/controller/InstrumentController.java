@@ -72,4 +72,15 @@ public class InstrumentController {
                 .build();
         return ResponseEntity.ok(restResponse);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<RestResponse> deleteInstrument(@PathVariable Long id) {
+        instrumentService.deleteInstrument(id);
+        RestResponse<String> restResponse = RestResponse.<String>builder()
+                .statusCode(200)
+                .message("Instrument deleted successfully")
+                .build();
+        return ResponseEntity.ok(restResponse);
+    }
+
 }
