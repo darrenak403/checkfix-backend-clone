@@ -16,7 +16,7 @@ public interface ReagentService {
     ReagentInstallResponse installReagent(ReagentInstallRequest reagentInstallRequest);
     List<ReagentGetAllResponse> getALlReagents();
 
-    UpdateReagentStatusResponse updateReagentStatus(UpdateReagentStatusRequest updateReagentRequest);
+    UpdateReagentStatusResponse updateReagentStatus(UpdateReagentStatusRequest updateReagentRequest , String reagentId );
 
     ReagentDeleteResponse deleteReagent(String reagentId );
 }

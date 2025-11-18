@@ -134,8 +134,8 @@ public class ReagentServiceImp implements ReagentService {
     }
 
     @Override
-    public UpdateReagentStatusResponse updateReagentStatus(UpdateReagentStatusRequest updateReagentRequest) {
-        ReagentEntity reagentEntity = reagentRepo.findByIdAndDeletedFalse(updateReagentRequest.getReagentId()).orElseThrow(() -> new RuntimeException("Reagent with ID " + updateReagentRequest.getReagentId() + " not found."));
+    public UpdateReagentStatusResponse updateReagentStatus(UpdateReagentStatusRequest updateReagentRequest , String reagentId ) {
+        ReagentEntity reagentEntity = reagentRepo.findByIdAndDeletedFalse(reagentId).orElseThrow(() -> new RuntimeException("Reagent with ID " + reagentId + " not found."));
 
         ReagentStatus currentStatus = reagentEntity.getStatus();
 

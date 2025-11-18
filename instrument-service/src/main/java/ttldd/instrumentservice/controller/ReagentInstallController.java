@@ -58,9 +58,9 @@ public class ReagentInstallController {
     public ResponseEntity<?> updateReagentStatus(@Valid @RequestBody UpdateReagentStatusRequest updateReagentStatusRequest, @PathVariable("reagentId") String reagentId) {
         BaseResponse baseResponse = new BaseResponse();
 
-        updateReagentStatusRequest.setReagentId(reagentId);
         try {
-            UpdateReagentStatusResponse response = reagentService.updateReagentStatus(updateReagentStatusRequest);
+            UpdateReagentStatusResponse response = reagentService.updateReagentStatus(updateReagentStatusRequest, reagentId);
+
             baseResponse.setStatus(200);
             baseResponse.setMessage("Reagent status updated successfully");
             baseResponse.setData(response);
