@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ttldd.testorderservices.entity.OrderStatus;
-import ttldd.testorderservices.entity.PriorityStatus;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -36,11 +35,11 @@ public class TestOrderDTO {
 
     private Integer age;
 
-    private OrderStatus status;
+    private String status;
 
     private LocalDateTime createdAt;
 
-    private PriorityStatus priority;
+    private String priority;
 
     private Long instrumentId;
 
