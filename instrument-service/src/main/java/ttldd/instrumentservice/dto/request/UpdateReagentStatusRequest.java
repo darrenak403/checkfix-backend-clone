@@ -8,8 +8,6 @@ import ttldd.instrumentservice.entity.ReagentStatus;
 
 @Data
 public class UpdateReagentStatusRequest {
-    private String reagentId;
-
 
     private ReagentStatus reagentStatus;
 
