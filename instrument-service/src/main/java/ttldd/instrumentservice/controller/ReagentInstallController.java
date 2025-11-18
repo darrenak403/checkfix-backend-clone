@@ -53,12 +53,12 @@ public class ReagentInstallController {
             return ResponseEntity.status(500).body(baseResponse);
         }
     }
-    @PutMapping("/{reagentName}/status")
+    @PatchMapping("/{reagentId}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF')")
-    public ResponseEntity<?> updateReagentStatus(@Valid @RequestBody UpdateReagentStatusRequest updateReagentStatusRequest, @PathVariable("reagentName") String reagentName) {
+    public ResponseEntity<?> updateReagentStatus(@Valid @RequestBody UpdateReagentStatusRequest updateReagentStatusRequest, @PathVariable("reagentId") String reagentId) {
         BaseResponse baseResponse = new BaseResponse();
 
-        updateReagentStatusRequest.setReagentName(reagentName);
+        updateReagentStatusRequest.setReagentId(reagentId);
         try {
             UpdateReagentStatusResponse response = reagentService.updateReagentStatus(updateReagentStatusRequest);
             baseResponse.setStatus(200);

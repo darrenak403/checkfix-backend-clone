@@ -135,12 +135,12 @@ public class ReagentServiceImp implements ReagentService {
 
     @Override
     public UpdateReagentStatusResponse updateReagentStatus(UpdateReagentStatusRequest updateReagentRequest) {
-        ReagentEntity reagentEntity = reagentRepo
-                .findByReagentNameAndLotNumber(updateReagentRequest.getReagentName(), updateReagentRequest.getLotNumber())
-                .orElseThrow(() -> new RuntimeException("Reagent with name " + updateReagentRequest.getReagentName() + " and lot number " + updateReagentRequest.getLotNumber() + " not found."));
+        ReagentEntity reagentEntity = reagentRepo.findByIdAndDeletedFalse(updateReagentRequest.getReagentId()).orElseThrow(() -> new RuntimeException("Reagent with ID " + updateReagentRequest.getReagentId() + " not found."));
+
+        ReagentStatus currentStatus = reagentEntity.getStatus();
 
         if(reagentEntity.getStatus() == updateReagentRequest.getReagentStatus()) {
-            throw new RuntimeException("Reagent " + updateReagentRequest.getReagentName() + " is already in status " + updateReagentRequest.getReagentStatus());
+            throw new RuntimeException("Reagent " + reagentEntity.getReagentName() + " is already in status " + updateReagentRequest.getReagentStatus());
         }
         if(updateReagentRequest.getQuantity() < 5 && updateReagentRequest.getReagentStatus() == ReagentStatus.AVAILABLE) {
             throw new RuntimeException("Quantity must be at least 5 to set status to AVAILABLE.");
@@ -166,7 +166,7 @@ public class ReagentServiceImp implements ReagentService {
 
         return UpdateReagentStatusResponse.builder()
                 .reagentName(reagentEntity.getReagentName())
-                .oldStatus(reagentEntity.getStatus())
+                .oldStatus(currentStatus)
                 .newStatus(updateReagentRequest.getReagentStatus())
                 .oldQuantity(reagentEntity.getQuantity())
                 .newQuantity(updateReagentRequest.getQuantity())
