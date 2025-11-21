@@ -46,7 +46,8 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
             "/patient/v3/api-docs",
             "/testOrder/v3/api-docs",
             "/warehouse/v3/api-docs",
-            "/instrument/v3/api-docs"
+            "/instrument/v3/api-docs",
+            "/monitoring/v3/api-docs"
     };
 
     @Value("${app.prefix}")

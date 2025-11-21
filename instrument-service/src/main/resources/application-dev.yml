@@ -1,8 +1,8 @@
 spring:
   data:
     mongodb:
-#      uri: mongodb://localhost:27017/instrument_service
-      uri: mongodb://root:123456@localhost:27017/notification-service?authSource=admin
+      uri: mongodb://localhost:27017/instrument_service
+#      uri: mongodb://root:123456@localhost:27017/notification-service?authSource=admin
       database: instrument_service
 
 
