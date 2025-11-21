@@ -56,18 +56,22 @@ public class CommentServiceImp implements CommentService {
                 throw new IllegalArgumentException("Doctor not found");
             }
 
-
             if (commentRequest.getContent() == null || commentRequest.getContent().trim().isEmpty()) {
                 throw new IllegalArgumentException("Comment content cannot be empty.");
             }
 
             Comment comment = new Comment();
 
+            // Tìm TestResult theo testResultId
             TestResult result = testResultRepository.findById(commentRequest.getTestResultId())
                     .orElseThrow(() -> new IllegalArgumentException("Test Result not found"));
 
-            TestOrder testOrder = testOrderRepository.findById(result.getTestOrder().getId()).orElseThrow(() -> new IllegalArgumentException("Test Order not found"));
+            // Lấy TestOrder từ TestResult
+            TestOrder testOrder = testOrderRepository.findById(result.getTestOrder().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Test Order not found"));
+
             comment.setTestResult(result);
+            comment.setTestOrder(testOrder);
             comment.setDoctorId(clientUser.getData().getId());
             comment.setContent(commentRequest.getContent());
             comment.setStatus(CommentStatus.ACTIVE);
@@ -79,6 +83,16 @@ public class CommentServiceImp implements CommentService {
                 Comment parent = commentRepository.findById(commentRequest.getParentCommentId())
                         .orElseThrow(() -> new RuntimeException("Parent comment not found."));
 
+                // Validation: Parent comment phải cùng testResult
+                if (!parent.getTestResult().getId().equals(result.getId())) {
+                    throw new RuntimeException("Cannot reply to comment from different test result.");
+                }
+
+                // Validation: Parent comment phải ACTIVE
+                if (parent.getStatus() != CommentStatus.ACTIVE) {
+                    throw new RuntimeException("Cannot reply to inactive or deleted comment.");
+                }
+
                 if (parent.getLevel() >= 2) {
                     throw new RuntimeException("Only two levels of comments are allowed.");
                 }
@@ -89,47 +103,43 @@ public class CommentServiceImp implements CommentService {
                 comment.setLevel(1);
             }
 
-
             Comment saved = commentRepository.save(comment);
-
 
             return CommentResponse.builder()
                     .commentId(saved.getId())
                     .doctorName(clientUser.getData().getFullName())
+                    .testOrderId(saved.getTestOrder().getId())
                     .testResultId(saved.getTestResult() != null ? saved.getTestResult().getId() : 0L)
                     .commentContent(saved.getContent())
                     .createdAt(saved.getCreatedAt())
                     .build();
-
         } catch (Exception e) {
             throw e;
         }
     }
 
-
-
     @Transactional
     @Override
     public CommentUpdateResponse updateComment(CommentUpdateRequest request) {
-        //Kiểm tra tồn tại
+        // Kiểm tra tồn tại
         Comment comment = commentRepository.findById(request.getId())
                 .orElseThrow(() -> new RuntimeException("Comment not found with id: " + request.getId()));
 
         if (request.getContent() == null || request.getContent().trim().isEmpty()) {
             throw new IllegalArgumentException("Comment content cannot be empty.");
         }
-        //Luu nội dung cũ
+        // Luu nội dung cũ
         try {
             String oldContent = comment.getContent();
 
-            //Lấy thông tin tu nguoiw sửa (Doctor)
+            // Lấy thông tin tu nguoiw sửa (Doctor)
             Long jwtDoctorId = jwtUtils.getCurrentUserId();
             RestResponse<UserResponse> clientUser = userClient.getUser(jwtDoctorId);
             if (clientUser == null || clientUser.getData() == null) {
                 throw new IllegalArgumentException("Doctor not found");
             }
 
-            //ghi vào auditLog
+            // ghi vào auditLog
             AuditLogComment auditLogComment = AuditLogComment.builder()
                     .action("UPDATE_COMMENT")
                     .commentId(comment.getId())
@@ -141,13 +151,12 @@ public class CommentServiceImp implements CommentService {
 
             auditLogRepository.save(auditLogComment);
 
-            //Cập nhật nội dung mới
+            // Cập nhật nội dung mới
 
             comment.setContent(request.getContent());
             comment.setUpdatedBy(clientUser.getData().getFullName());
             comment.setUpdatedAt(LocalDateTime.now());
             commentRepository.save(comment);
-
 
             return CommentUpdateResponse.builder()
                     .id(comment.getId())
@@ -164,12 +173,13 @@ public class CommentServiceImp implements CommentService {
     @Transactional
     @Override
     public CommentDeleteResponse deleteComment(CommentDeleteRequest commentDeleteRequest) {
-    
-        //1.Tìm comment
-        Comment comment = commentRepository.findById(commentDeleteRequest.getCommentId())
-                .orElseThrow(() -> new DeleteException("Comment not found with id: " + commentDeleteRequest.getCommentId()));
 
-        //2.Kiểm tra status comment đã xóa chưa
+        // 1.Tìm comment
+        Comment comment = commentRepository.findById(commentDeleteRequest.getCommentId())
+                .orElseThrow(
+                        () -> new DeleteException("Comment not found with id: " + commentDeleteRequest.getCommentId()));
+
+        // 2.Kiểm tra status comment đã xóa chưa
         if (comment.getStatus() == CommentStatus.DELETED) {
             throw new DeleteException("Comment with id " + comment.getId() + " is already deleted.");
         }
@@ -177,7 +187,7 @@ public class CommentServiceImp implements CommentService {
         comment.setStatus(CommentStatus.DELETED);
         commentRepository.save(comment);
 
-        //3.Ghi vào auditLog
+        // 3.Ghi vào auditLog
         Long jwtDoctorId = jwtUtils.getCurrentUserId();
         RestResponse<UserResponse> clientUser = userClient.getUser(jwtDoctorId);
         if (clientUser == null) {
