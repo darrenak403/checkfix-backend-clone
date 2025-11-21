@@ -10,9 +10,9 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByDoctorId(Long doctorId);
-    
+
     List<Comment> findByTestOrderIdAndStatus(Long testOrderId, CommentStatus status);
-    
+
     List<Comment> findByTestOrderIdAndStatusAndLevelOrderByCreatedAtDesc(
             Long testOrderId, CommentStatus status, Integer level);
 }

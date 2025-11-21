@@ -84,7 +84,6 @@ public class TestOrderService {
         return mapper.toTestOrderCreationResponse(saved);
     }
 
-
     @Transactional(readOnly = true)
     public Page<TestOrderCreationResponse> list(OrderStatus status, Pageable pageable) {
         Page<TestOrder> page = (status == null)
@@ -99,36 +98,36 @@ public class TestOrderService {
         TestOrder o = orderRepo.findById(id)
                 .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
                 .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại"));
-        
+
         // Chỉ lấy comment cha (level = 1), replies sẽ được load tự động qua mapper
         List<Comment> parentComments = commentRepo.findByTestOrderIdAndStatusAndLevelOrderByCreatedAtDesc(
                 o.getId(), CommentStatus.ACTIVE, 1);
-        
+
         o.setComments(parentComments);
-        
+
         // Sử dụng CommentMapper để map, doctorName đã có sẵn trong entity
         List<CommentResponse> commentResponses = parentComments.stream()
                 .map(commentMapper::toResponse)
                 .toList();
-        
+
         TestOrderDetailResponse resp = mapper.toTestOrderDetailResponse(o);
         resp.setComments(commentResponses);
-//        var dto = TestOrderDetailResponse.builder()
-//                .id(o.getId())
-//                .status(o.getStatus())
-//                .createdAt(o.getCreatedAt())
-//                .patientId(o.getPatientId())
-//                .runAt(o.getRunAt())
-//                .comments(commentRepo.findByUserId(o.getId()))
-//                .build();
-//
-//        try {
-//            var p = getPatient(o.getPatientId());
-//            dto.setPatientName(p.getFullName());
-//            dto.setPatientGender(p.getGender());
-//            dto.setPatientEmail(p.getEmail());
-//            dto.setPatientAge(ageFrom(p.getYob()));
-//        } catch (Exception ignored) {}
+        // var dto = TestOrderDetailResponse.builder()
+        // .id(o.getId())
+        // .status(o.getStatus())
+        // .createdAt(o.getCreatedAt())
+        // .patientId(o.getPatientId())
+        // .runAt(o.getRunAt())
+        // .comments(commentRepo.findByUserId(o.getId()))
+        // .build();
+        //
+        // try {
+        // var p = getPatient(o.getPatientId());
+        // dto.setPatientName(p.getFullName());
+        // dto.setPatientGender(p.getGender());
+        // dto.setPatientEmail(p.getEmail());
+        // dto.setPatientAge(ageFrom(p.getYob()));
+        // } catch (Exception ignored) {}
 
         return resp;
     }
@@ -139,7 +138,8 @@ public class TestOrderService {
                 .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
                 .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại"));
 
-        if (req.getStatus() != null) o.setStatus(req.getStatus());
+        if (req.getStatus() != null)
+            o.setStatus(req.getStatus());
         logAudit(o.getId(), "UPDATE", safeJson(o), jwtUtils.getCurrentUserId());
         orderRepo.save(o);
         return mapper.toTestOrderCreationResponse(o);
@@ -151,11 +151,16 @@ public class TestOrderService {
                 .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
                 .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại"));
 
-        if (StringUtils.hasText(req.getFullName())) o.setPatientName(req.getFullName());
-        if (StringUtils.hasText(req.getPhone())) o.setPhone(req.getPhone());
-        if (StringUtils.hasText(req.getAddress())) o.setAddress(req.getAddress());
-        if (req.getYob() != null) o.setYob(req.getYob());
-        if (StringUtils.hasText(req.getGender())) o.setGender(req.getGender());
+        if (StringUtils.hasText(req.getFullName()))
+            o.setPatientName(req.getFullName());
+        if (StringUtils.hasText(req.getPhone()))
+            o.setPhone(req.getPhone());
+        if (StringUtils.hasText(req.getAddress()))
+            o.setAddress(req.getAddress());
+        if (req.getYob() != null)
+            o.setYob(req.getYob());
+        if (StringUtils.hasText(req.getGender()))
+            o.setGender(req.getGender());
         o.setAge(ageFrom(req.getYob()));
         if (req.getRunBy() != null) {
             RestResponse<UserResponse> user = userClient.getUser(req.getRunBy());
@@ -178,17 +183,17 @@ public class TestOrderService {
         logAudit(o.getId(), "DELETE", safeJson(o), jwtUtils.getCurrentUserId());
     }
 
-    //    private PatientDTO getPatient(Long patientId) {
-//        try {
-//            RestResponse<PatientDTO> response = patientClient.getById(patientId);
-//            if (response == null || response.getData().isDeleted())
-//                throw new IllegalArgumentException("Bệnh nhân không tồn tại hoặc đã bị xoá");
-//            return response.getData();
-//        } catch (Exception e) {
-//            log.error("Lỗi khi gọi Patient Service: {}", e.getMessage());
-//            throw new IllegalArgumentException("Không kết nối được tới Patient Service");
-//        }
-//    }
+    // private PatientDTO getPatient(Long patientId) {
+    // try {
+    // RestResponse<PatientDTO> response = patientClient.getById(patientId);
+    // if (response == null || response.getData().isDeleted())
+    // throw new IllegalArgumentException("Bệnh nhân không tồn tại hoặc đã bị xoá");
+    // return response.getData();
+    // } catch (Exception e) {
+    // log.error("Lỗi khi gọi Patient Service: {}", e.getMessage());
+    // throw new IllegalArgumentException("Không kết nối được tới Patient Service");
+    // }
+    // }
     private PatientDTO getPatient(Long patientId) {
         try {
             RestResponse<PatientDTO> response = patientClient.getById(patientId);
@@ -203,15 +208,17 @@ public class TestOrderService {
 
     public PatientDTO getPatientByAccessionNumber(String accessionNumber) {
         TestOrder order = orderRepo.findByAccessionNumberAndDeletedFalse(accessionNumber)
-                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu xét nghiệm với số accession number đã cho"));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Không tìm thấy phiếu xét nghiệm với số accession number đã cho"));
         return getPatient(order.getPatientId());
     }
+
     public TestOrderDTO getTestOrderByAccessionNumber(String accessionNumber) {
         TestOrder order = orderRepo.findByAccessionNumberAndDeletedFalse(accessionNumber)
-                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu xét nghiệm với số accession number đã cho"));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Không tìm thấy phiếu xét nghiệm với số accession number đã cho"));
         return convertToTestOrderDTO(order);
     }
-
 
     public PageResponse<TestOrderResponse> getAllOrdersByPatientId(Long patientId, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
@@ -229,7 +236,7 @@ public class TestOrderService {
                 .build();
     }
 
-    public void asyncTestOrderFromUser(PatientUpdateEvent event){
+    public void asyncTestOrderFromUser(PatientUpdateEvent event) {
         List<TestOrder> orders = orderRepo.findByPatientIdAndDeletedFalse(event.getId());
         for (TestOrder order : orders) {
             order.setPatientName(event.getFullName());
@@ -243,7 +250,6 @@ public class TestOrderService {
         log.info("sync test orders from patient event: {}", safeJson(event));
     }
 
-
     private void logAudit(Long orderId, String action, String detail, Long operatorUserId) {
         auditRepo.save(HistoryOrderAudit.builder()
                 .orderId(orderId)
@@ -252,14 +258,13 @@ public class TestOrderService {
                 .operatorUserId(operatorUserId)
                 .build());
     }
+
     private String generateAccessionNumber() {
         // Lấy số lượng phiếu hiện có để sinh mã kế tiếp
         long count = orderRepo.count() + 1;
 
-
         return String.format("ACC%03d", count);
     }
-
 
     private String safeJson(Object obj) {
         try {

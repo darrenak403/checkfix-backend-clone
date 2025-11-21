@@ -1,6 +1,5 @@
 package ttldd.testorderservices.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,6 +53,7 @@ public class Comment {
             createdAt = LocalDateTime.now(); // Tự động gán thời gian khi lưu mới
         }
     }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_comment_id")
     private Comment parentComment;
