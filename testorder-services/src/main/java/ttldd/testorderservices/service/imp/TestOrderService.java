@@ -12,6 +12,7 @@ import ttldd.testorderservices.dto.request.TestOrderUpdateRequest;
 import ttldd.testorderservices.dto.request.TestOrderUpdateStatusRequest;
 import ttldd.testorderservices.dto.response.*;
 import ttldd.testorderservices.entity.*;
+import ttldd.testorderservices.mapper.CommentMapper;
 import ttldd.testorderservices.mapper.TestOrderMapper;
 import ttldd.testorderservices.repository.CommentRepository;
 import ttldd.testorderservices.repository.HistoryOrderAuditRepository;
@@ -42,6 +43,7 @@ public class TestOrderService {
     private final HistoryOrderAuditRepository auditRepo;
     private final PatientClient patientClient;
     private final TestOrderMapper mapper;
+    private final CommentMapper commentMapper;
     private final ObjectMapper om = new ObjectMapper().findAndRegisterModules();
     private final JwtUtils jwtUtils;
     private final UserClient userClient;
@@ -97,23 +99,18 @@ public class TestOrderService {
         TestOrder o = orderRepo.findById(id)
                 .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
                 .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại"));
-        List<Comment> comments = commentRepo.findByTestOrderIdAndStatus(o.getId(), CommentStatus.ACTIVE);
-        o.setComments(comments);
-        List<CommentResponse> commentResponses = comments.stream()
-                .map(c -> {
-                    long testOrderId = (c.getTestOrder() != null) ? c.getTestOrder().getId() : 0L;
-                    long testResultId = (c.getTestResult() != null) ? c.getTestResult().getId() : 0L;
-
-                    return CommentResponse.builder()
-                            .commentId(c.getId())
-                            .commentContent(c.getContent())
-                            .testOrderId(testOrderId)
-                            .doctorName(c.getDoctorId().toString())
-                            .testResultId(testResultId)
-                            .createdAt(c.getCreatedAt())
-                            .build();
-                })
+        
+        // Chỉ lấy comment cha (level = 1), replies sẽ được load tự động qua mapper
+        List<Comment> parentComments = commentRepo.findByTestOrderIdAndStatusAndLevelOrderByCreatedAtDesc(
+                o.getId(), CommentStatus.ACTIVE, 1);
+        
+        o.setComments(parentComments);
+        
+        // Sử dụng CommentMapper để map, doctorName đã có sẵn trong entity
+        List<CommentResponse> commentResponses = parentComments.stream()
+                .map(commentMapper::toResponse)
                 .toList();
+        
         TestOrderDetailResponse resp = mapper.toTestOrderDetailResponse(o);
         resp.setComments(commentResponses);
 //        var dto = TestOrderDetailResponse.builder()

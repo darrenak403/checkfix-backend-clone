@@ -6,16 +6,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentResponse {
-    private long commentId;
+    private Long commentId;
     private String doctorName;
-    private long testOrderId;
-    private long testResultId;
+    private Long testOrderId;
+    private Long testResultId;
     private String commentContent;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String updatedBy;
+    private Integer level;
+    private Long parentCommentId;
+    private List<CommentResponse> replies;
 }

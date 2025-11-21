@@ -73,10 +73,10 @@ public class CommentServiceImp implements CommentService {
             comment.setTestResult(result);
             comment.setTestOrder(testOrder);
             comment.setDoctorId(clientUser.getData().getId());
+            comment.setDoctorName(clientUser.getData().getFullName());
             comment.setContent(commentRequest.getContent());
+            comment.setCreatedAt(LocalDateTime.now());
             comment.setStatus(CommentStatus.ACTIVE);
-            comment.setTestResult(result);
-            comment.setTestOrder(testOrder);
 
             // Kiểm tra nếu là reply
             if (commentRequest.getParentCommentId() != null) {
@@ -107,11 +107,15 @@ public class CommentServiceImp implements CommentService {
 
             return CommentResponse.builder()
                     .commentId(saved.getId())
-                    .doctorName(clientUser.getData().getFullName())
+                    .doctorName(saved.getDoctorName())
                     .testOrderId(saved.getTestOrder().getId())
-                    .testResultId(saved.getTestResult() != null ? saved.getTestResult().getId() : 0L)
+                    .testResultId(saved.getTestResult().getId())
                     .commentContent(saved.getContent())
                     .createdAt(saved.getCreatedAt())
+                    .updatedAt(saved.getUpdatedAt())
+                    .updatedBy(saved.getUpdatedBy())
+                    .level(saved.getLevel())
+                    .parentCommentId(saved.getParentComment() != null ? saved.getParentComment().getId() : null)
                     .build();
         } catch (Exception e) {
             throw e;
