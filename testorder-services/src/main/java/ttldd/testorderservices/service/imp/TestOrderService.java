@@ -108,7 +108,7 @@ public class TestOrderService {
                             .commentId(c.getId())
                             .commentContent(c.getContent())
                             .testOrderId(testOrderId)
-                            .doctorName(jwtUtils.getFullName())
+                            .doctorName(c.getDoctorId().toString())
                             .testResultId(testResultId)
                             .createdAt(c.getCreatedAt())
                             .build();
