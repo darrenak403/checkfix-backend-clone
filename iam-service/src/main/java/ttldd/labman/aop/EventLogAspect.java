@@ -24,13 +24,17 @@ public class EventLogAspect {
 
     @Around("execution(* ttldd.labman.service.imp.*.create*(..)) || " +
             "execution(* ttldd.labman.service.imp.*.update*(..)) || " +
-            "execution(* ttldd.labman.service.imp.*.delete*(..))")
+            "execution(* ttldd.labman.service.imp.*.delete*(..)) || " +
+            "execution(* ttldd.labman.service.imp.*.forgot*(..)) || " +
+            "execution(* ttldd.labman.service.imp.*.reset*(..))")
     public Object logCUDOperation(ProceedingJoinPoint joinPoint) throws Throwable {
 
         String methodName = joinPoint.getSignature().getName();
         String action = methodName.startsWith("create") ? "CREATE" :
                 methodName.startsWith("update") ? "UPDATE" :
-                        methodName.startsWith("delete") ? "DELETE" : "UNKNOWN";
+                        methodName.startsWith("delete") ? "DELETE" :
+                                methodName.startsWith("forgot") ? "FORGOT_PASSWORD" :
+                                        methodName.startsWith("reset") ? "RESET_PASSWORD" : "UNKNOWN";
 
         String entity = joinPoint.getTarget().getClass().getSimpleName().replace("ServiceImpl", "");
 
@@ -43,16 +47,45 @@ public class EventLogAspect {
                 .entity(entity)
                 .performedBy(actor)
                 .timestamp(LocalDateTime.now())
-                .traceId(UUID.randomUUID().toString()) // traceId giúp theo dõi log liên service
+                .traceId(UUID.randomUUID().toString())
                 .build();
 
         try {
             Object result = joinPoint.proceed();
 
-            logDTO.setStatus("SUCCESS");
-            logDTO.setMessage("✅ " + action + " executed successfully on " + entity);
+            // Check if result has a 'success' field to determine actual status
+            boolean isSuccess = true;
+            String resultMessage = action + " executed successfully on " + entity;
 
-            // Lấy entityId (nếu trong request có field id)
+            if (result != null) {
+                try {
+                    var successField = result.getClass().getDeclaredField("success");
+                    successField.setAccessible(true);
+                    Object successValue = successField.get(result);
+
+                    if (successValue instanceof Boolean) {
+                        isSuccess = (Boolean) successValue;
+                    }
+
+                    // Get the message from the response if available
+                    if (!isSuccess) {
+                        try {
+                            var messageField = result.getClass().getDeclaredField("message");
+                            messageField.setAccessible(true);
+                            Object messageValue = messageField.get(result);
+                            if (messageValue != null) {
+                                resultMessage = messageValue.toString();
+                            }
+                        } catch (Exception ignored) {}
+                    }
+                } catch (NoSuchFieldException ignored) {
+                    // If no 'success' field exists, assume it's successful
+                }
+            }
+
+            logDTO.setStatus(isSuccess ? "SUCCESS" : "FAILURE");
+            logDTO.setMessage((isSuccess ? "✅ " : "⚠️ ") + resultMessage);
+
             Object[] args = joinPoint.getArgs();
             if (args.length > 0) {
                 try {

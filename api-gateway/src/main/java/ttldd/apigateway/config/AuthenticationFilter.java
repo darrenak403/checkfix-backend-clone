@@ -34,7 +34,8 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     @NonFinal
     private String[] whileList = {
             "/actuator/.*",
-            "/iam/auth/.*"
+            "/iam/auth/.*",
+            "/monitoring/api/monitorings.*"
     };
 
     @NonFinal
