@@ -1,3 +1,8 @@
+server:
+  port: 8084
+  servlet:
+    context-path: /warehouse
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/warehouse_db

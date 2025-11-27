@@ -6,16 +6,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.time.LocalDate;
-//hello
+
 @Document(collection = "reagent_inventory")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ReagentEntity {
-    @Id
+    @MongoId
     private String id;
 
     private ReagentType reagentType;

@@ -18,5 +18,7 @@ public interface ReagentService {
 
     UpdateReagentStatusResponse updateReagentStatus(UpdateReagentStatusRequest updateReagentRequest , String reagentId );
 
+    ReagentInstallResponse updateReagentInfo(ReagentInstallRequest reagentInstallRequest , String reagentId );
+
     ReagentDeleteResponse deleteReagent(String reagentId );
 }

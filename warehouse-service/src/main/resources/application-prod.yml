@@ -1,6 +1,10 @@
+server:
+  port: 8084
+  servlet:
+    context-path: /warehouse
 spring:
   datasource:
-    url: jdbc:postgresql://postgresql:5432/warehouse_db
+    url: jdbc:postgresql://postgres:5432/warehouse_db
     username: postgres
     password: 123456
     driver-class-name: org.postgresql.Driver
@@ -13,7 +17,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVER:kafka:9092}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -30,7 +34,7 @@ eureka:
     service-url:
       defaultZone: http://eureka-server:8761/eureka/
   instance:
-    hostname: localhost
+    prefer-ip-address: true
 
 management:
   endpoints:

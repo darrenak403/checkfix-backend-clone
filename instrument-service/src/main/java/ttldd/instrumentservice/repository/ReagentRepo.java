@@ -13,7 +13,7 @@ public interface ReagentRepo extends MongoRepository<ReagentEntity, String> {
     Optional<ReagentEntity> findByLotNumberAndDeletedFalse(String lotNumber);
     ReagentEntity findFirstByStatusOrderByExpiryDateAsc(ReagentStatus status);
     List<ReagentEntity> findByStatusAndDeletedFalse(ReagentStatus status);
-
+    List<ReagentEntity> findByDeletedFalse();
     Optional<ReagentEntity> findByIdAndStatus(String id, ReagentStatus status);
 
     Optional<ReagentEntity> findByReagentNameAndLotNumber(String name, String lotNumber);

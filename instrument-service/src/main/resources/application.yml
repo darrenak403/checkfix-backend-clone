@@ -1,7 +1,4 @@
-server:
-  port: 8085
-  servlet:
-    context-path: /instrument
+
 spring:
   application:
     name: instrument-service

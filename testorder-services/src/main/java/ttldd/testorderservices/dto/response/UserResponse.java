@@ -1,11 +1,13 @@
 package ttldd.testorderservices.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
+@Builder
 public class UserResponse {
     private String email;
     private String fullName;

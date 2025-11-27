@@ -98,14 +98,14 @@ public class TestOrderController {
     }
 
     @GetMapping("/accessionNumber/patient/{accessionNumber}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_STAFF') or hasAnyAuthority('ROLE_DOCTOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_STAFF') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('READ_ONLY')")
     public ResponseEntity<RestResponse<?>> getOrdersByAccessionNumber(@PathVariable String accessionNumber){
         PatientDTO patientDTO = service.getPatientByAccessionNumber(accessionNumber);
         return ResponseEntity.ok(RestResponse.success(patientDTO));
     }
 
     @GetMapping("/accessionNumber/testOrder/{accessionNumber}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_STAFF') or hasAnyAuthority('ROLE_DOCTOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_STAFF') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('READ_ONLY')")
     public ResponseEntity<RestResponse<?>> getTestOrdersByAccessionNumber(@PathVariable String accessionNumber){
         TestOrderDTO testOrderDTO = service.getTestOrderByAccessionNumber(accessionNumber);
         return ResponseEntity.ok(RestResponse.success(testOrderDTO));

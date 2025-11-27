@@ -122,14 +122,14 @@ public class HL7Utils {
     private double getRandomValue(Random random, double normalMin, double normalMax, double absoluteMin, double absoluteMax) {
         double chance = random.nextDouble();
         if (chance < 0.06) {
-            // 6% bất thường thấp
+            // 6% thấp
             return absoluteMin + random.nextDouble() * (normalMin - absoluteMin);
-        } else if (chance > 0.10) {
-            // 4% bất thường cao
-            return normalMax + random.nextDouble() * (absoluteMax - normalMax);
-        } else {
+        } else if (chance < 0.96) {
             // 90% bình thường
             return normalMin + random.nextDouble() * (normalMax - normalMin);
+        } else {
+            // 4% cao
+            return normalMax + random.nextDouble() * (absoluteMax - normalMax);
         }
     }
 
