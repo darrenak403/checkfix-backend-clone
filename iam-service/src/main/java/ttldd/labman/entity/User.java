@@ -25,7 +25,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Pattern(regexp = "^0\\d{9}$", message = "Phone must be 10 digits starting with 0")

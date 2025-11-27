@@ -1,8 +1,26 @@
+server:
+  port: 8085
+  servlet:
+    context-path: /instrument
+
 spring:
   data:
     mongodb:
       uri: mongodb://mongodb:27017/instrument_service
       database: instrument_service
 
-server:
-   port: 8085
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: true
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+  instance:
+    prefer-ip-address: true

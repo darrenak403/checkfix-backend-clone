@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết quả xét nghiệm đã sẵn sàng</title>
+    <style>
+        body { margin: 0; padding: 0; }
+        @media screen and (max-width: 600px) {
+            .content-wrapper { padding: 20px 20px !important; }
+        }
+    </style>
+</head>
+
+<body style="margin:0; padding:0; background-color:#F4F8FF; font-family: Arial, sans-serif; color:#333;">
+
+<table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#F4F8FF;">
+    <tr>
+        <td align="center">
+
+            <table width="600" cellpadding="0" cellspacing="0" role="presentation"
+                   style="max-width: 600px; width: 100%; margin: 40px auto; background-color: #ffffff;
+                          border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 86, 179, 0.08);
+                          overflow: hidden; border: 1px solid #E0EFFF;">
+
+                <!-- Header -->
+                <tr>
+                    <td align="center" style="padding: 28px 20px; background-color: #F4F9FF; border-bottom: 1px solid #EAF6FF;">
+                        <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #0056b3;">
+                            Thông báo Kết quả Xét nghiệm
+                        </h1>
+                    </td>
+                </tr>
+
+                <!-- Main Content -->
+                <tr>
+                    <td class="content-wrapper" style="padding: 40px 40px; font-size: 16px; line-height: 1.6;">
+                        <h2 style="color: #0056b3; margin-top: 0; margin-bottom: 18px; font-size: 22px; font-weight: 600;">
+                            Xin chào <span th:text="${userName}">Bạn</span>,
+                        </h2>
+
+                        <p style="margin: 0 0 15px 0;">
+                            Hệ thống xin thông báo <strong>kết quả xét nghiệm</strong> của bạn đã được cập nhật.
+                        </p>
+
+                        <p style="margin: 0 0 15px 0;">
+                            Dưới đây là thông tin chi tiết:
+                        </p>
+
+                        <!-- Info Box -->
+                        <table width="100%" cellpadding="0" cellspacing="0"
+                               style="background-color:#F4F9FF; border:1px solid #E0EFFF; border-radius:8px; margin: 20px 0;">
+                            <tr>
+                                <td style="padding: 20px 25px; font-size: 16px;">
+                                    <p style="margin:0 0 12px 0;">
+                                        <strong>Mã xét nghiệm:</strong>
+                                        <span style="color:#0056b3;" th:text="${accession}">ABC12345</span>
+                                    </p>
+                                    <p style="margin:0 0 12px 0;">
+                                        <strong>Bệnh nhân:</strong>
+                                        <span style="color:#0056b3;" th:text="${patientName}">Nguyễn Văn A</span>
+                                    </p>
+                                    <p style="margin:0 0 12px 0;">
+                                        <strong>Tên xét nghiệm:</strong>
+                                        <span style="color:#0056b3;" th:text="${testName}">Huyết học tổng quát</span>
+                                    </p>
+
+                                    <p style="margin:0;">
+                                        <strong>Ngày hoàn thành:</strong>
+                                        <span style="color:#0056b3;" th:text="${completedDate}">2025-01-01</span>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- View Result Button -->
+                        <table width="100%" cellpadding="0" cellspacing="0" style="text-align:center; margin-top:25px;">
+                            <tr>
+                                <td align="center">
+                                    <table cellpadding="0" cellspacing="0" role="presentation">
+                                        <tr>
+                                            <td align="center" style="background-color:#007BFF; border-radius:6px;">
+                                                <a th:href="${resultLink}" target="_blank"
+                                                   style="display:inline-block; background-color:#007BFF;
+                                                   color:#ffffff; text-decoration:none; padding:14px 28px;
+                                                   border-radius:6px; font-weight:600; font-size:16px;">
+                                                    Xem kết quả tại đây
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <p style="margin: 20px 0 0 0;">
+                            Nếu bạn cần hỗ trợ, vui lòng liên hệ đội ngũ hỗ trợ của chúng tôi.
+                        </p>
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td style="border-top: 1px solid #EAF6FF; padding: 30px 40px; background-color:#FAFAFB;
+                               font-size:14px; color:#777; text-align:left;">
+                        <p style="margin:0 0 5px 0;">Trân trọng,</p>
+                        <p style="margin:0 0 15px 0;"><strong>Laboratory Management System</strong></p>
+
+                        <p style="margin:15px 0 0 0; font-size:12px; color:#AAA;">
+                            Đây là email tự động, vui lòng không trả lời email này.<br>
+                            © 2025 Laboratory Management System. All rights reserved.
+                        </p>
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

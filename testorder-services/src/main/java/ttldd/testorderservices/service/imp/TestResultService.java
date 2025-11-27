@@ -7,15 +7,19 @@ import ttldd.testorderservices.entity.TestOrder;
 import ttldd.testorderservices.entity.TestResult;
 import ttldd.testorderservices.entity.TestResultParameter;
 import ttldd.testorderservices.mapper.TestResultMapper;
+import ttldd.testorderservices.producer.NotificationProducer;
 import ttldd.testorderservices.repository.TestOrderRepository;
 import ttldd.testorderservices.repository.TestResultRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ttldd.testorderservices.util.CryptoUtil;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +30,8 @@ public class TestResultService {
     private final TestResultRepository resultRepo;
 
     private final TestResultMapper mapper;
+    private final NotificationProducer notificationProducer;
+    private final CryptoUtil cryptoUtil;
 
 
     @Transactional
@@ -49,7 +55,6 @@ public class TestResultService {
 
             String[] lines = hl7Formatted.split("\\r?\\n");
             String accession = null;
-            String instrument = "";
             List<TestResultParameter> params = new ArrayList<>();
 
             for (String line : lines) {
@@ -115,10 +120,36 @@ public class TestResultService {
             }
             result.setParameters(params);
 
-//            resultRepo.save(result);
             order.setTestResult(result);
             order.setStatus(OrderStatus.COMPLETED);
             orderRepo.save(order);
+            //send mail test result notification
+
+            String encryptedAccession = cryptoUtil.encryptForURL(order.getAccessionNumber());
+            String encryptedOrderId = cryptoUtil.encryptForURL(String.valueOf(order.getId()));
+            String resultLink = "http://localhost:3000/service/my-medical-records/"
+                    + encryptedOrderId
+                    + "/"
+                    + encryptedAccession;
+
+            String testName = params.isEmpty() ? "Xét nghiệm" : params.getFirst().getParamName();
+            String safeFullName = (order.getPatientName() == null || order.getPatientName().trim().isEmpty())
+                    ? "Bạn"
+                    : order.getPatientName();
+            notificationProducer.sendEmail(
+                    "send-email",
+                    order.getEmail(),
+                    "Kết quả xét nghiệm của bạn đã sẵn sàng",
+                    "TEST_RESULT_NOTIFICATION",
+                    Map.of(
+                            "userName", safeFullName,
+                            "accession", order.getAccessionNumber(),
+                            "patientName", safeFullName,
+                            "testName", testName,
+                            "completedDate", LocalDate.now().toString(),
+                            "resultLink", resultLink
+                    )
+            );
 
             log.info("HL7 parsed successfully for accession {} ({} params)", finalAccession, params.size());
             return RestResponse.success("HL7 parsed successfully", result);

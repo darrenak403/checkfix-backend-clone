@@ -33,7 +33,7 @@ public class UserController {
     private final IdentityCardService identityCardService;
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR')  or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('VIEW_USER')")
     public ResponseEntity<?> getAllUsers() {
         BaseResponse response = new BaseResponse();
         List<UserResponse> users = userService.getAllUser();
@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR')  or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('VIEW_USER')")
     public ResponseEntity<?> getUser(@PathVariable Long id) {
         UserResponse user = userService.getUserById(id);
         RestResponse<UserResponse> response = RestResponse.<UserResponse>builder()
@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('CREATE_USER')")
     public  ResponseEntity<RestResponse<UserResponse>> createUser(@RequestBody UserCreationRequest user) {
         UserResponse createdUser = userService.createUser(user);
         RestResponse<UserResponse> response = RestResponse.<UserResponse>builder()
@@ -68,7 +68,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated() or hasAnyAuthority('MODIFY_USER')")
     public ResponseEntity<RestResponse<UserResponse>> updateUser(@PathVariable Long id ,@Valid @RequestBody UserUpdateRequest user) {
         UserResponse updatedUser = userService.updateUser(id,user);
         RestResponse<UserResponse> response = RestResponse.<UserResponse>builder()
@@ -80,7 +80,7 @@ public class UserController {
     }
 
     @PatchMapping("/avatar")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated() or hasAnyAuthority('MODIFY_USER')")
     public ResponseEntity<RestResponse<UserResponse>> updateAvatar(@RequestBody UpdateAvatarRequest rq) {
         UserResponse updatedUser = userService.updateAvatar(rq);
         RestResponse<UserResponse> response = RestResponse.<UserResponse>builder()

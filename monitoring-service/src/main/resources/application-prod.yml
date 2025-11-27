@@ -1,3 +1,8 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /monitoring
+
 spring:
 
 
@@ -17,7 +22,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   kafka:
-    bootstrap-servers: localhost:9094
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVER:kafka:9092}
     consumer:
       group-id: monitoring-group
       auto-offset-reset: latest
@@ -25,16 +30,16 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://localhost:8761/eureka/
-#  instance:
-#    prefer-ip-address: true
-#
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: "*"
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 

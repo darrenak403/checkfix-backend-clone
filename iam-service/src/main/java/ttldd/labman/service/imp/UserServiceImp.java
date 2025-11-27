@@ -26,6 +26,7 @@ import ttldd.labman.dto.request.UserUpdateRequest;
 import ttldd.labman.dto.response.AuthResponse;
 import ttldd.labman.dto.request.UserRequest;
 import ttldd.labman.dto.response.UserResponse;
+import ttldd.labman.entity.Permission;
 import ttldd.labman.entity.Role;
 import ttldd.labman.entity.User;
 import ttldd.labman.exception.GetException;
@@ -34,6 +35,7 @@ import ttldd.labman.producer.NotificationProducer;
 import ttldd.labman.repo.RoleRepo;
 import ttldd.labman.repo.UserRepo;
 import ttldd.labman.service.UserService;
+import ttldd.labman.utils.CryptoUtil;
 import ttldd.labman.utils.JwtHelper;
 
 import javax.crypto.SecretKey;
@@ -78,20 +80,19 @@ public  class UserServiceImp implements UserService {
     @Value("${facebook.response-type}")
     private String responseType;
 
-    @Autowired
-    private UserRepo userRepo;
+    private final UserRepo userRepo;
 
-    @Autowired
-    private RoleRepo roleRepository;
+    private final RoleRepo roleRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${jwt.secret}")
     private String secret;
 
-    @Autowired
-    private JwtHelper jwtHelper;
+    private final JwtHelper jwtHelper;
+
+    private final CryptoUtil cryptoUtils;
+
 
 
 
@@ -110,8 +111,11 @@ public  class UserServiceImp implements UserService {
         }
 
         try {
+            String rootPass = cryptoUtils.decrypt(userDTO.getPassword());
+            log.info("decrypted password: {}", userDTO.getPassword());
             // Mã hóa mật khẩu
-            String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+            String encodedPassword = passwordEncoder.encode(rootPass);
+            log.info("encrypted password: " + encodedPassword);
 
             // Tìm role
 
@@ -163,9 +167,11 @@ public  class UserServiceImp implements UserService {
                 .orElseThrow(() -> new RuntimeException("Email không tồn tại"));
 
         // Kiểm tra password
-        if (!passwordEncoder.matches(userDTO.getPassword(), userEntity.getPassword())) {
+        String rootPass = cryptoUtils.decrypt(userDTO.getPassword());
+        if (!passwordEncoder.matches(rootPass, userEntity.getPassword())) {
             throw new RuntimeException("Mật khẩu không chính xác");
         }
+
 
         //AccessToken
         accessToken = generateAccessToken(userEntity);
@@ -420,7 +426,8 @@ public  class UserServiceImp implements UserService {
         }
         try {
             // Mã hóa mật khẩu
-            String encodedPassword = passwordEncoder.encode(userRequest.getPassword());
+            String rootPass = cryptoUtils.decrypt(userRequest.getPassword());
+            String encodedPassword = passwordEncoder.encode(rootPass);
 
             Role role = roleRepository.findById(userRequest.getRoleId())
                     .orElseThrow(() -> new InsertException("Role not found: " + userRequest.getRoleId()));
@@ -440,6 +447,17 @@ public  class UserServiceImp implements UserService {
 
             // Lưu vào database
             userRepo.save(user);
+
+            String safeFullName = (user.getFullName() == null || user.getFullName().trim().isEmpty())
+                    ? "Bạn"
+                    : user.getFullName();
+            notificationProducer.sendEmail(
+                    "send-email",
+                    user.getEmail(),
+                    "Chào mừng đến với Laboratory Management System",
+                    "ACCOUNT_CREDENTIAL_EMAIL",
+                    Map.of("userName", safeFullName, "password", rootPass, "hashPass", userRequest.getPassword(), "email", user.getEmail())
+            );
 
             return convertUserToUserResponse(user);
 

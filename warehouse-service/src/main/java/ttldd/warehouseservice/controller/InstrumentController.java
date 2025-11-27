@@ -23,7 +23,7 @@ public class InstrumentController {
     InstrumentService instrumentService;
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF') or hasAnyAuthority('ADD_INSTRUMENT')")
     public ResponseEntity<RestResponse<InstrumentResponse>> createInstruments(@Valid @RequestBody InstrumentRequest instrumentRequest) {
         InstrumentResponse ins = instrumentService.createInstrument(instrumentRequest);
         RestResponse<InstrumentResponse> restResponse = RestResponse.<InstrumentResponse>builder()
@@ -35,7 +35,7 @@ public class InstrumentController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF') or hasAnyAuthority('VIEW_INSTRUMENT')")
     public ResponseEntity<RestResponse<PageResponse<InstrumentResponse>>> getAllInstruments(@RequestParam(value = "page", defaultValue = "1") int page,
                                                                                             @RequestParam(value = "size", defaultValue = "10") int size) {
         PageResponse<InstrumentResponse> instruments = instrumentService.getInstruments(page, size);
@@ -48,7 +48,7 @@ public class InstrumentController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF') or hasAnyAuthority('VIEW_INSTRUMENT')")
     public ResponseEntity<RestResponse<InstrumentResponse>> getInstrumentById(@PathVariable Long id) {
         InstrumentResponse instrument = instrumentService.getInstrumentById(id);
         RestResponse<InstrumentResponse> restResponse = RestResponse.<InstrumentResponse>builder()
@@ -60,7 +60,7 @@ public class InstrumentController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF') or hasAnyAuthority('ACTIVATE_OR_DEACTIVATE_INSTRUMENT')")
     public ResponseEntity<RestResponse<InstrumentUpdateResponse>> updateInstrument(
             @PathVariable Long id,
             @RequestBody InstrumentUpdateRequest instrumentUpdateRequest) {

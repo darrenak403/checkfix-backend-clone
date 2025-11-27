@@ -1,5 +1,6 @@
 package ttldd.instrumentservice.service.imp;
 
+import org.springframework.util.StringUtils;
 import ttldd.instrumentservice.dto.request.ReagentInstallRequest;
 import ttldd.instrumentservice.dto.request.UpdateReagentStatusRequest;
 import ttldd.instrumentservice.dto.response.ReagentDeleteResponse;
@@ -20,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
 //hello
 @Service
 public class ReagentServiceImp implements ReagentService {
@@ -125,7 +127,7 @@ public class ReagentServiceImp implements ReagentService {
 
     @Override
     public List<ReagentGetAllResponse> getALlReagents() {
-        List<ReagentEntity> reagentEntity = reagentRepo.findByStatusAndDeletedFalse(ReagentStatus.AVAILABLE);
+        List<ReagentEntity> reagentEntity = reagentRepo.findByDeletedFalse();
 
         //convert list
         return reagentEntity.stream()
@@ -134,18 +136,20 @@ public class ReagentServiceImp implements ReagentService {
     }
 
     @Override
-    public UpdateReagentStatusResponse updateReagentStatus(UpdateReagentStatusRequest updateReagentRequest , String reagentId ) {
+    public UpdateReagentStatusResponse updateReagentStatus(UpdateReagentStatusRequest updateReagentRequest, String reagentId) {
         ReagentEntity reagentEntity = reagentRepo.findByIdAndDeletedFalse(reagentId).orElseThrow(() -> new RuntimeException("Reagent with ID " + reagentId + " not found."));
 
         ReagentStatus currentStatus = reagentEntity.getStatus();
 
-        if(reagentEntity.getStatus() == updateReagentRequest.getReagentStatus()) {
-            throw new RuntimeException("Reagent " + reagentEntity.getReagentName() + " is already in status " + updateReagentRequest.getReagentStatus());
-        }
-        if(updateReagentRequest.getQuantity() < 5 && updateReagentRequest.getReagentStatus() == ReagentStatus.AVAILABLE) {
+//        if (reagentEntity.getStatus() == updateReagentRequest.getReagentStatus()) {
+//            throw new RuntimeException("Reagent " + reagentEntity.getReagentName() + " is already in status " + updateReagentRequest.getReagentStatus());
+//        }
+        if (updateReagentRequest.getQuantity() < 5 && updateReagentRequest.getReagentStatus() == ReagentStatus.AVAILABLE) {
             throw new RuntimeException("Quantity must be at least 5 to set status to AVAILABLE.");
         }
-        reagentEntity.setStatus(updateReagentRequest.getReagentStatus());
+        if(StringUtils.hasText(updateReagentRequest.getReagentStatus().toString())){
+            reagentEntity.setStatus(updateReagentRequest.getReagentStatus());
+        }
         reagentEntity.setQuantity(updateReagentRequest.getQuantity());
         reagentRepo.save(reagentEntity);
 
@@ -173,6 +177,51 @@ public class ReagentServiceImp implements ReagentService {
                 .timestamp(LocalDateTime.now())
                 .action(reagentUpdateAuditLogEntity.getAction())
                 .updatedBy(jwtUtils.getFullName())
+                .build();
+    }
+
+    @Override
+    public ReagentInstallResponse updateReagentInfo(ReagentInstallRequest reagentInstallRequest, String reagentId) {
+        ReagentEntity reagentEntity = reagentRepo.findByIdAndDeletedFalse(reagentId).orElseThrow(() -> new RuntimeException("Reagent with ID " + reagentId + " not found."));
+        if (StringUtils.hasText(reagentInstallRequest.getReagentName())) {
+            reagentEntity.setReagentName(reagentInstallRequest.getReagentName());
+        }
+        if (reagentInstallRequest.getReagentType() != null) {
+            reagentEntity.setReagentType(reagentInstallRequest.getReagentType());
+        }
+        reagentEntity.setQuantity(reagentInstallRequest.getQuantity());
+        if (StringUtils.hasText(reagentInstallRequest.getUnit())) {
+            reagentEntity.setUnit(reagentInstallRequest.getUnit());
+        }
+        if (reagentInstallRequest.getExpiryDate() != null) {
+            reagentEntity.setExpiryDate(reagentInstallRequest.getExpiryDate());
+        }
+        if (StringUtils.hasText(reagentInstallRequest.getVendorId())) {
+            reagentEntity.setVendorId(reagentInstallRequest.getVendorId());
+        }
+        if (StringUtils.hasText(reagentInstallRequest.getVendorName())) {
+            reagentEntity.setVendorName(reagentInstallRequest.getVendorName());
+        }
+        if (StringUtils.hasText(reagentInstallRequest.getVendorContact())) {
+            reagentEntity.setVendorContact(reagentInstallRequest.getVendorContact());
+        }
+        if (StringUtils.hasText(reagentInstallRequest.getRemarks())) {
+            reagentEntity.setRemarks(reagentInstallRequest.getRemarks());
+        }
+        reagentRepo.save(reagentEntity);
+        return ReagentInstallResponse.builder()
+                .reagentId(reagentEntity.getId())
+                .reagentType(reagentEntity.getReagentType())
+                .reagentName(reagentEntity.getReagentName())
+                .lotNumber(reagentEntity.getLotNumber())
+                .quantity(reagentEntity.getQuantity())
+                .unit(reagentEntity.getUnit())
+                .expiryDate(reagentEntity.getExpiryDate())
+                .vendorId(reagentEntity.getVendorId())
+                .vendorName(reagentEntity.getVendorName())
+                .installedBy(reagentEntity.getInstalledBy())
+                .installDate(reagentEntity.getInstallDate())
+                .status(reagentEntity.getStatus() != null ? reagentEntity.getStatus().toString() : null)
                 .build();
     }
 

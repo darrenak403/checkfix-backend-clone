@@ -35,6 +35,13 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
             case "RESET_PASSWORD_EMAIL":
                 templateName = "email/password-changed-template";
                 break;
+
+            case "ACCOUNT_CREDENTIAL_EMAIL":
+                templateName = "email/account-credential";
+                break;
+            case "TEST_RESULT_NOTIFICATION":
+                templateName = "email/test-result-template";
+                break;
             default:
                 throw new IllegalArgumentException("Unknown template code: " + templateCode);
         }

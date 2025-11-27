@@ -14,17 +14,17 @@ import java.util.List;
 
 //hello
 @RestController
-    @RequestMapping("/reagents")
+@RequestMapping("/reagents")
 public class ReagentInstallController {
     @Autowired
     private ReagentService reagentService;
 
     @PostMapping("/install")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF') or hasAnyAuthority('ADD_REAGENTS')")
     public ResponseEntity<?> installReagent(@Valid @RequestBody ReagentInstallRequest reagentInstallRequest) {
         BaseResponse baseResponse = new BaseResponse();
         try {
-            ReagentInstallResponse updateInstrument =  reagentService.installReagent(reagentInstallRequest);
+            ReagentInstallResponse updateInstrument = reagentService.installReagent(reagentInstallRequest);
             baseResponse.setStatus(200);
             baseResponse.setMessage("Reagent installed successfully");
             baseResponse.setData(updateInstrument);
@@ -37,12 +37,12 @@ public class ReagentInstallController {
 
     }
 
-    @GetMapping("/all" )
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF')")
+    @GetMapping("/all")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF') or hasAnyAuthority('ADD_REAGENTS')")
     public ResponseEntity<?> getAllReagents() {
         BaseResponse baseResponse = new BaseResponse();
         try {
-            List<ReagentGetAllResponse> reagents =  reagentService.getALlReagents();
+            List<ReagentGetAllResponse> reagents = reagentService.getALlReagents();
             baseResponse.setStatus(200);
             baseResponse.setMessage("Get all reagents successfully");
             baseResponse.setData(reagents);
@@ -53,8 +53,9 @@ public class ReagentInstallController {
             return ResponseEntity.status(500).body(baseResponse);
         }
     }
+
     @PatchMapping("/{reagentId}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF') or hasAnyAuthority('MODIFY_REAGENTS')")
     public ResponseEntity<?> updateReagentStatus(@Valid @RequestBody UpdateReagentStatusRequest updateReagentStatusRequest, @PathVariable("reagentId") String reagentId) {
         BaseResponse baseResponse = new BaseResponse();
 
@@ -72,8 +73,21 @@ public class ReagentInstallController {
         }
     }
 
+    @PatchMapping("/info/{reagentId}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_STAFF', 'MODIFY_REAGENTS')")
+    public ResponseEntity<RestResponse<ReagentInstallResponse>> updateReagentInfo(@Valid @RequestBody ReagentInstallRequest reagentInstallRequest, @PathVariable("reagentId") String reagentId) {
+
+        ReagentInstallResponse response = reagentService.updateReagentInfo(reagentInstallRequest, reagentId);
+        RestResponse<ReagentInstallResponse> baseResponse = RestResponse.<ReagentInstallResponse>builder()
+                .statusCode(200)
+                .message("Reagent info updated successfully")
+                .data(response)
+                .build();
+        return ResponseEntity.ok(baseResponse);
+    }
+
     @DeleteMapping("/{reagentId}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MANAGER') or hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ROLE_STAFF') or hasAnyAuthority('DELETE_REAGENTS')")
     public ResponseEntity<?> deleteReagent(@PathVariable("reagentId") String reagentId) {
         BaseResponse baseResponse = new BaseResponse();
         try {

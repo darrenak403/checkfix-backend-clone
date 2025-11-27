@@ -1,7 +1,4 @@
-server:
-  port: 8084
-  servlet:
-    context-path: /warehouse
+
 
 spring:
   application:

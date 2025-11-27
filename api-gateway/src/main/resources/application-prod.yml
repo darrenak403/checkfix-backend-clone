@@ -1,36 +1,161 @@
 app:
   prefix: /v1/api
+
 server:
   port: 6789
+
 spring:
+  application:
+    name: api-gateway
+
   cloud:
     gateway:
       routes:
+        #IAM SERVICE
         - id: iam-service
           uri: lb://iam-service
           predicates:
             - Path=${app.prefix}/iam/**
           filters:
             - StripPrefix=2
+
+        #  PATIENT SERVICE
         - id: patient-service
           uri: lb://patient-service
           predicates:
             - Path=${app.prefix}/patient/**
           filters:
             - StripPrefix=2
-        - id: testOrder-service
+
+        # TESTORDER SERVICE
+        - id: testorder-service
           uri: lb://testorder-service
           predicates:
             - Path=${app.prefix}/orders/**, ${app.prefix}/comments/**, ${app.prefix}/results/**
           filters:
             - StripPrefix=2
+        # WAREHOUSE SERVICE
+        - id: warehouse-service
+          uri: lb://warehouse-service
+          predicates:
+            - Path=${app.prefix}/warehouse/**
+          filters:
+            - StripPrefix=2
+        # INSTRUMENT SERVICE
+        - id: instrument-service
+          uri: lb://instrument-service
+          predicates:
+            - Path=${app.prefix}/instrument/**
+          filters:
+            - StripPrefix=2
+        # MONITORING SERVICE
+        - id: monitoring-service
+          uri: lb://monitoring-service
+          predicates:
+            - Path=${app.prefix}/monitoring/**
+          filters:
+            - StripPrefix=2
+
+        # SWAGGER DOCS
+        - id: iam-openapi
+          uri: http://localhost:8081
+          predicates:
+            - Path=/iam/v3/api-docs
+          filters:
+            - name: ModifyResponseBody
+              args:
+                inClass: java.lang.String
+                outClass: java.lang.String
+                rewriteFunction: "#{@swaggerRewrite}"
+
+        - id: patient-openapi
+          uri: http://localhost:8082
+          predicates:
+            - Path=/patient/v3/api-docs
+          filters:
+            - StripPrefix=1
+            - name: ModifyResponseBody
+              args:
+                inClass: java.lang.String
+                outClass: java.lang.String
+                rewriteFunction: "#{@swaggerRewrite}"
+
+        - id: testorder-openapi
+          uri: http://localhost:8083
+          predicates:
+            - Path=/testOrder/v3/api-docs
+          filters:
+            - StripPrefix=1
+            - name: ModifyResponseBody
+              args:
+                inClass: java.lang.String
+                outClass: java.lang.String
+                rewriteFunction: "#{@swaggerRewrite}"
+
+        - id: warehouse-openapi
+          uri: http://localhost:8084
+          predicates:
+            - Path=/warehouse/v3/api-docs
+          filters:
+            - name: ModifyResponseBody
+              args:
+                inClass: java.lang.String
+                outClass: java.lang.String
+                rewriteFunction: "#{@swaggerRewrite}"
+
+        - id: instrument-openapi
+          uri: http://localhost:8085
+          predicates:
+            - Path=/instrument/v3/api-docs
+          filters:
+            - name: ModifyResponseBody
+              args:
+                inClass: java.lang.String
+                outClass: java.lang.String
+                rewriteFunction: "#{@swaggerRewrite}"
+        - id: monitoring-openapi
+          uri: http://localhost:8088
+          predicates:
+            - Path=/monitoring/v3/api-docs
+          filters:
+            - name: ModifyResponseBody
+              args:
+                inClass: java.lang.String
+                outClass: java.lang.String
+                rewriteFunction: "#{@swaggerRewrite}"
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: IAM Service
+        url: /iam/v3/api-docs
+      - name: Patient Service
+        url: /patient/v3/api-docs
+      - name: TestOrder Service
+        url: /testOrder/v3/api-docs
+      - name: Warehouse Service
+        url: /warehouse/v3/api-docs
+      - name: Instrument Service
+        url: /instrument/v3/api-docs
+      - name: Monitoring Service
+        url: /monitoring/v3/api-docs
+  api-docs:
+    enabled: true
 
 eureka:
-    client:
-      service-url:
-        defaultZone: http://eureka-server:8761/eureka/
-    instance:
-      hostname: eureka-server
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
 
 management:
   endpoints:
@@ -40,8 +165,12 @@ management:
   endpoint:
     health:
       show-details: always
+
   prometheus:
     metrics:
       export:
         enabled: true
+
+
+
 

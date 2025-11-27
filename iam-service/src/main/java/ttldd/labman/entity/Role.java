@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -26,15 +27,17 @@ public class Role {
     @NotBlank(message = "Role code cannot be blank")
     private String roleCode;
 
-    @NotBlank(message = "Role description cannot be blank")
-    private String description;
-
-    @Column(nullable = false, columnDefinition = "VARCHAR(50) DEFAULT 'READ_ONLY'")
-    private String privileges;
-
-
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private List<User> user;
+
+    @ManyToMany
+    @JoinTable(
+            name = "role_permissions",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private List<Permission> permissions = new ArrayList<>();
+
 
     public void addUser(User object) {
         this.user.add(object);

@@ -24,7 +24,7 @@ public class CommentController {
     private JwtUtils jwtUtils;
 
     @PostMapping
-    @PreAuthorize("  hasAnyAuthority('ROLE_DOCTOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('ADD_COMMENT')")
     public ResponseEntity<?> addComment(@RequestBody CommentRequest commentRequest) {
 
         CommentResponse comment = commentService.addComment(commentRequest);
@@ -45,7 +45,7 @@ public class CommentController {
     }
 
     @PutMapping("/update")
-    @PreAuthorize("  hasAnyAuthority('ROLE_DOCTOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('MODIFY_COMMENT')")
     public ResponseEntity<?> updateComment(@RequestBody CommentUpdateRequest commentRequest ) {
 
         try {
@@ -75,7 +75,7 @@ public class CommentController {
     }
 
     @DeleteMapping
-    @PreAuthorize("  hasAnyAuthority('ROLE_DOCTOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_DOCTOR') or hasAnyAuthority('DELETE_COMMENT')")
     public ResponseEntity<?> deleteComment(@RequestBody CommentDeleteRequest commentRequest ) {
         BaseResponse baseResponse = new BaseResponse();
         CommentDeleteResponse comment = commentService.deleteComment(commentRequest);
