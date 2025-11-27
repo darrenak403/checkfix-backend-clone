@@ -40,6 +40,8 @@ app:
     url: http://localhost:8082
   iam-service:
     url: http://localhost:8081/iam
+  security:
+    encryption-key: 1a9733d7738894c5
 
 springdoc:
   swagger-ui:
@@ -59,4 +61,5 @@ management:
     web:
       exposure:
         include: "*"
+
 
