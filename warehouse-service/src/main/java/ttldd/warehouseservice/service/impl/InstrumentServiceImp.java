@@ -37,6 +37,12 @@ public class InstrumentServiceImp implements InstrumentService {
 
     @Override
     public InstrumentResponse createInstrument(InstrumentRequest instrumentRequest) {
+
+        instrumentRepo.findBySerialNumber(instrumentRequest.getSerialNumber())
+                .ifPresent(i -> {
+                    throw new IllegalArgumentException("Serial number này đã tồn tại trong hệ thống: " + instrumentRequest.getSerialNumber());
+                });
+
         Instrument instrument = instrumentMapper.toInstrumentEntity(instrumentRequest);
 
         instrument.setCreatedBy(jwtUtils.getFullName());

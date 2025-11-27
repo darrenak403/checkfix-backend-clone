@@ -11,9 +11,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class InstrumentRequest {
 
-    @NotBlank
+    @NotBlank(message = "Instrument name must not be blank")
     String name;
 
-    @NotBlank
+    @NotBlank(message = "Serial number must not be blank")
     String serialNumber;
 }

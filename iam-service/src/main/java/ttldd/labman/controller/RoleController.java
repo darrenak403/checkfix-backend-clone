@@ -1,6 +1,5 @@
 package ttldd.labman.controller;
 
-import feign.Body;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ttldd.labman.dto.request.PermissionRequest;
 import ttldd.labman.dto.request.RoleRequest;
+import ttldd.labman.dto.request.RoleUpdateRequest;
 import ttldd.labman.dto.response.PermissionResponse;
 import ttldd.labman.dto.response.RestResponse;
 import ttldd.labman.dto.response.RoleResponse;
@@ -46,7 +47,7 @@ public class RoleController {
     }
     @PatchMapping
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('UPDATE_ROLE')")
-    public ResponseEntity<RestResponse<RoleResponse>> updateRole(@RequestParam Long id, @RequestBody RoleRequest request) {
+    public ResponseEntity<RestResponse<RoleResponse>> updateRole(@RequestParam Long id, @RequestBody RoleUpdateRequest request) {
         RoleResponse updatedRole = roleService.updateRole(id, request);
         RestResponse<RoleResponse> response = RestResponse.<RoleResponse>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -62,4 +63,28 @@ public class RoleController {
         RestResponse<List<PermissionResponse>> response = RestResponse.success(permissions);
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/permissions/{permissionId}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('DELETE_ROLE')")
+    public ResponseEntity<RestResponse<Void>> deletePermission(@PathVariable Long permissionId) {
+        permissionService.deletePermission(permissionId);
+        RestResponse<Void> response = RestResponse.<Void>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Permission deleted successfully")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping("/permissions")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('CREATE_ROLE')")
+    public ResponseEntity<RestResponse<PermissionResponse>> createPermission(@RequestBody PermissionRequest permissionRequest) {
+        PermissionResponse permission = permissionService.createPermission(permissionRequest);
+        RestResponse<PermissionResponse> response = RestResponse.<PermissionResponse>builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message("Permission created successfully")
+                .data(permission)
+                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
 }

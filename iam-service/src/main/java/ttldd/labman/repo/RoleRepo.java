@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface RoleRepo extends JpaRepository<Role, Long> {
     Optional<Role> findByRoleCode(String roleCode);
 
-    @Query("SELECT p.name FROM Role r JOIN r.permissions p WHERE r.roleCode = :roleCode")
+    @Query("SELECT p.name FROM Role r JOIN r.permissions p WHERE r.roleCode = :roleCode and p.deleted = false")
     List<String> findPermissionsByRoleCode(@Param("roleCode") String roleCode);
 }

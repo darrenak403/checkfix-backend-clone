@@ -7,9 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Table(name = "permissions")
 @AllArgsConstructor
@@ -24,7 +22,13 @@ public class Permission {
     @Column(unique = true, nullable = false)
     private String name;
     private String description;
+    private boolean deleted = false;
     @ManyToMany(mappedBy = "permissions")
     private List<Role> roles = new ArrayList<>();
+
+    public void removeRole(Role role) {
+        this.roles.remove(role);
+        role.getPermissions().remove(this);
+    }
 
 }

@@ -1,5 +1,6 @@
 package ttldd.labman.utils;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
@@ -12,7 +13,8 @@ import java.util.Base64;
 
 @Component
 public class CryptoUtil {
-    private static final String SECRET_KEY = "1a9733d7738894c5";
+    @Value("${app.security.crypto-secret}")
+    private String SECRET_KEY;
 
     private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
 

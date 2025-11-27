@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import ttldd.labman.dto.request.RoleRequest;
+import ttldd.labman.dto.request.RoleUpdateRequest;
 import ttldd.labman.dto.response.RoleResponse;
 import ttldd.labman.entity.Permission;
 import ttldd.labman.entity.Role;
@@ -16,7 +16,6 @@ import ttldd.labman.repo.RoleRepo;
 import ttldd.labman.service.RoleService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -53,31 +52,27 @@ public class RoleServiceImp implements RoleService {
     }
 
     @Override
-    public RoleResponse updateRole(Long roleId, RoleRequest request) {
+    public RoleResponse updateRole(Long roleId, RoleUpdateRequest request) {
         Role role = roleRepo.findById(roleId)
                 .orElseThrow(() -> new RuntimeException("Role not found with id: " + roleId));
 
-        if(StringUtils.hasText(request.getRoleName())) {
-            role.setRoleName(request.getRoleName());
-        }
-
-        if (StringUtils.hasText(request.getRoleCode())) {
-            Optional<Role> existingRole = roleRepo.findByRoleCode(request.getRoleCode());
-            if (existingRole.isPresent() && !existingRole.get().getId().equals(roleId)) {
-                throw new IllegalArgumentException("Role code already exists");
-            }
-            role.setRoleCode(request.getRoleCode());
-        }
-
 
         if (request.getPermissionIds() != null) {
-            List<Permission> permissions = permissionRepo.findAllById(request.getPermissionIds());
-            if (permissions.size() != request.getPermissionIds().size()) {
+
+            List<Permission> newPermissions =
+                    permissionRepo.findAllByIdInAndDeletedFalse(request.getPermissionIds());
+
+            if (newPermissions.size() != request.getPermissionIds().size()) {
                 throw new IllegalArgumentException("Some permissions not found");
             }
 
-            role.setPermissions(permissions);
+            for (Permission p : newPermissions) {
+                if (!role.getPermissions().contains(p)) {
+                    role.getPermissions().add(p);
+                }
+            }
         }
+
         roleRepo.save(role);
         return roleMapper.toRoleResponse(role);
     }

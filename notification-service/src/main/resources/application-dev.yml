@@ -1,5 +1,7 @@
 
 spring:
+  config:
+    import: file:./.env.properties
   kafka:
     bootstrap-servers: localhost:9094
     producer:

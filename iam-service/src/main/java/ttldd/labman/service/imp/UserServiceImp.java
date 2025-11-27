@@ -26,12 +26,14 @@ import ttldd.labman.dto.request.UserUpdateRequest;
 import ttldd.labman.dto.response.AuthResponse;
 import ttldd.labman.dto.request.UserRequest;
 import ttldd.labman.dto.response.UserResponse;
+import ttldd.labman.entity.IdentityCard;
 import ttldd.labman.entity.Permission;
 import ttldd.labman.entity.Role;
 import ttldd.labman.entity.User;
 import ttldd.labman.exception.GetException;
 import ttldd.labman.exception.InsertException;
 import ttldd.labman.producer.NotificationProducer;
+import ttldd.labman.repo.IdentityCardRepo;
 import ttldd.labman.repo.RoleRepo;
 import ttldd.labman.repo.UserRepo;
 import ttldd.labman.service.UserService;
@@ -92,6 +94,8 @@ public  class UserServiceImp implements UserService {
     private final JwtHelper jwtHelper;
 
     private final CryptoUtil cryptoUtils;
+
+    private final IdentityCardRepo identityCardRepo;
 
 
 
@@ -416,6 +420,10 @@ public  class UserServiceImp implements UserService {
     @Override
     public UserResponse getUserById(Long id) {
         User user = userRepo.findById(id).orElseThrow(() -> new GetException("User not found with id: " + id));
+        IdentityCard identityCard = identityCardRepo.findByUserId(user.getId());
+        if(identityCard!= null){
+            user.setIdentifyNumber(identityCard.getIdentityNumber());
+        }
         return convertUserToUserResponse(user);
     }
 
