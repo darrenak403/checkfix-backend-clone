@@ -1,6 +1,7 @@
 spring:
+  config:
+    import: file:./.env.properties
   datasource:
-
     url: jdbc:mysql://mysql:3306/lab_manager
     username: root
     password: 123456
@@ -45,22 +46,6 @@ spring:
     baseline-version: 0
 
 
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: codemaster3979@gmail.com
-    password: bnzrqpzdxjfknmxk
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-        transport:
-          protocol: smtp
-        debug: false
-
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
@@ -70,18 +55,18 @@ spring:
       client:
         registration:
           facebook:
-            client-id: 832260309241866
-            client-secret: ca4c07eb8ab9836691880dc5dc8ffaf5
-            redirect-uri: "${FACEBOOK_REDIRECT_URI:http://localhost:3000/auth/social/callback/facebook}"
+            client-id: "${FACEBOOK_CLIENT_ID}"
+            client-secret: "${FACEBOOK_CLIENT_SECRET}"
+            redirect-uri: "${FACEBOOK_REDIRECT_URI}"
 
             scope:
               - email
               - public_profile
 
           google:
-            client-id: "${GOOGLE_CLIENT_ID:1061123444145-ga7gecn3snrnrvkg79fvp759n5iq8ibd.apps.googleusercontent.com}"
-            client-secret: "${GOOGLE_CLIENT_SECRET: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}"
-            redirect-uri: "${GOOGLE_REDIRECT_URI:https://dupssapp.id.vn:3000/auth/social/callback/google}"
+            client-id: "${GOOGLE_CLIENT_ID}"
+            client-secret: "${GOOGLE_CLIENT_SECRET}"
+            redirect-uri: "${GOOGLE_REDIRECT_URI}"
 
             scope:
               - email
@@ -100,7 +85,7 @@ facebook:
   response-type: code
 
 jwt:
-  secret: nXT5iZ/lPUY/9T4pgt3zqCJkezyP0if70mQbfJlz1k8=
+  secret: ${JWT_SECRET_KEY}
   expiration: 86400
   refreshable-duration: 604800
 
@@ -134,136 +119,17 @@ management:
 
 cloudinary:
   cloud:
-    name: darnrlpag
+    name: ${CLOUDINARY_CLOUD_NAME}
   api:
-    key: 862363649448685
-    secret: XyiZzdrwIArp7SPiGlL7XyHb-oA
-
+    key: ${CLOUDINARY_API_KEY}
+    secret: ${CLOUDINARY_API_SECRET}
+app:
+  security:
+    crypto-secret: ${CRYPTO_SECRET_KEY}
 vnpt:
   ekyc:
     api:
-      url: https://api.idg.vnpt.vn
-      token-id: 41ca23f3-3408-72c0-e063-63199f0ade0c
-      token-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALTPPEAfan+kGlGgSutfhag+Q3rL1DJ27Xc+FGpl/MKc5ZVcWizEGwR8ZCd3A2vOCIETwKYNDsy6Vq7X0Sj8wp8CAwEAAQ==
-      access-token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0cmFuc2FjdGlvbl9pZCI6IjlhZWYxNmU1LTYwYWUtNGJjZC1iM2VhLWRiMTU3ZTA2YThjYyIsInN1YiI6IjdhOWI1YjJlLWFmYWQtMTFmMC1hMDI3LWI5YWRlYWNmZjdjYyIsImF1ZCI6WyJyZXN0c2VydmljZSJdLCJ1c2VyX25hbWUiOiJ0cHR2dC4yMDAyQGdtYWlsLmNvbSIsInNjb3BlIjpbInJlYWQiXSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3QiLCJuYW1lIjoidHB0dnQuMjAwMkBnbWFpbC5jb20iLCJleHAiOjE3NjEyNzAxMDcsInV1aWRfYWNjb3VudCI6IjdhOWI1YjJlLWFmYWQtMTFmMC1hMDI3LWI5YWRlYWNmZjdjYyIsImF1dGhvcml0aWVzIjpbIlVTRVIiXSwianRpIjoiNDA3ZTJkMzgtZWU4ZC00MmU1LWE0ZjItMDc2ZDQ4NDUyZTg2IiwiY2xpZW50X2lkIjoiY2xpZW50YXBwIn0.O7Fe82OlhT4j7rEGISI_yqVzzFPRKyqUE8PH38GAz_CkXilkPmP99X986XX-lP34qvVOT9LRB_R7_MW4Xt33xUv18vD_1tq8Z_xn58szzuZ5bYpHfYcT-nUGTabItUXJzNoxnnM2zOy5yEcqprGo73hX-V0rQd1VMxoJ4V7nWcID1nPOmQk7nIs_CUnf1M6ktGf4SV7hBV6K5h70iqIGeXYLgW3yrhk0V97cv9Jc0nJGQJQ6zyJuah7XwK8MiApfBD2nsn7K47-mpoRth57AhDWbdpfi4S6DsgjcsxEK0cjY5dnTBTuLhoNDzqV9M4sauJKamTuqKfYj-ne3c_SWEQ
-
-#spring:
-#  datasource:
-#
-#    url: jdbc:mysql://mysql:3307/lab_manager
-#    username: root
-#    password: 123456
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#
-#  jpa:
-#      hibernate:
-#        ddl-auto: update
-#      show-sql: true
-#      properties:
-#        hibernate:
-#          dialect: org.hibernate.dialect.MySQL8Dialect
-#    #kafka
-#  kafka:
-#      bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVER:kafka:9092}
-#      producer:
-#        key-serializer: org.apache.kafka.common.serialization.StringSerializer
-#        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-#      consumer:
-#        group-id: iam-group
-#        auto-offset-reset: latest
-#        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-#        properties:
-#          spring.json.trusted.packages: "*"
-#    #        spring.json.use.type.headers: false
-#    #        spring.json.value.default.type: ttldd.event.dto.UserUpdatedEvent
-#    #flyway migration
-#  flyway:
-#    enabled: true
-#    locations: classpath:db/migration
-#    baseline-on-migrate: true
-#    baseline-version: 0
-#
-#    # Email configuration
-#  mail:
-#      host: smtp.gmail.com
-#      port: 587
-#      username: codemaster3979@gmail.com
-#
-#      password: bnzrqpzdxjfknmxk
-#
-#      properties:
-#        mail:
-#          smtp:
-#            auth: true
-#            starttls:
-#              enable: true
-#              required: true
-#          transport:
-#            protocol: smtp
-#          debug: false
-#
-#  autoconfigure:
-#      exclude:
-#        - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
-#
-#  security:
-#      oauth2:
-#        client:
-#          registration:
-#            facebook:
-#              client-id: 832260309241866
-#              client-secret: ca4c07eb8ab9836691880dc5dc8ffaf5
-#              redirect-uri: "${FACEBOOK_REDIRECT_URI:http://localhost:3000/auth/social/callback/facebook}"
-#              auth-uri: https://www.facebook.com/v21.0/dialog/oauth
-#              token-uri: https://graph.facebook.com/oauth/access_token
-#              user-info-uri: https://graph.facebook.com/me?fields=id,name,email,picture.type(large)
-#              response-type: code
-#              scope:
-#                - email
-#                - public_profile
-#
-#            google:
-#              client-id: "${GOOGLE_CLIENT_ID:1061123444145-ga7gecn3snrnrvkg79fvp759n5iq8ibd.apps.googleusercontent.com}"
-#              client-secret: "${GOOGLE_CLIENT_SECRET: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}"
-#              redirect-uri: "${GOOGLE_REDIRECT_URI:http://localhost:3000/auth/social/callback/google}"
-#              auth-uri: "https://accounts.google.com/o/oauth2/v2/auth"
-#              token-uri: "https://www.googleapis.com/oauth2/v3/token"
-#              user-info-uri: "https://www.googleapis.com/oauth2/v3/userinfo"
-#              scope:
-#                - email
-#                - public_profile
-#
-#jwt:
-#    secret: nXT5iZ/lPUY/9T4pgt3zqCJkezyP0if70mQbfJlz1k8=
-#    expiration: 86400
-#    refreshable-duration: 604800
-#
-#admin:
-#    email: admin@admin.com
-#    password: Admin123
-#
-#server:
-#    port: 8081
-#    servlet:
-#      context-path: /iam
-#
-#eureka:
-#    client:
-#      service-url:
-#        defaultZone: http://eureka-server:8761/eureka
-#    instance:
-#      prefer-ip-address: true
-#
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: health,info,prometheus
-#  endpoint:
-#    health:
-#      show-details: always
-#  prometheus:
-#    metrics:
-#      export:
-#        enabled: true
+      url: ${VNPT_EKYC_API_URL}
+      token-id: ${VNPT_EKYC_TOKEN_ID}
+      token-key: ${VNPT_EKYC_TOKEN_KEY}
+      access-token: ${VNPT_EKYC_ACCESS_TOKEN}

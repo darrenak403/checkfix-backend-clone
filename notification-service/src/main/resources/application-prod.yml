@@ -1,6 +1,9 @@
-spring :
+
+spring:
+  config:
+    import: file:./.env.properties
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVER:kafka:9092}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -13,6 +16,6 @@ spring :
         spring.json.trusted.packages: "*"
 
 notification:
-    email:
-      brevo-url: https://api.brevo.com
-      brevo-apikey: ***REMOVED***
+  email:
+    brevo-url: https://api.brevo.com
+    brevo-apikey: ${BREVO_API_KEY}
