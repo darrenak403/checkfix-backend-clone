@@ -4,7 +4,7 @@ stages:
 
 variables:
   DOCKER_DRIVER: overlay2
-  DOCKER_IMAGE_PREFIX: "datdevv"   # đổi username Docker Hub của bạn vào đây
+  DOCKER_IMAGE_PREFIX: "datdevv"   # username Docker Hub của bạn
 
 services:
   - docker:27.0.3-dind
@@ -17,17 +17,20 @@ default:
   tags:
     - docker
 
-# TEMPLATE BUILD
+
+# ================================
+# TEMPLATE JOB
+# ================================
 .build_template: &build_template
   stage: build
   script:
     - docker build -t $IMAGE_NAME:latest $SERVICE_PATH
 
-# TEMPLATE PUSH
 .push_template: &push_template
   stage: push
   script:
     - docker push $IMAGE_NAME:latest
+
 
 
 # ========================================
@@ -46,7 +49,10 @@ eureka-push:
   extends: .push_template
   variables:
     IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/eureka-service"
-  needs: ["eureka-build"]
+  needs:
+    - job: eureka-build
+      optional: true
+
 
 
 # ========================================
@@ -65,7 +71,10 @@ gateway-push:
   extends: .push_template
   variables:
     IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/api-gateway"
-  needs: ["gateway-build"]
+  needs:
+    - job: gateway-build
+      optional: true
+
 
 
 # ========================================
@@ -84,7 +93,10 @@ iam-push:
   extends: .push_template
   variables:
     IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/iam-service"
-  needs: ["iam-build"]
+  needs:
+    - job: iam-build
+      optional: true
+
 
 
 # ========================================
@@ -103,7 +115,10 @@ patient-push:
   extends: .push_template
   variables:
     IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/patient-service"
-  needs: ["patient-build"]
+  needs:
+    - job: patient-build
+      optional: true
+
 
 
 # ========================================
@@ -122,7 +137,10 @@ testorder-push:
   extends: .push_template
   variables:
     IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/testorder-service"
-  needs: ["testorder-build"]
+  needs:
+    - job: testorder-build
+      optional: true
+
 
 
 # ========================================
@@ -141,7 +159,10 @@ warehouse-push:
   extends: .push_template
   variables:
     IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/warehouse-service"
-  needs: ["warehouse-build"]
+  needs:
+    - job: warehouse-build
+      optional: true
+
 
 
 # ========================================
@@ -160,7 +181,10 @@ instrument-push:
   extends: .push_template
   variables:
     IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/instrument-service"
-  needs: ["instrument-build"]
+  needs:
+    - job: instrument-build
+      optional: true
+
 
 
 # ========================================
@@ -179,7 +203,10 @@ monitoring-push:
   extends: .push_template
   variables:
     IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/monitoring-service"
-  needs: ["monitoring-build"]
+  needs:
+    - job: monitoring-build
+      optional: true
+
 
 
 # ========================================
@@ -198,4 +225,6 @@ notification-push:
   extends: .push_template
   variables:
     IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/notification-service"
-  needs: ["notification-build"]
+  needs:
+    - job: notification-build
+      optional: true
