@@ -23,6 +23,9 @@ jobs:
           mkdir -p ./notification-service/src/main/resources
           cp env_temp.properties ./notification-service/src/main/resources/.env.properties
 
+          mkdir -p ./testorder-service/src/main/resources
+          cp env_temp.properties ./testorder-service/src/main/resources/.env.properties
+
           rm env_temp.properties
 
       - name: Login to Docker Hub
