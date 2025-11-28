@@ -1,0 +1,102 @@
+name: Build & Push
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: docker
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # IAM SERVICE
+      - name: Build IAM Service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./iam-service
+          file: ./iam-service/Dockerfile
+          push: true
+          tags: datdevv/iam-service:latest
+
+      # PATIENT SERVICE
+      - name: Build Patient Service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./patient-service
+          file: ./patient-service/Dockerfile
+          push: true
+          tags: datdevv/patient-service:latest
+
+      # TESTORDER SERVICE
+      - name: Build TestOrder Service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./testorder-services
+          file: ./testorder-services/Dockerfile
+          push: true
+          tags: datdevv/testorder-service:latest
+
+      # WAREHOUSE SERVICE
+      - name: Build Warehouse Service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./warehouse-service
+          file: ./warehouse-service/Dockerfile
+          push: true
+          tags: datdevv/warehouse-service:latest
+
+      # INSTRUMENT SERVICE
+      - name: Build Instrument Service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./instrument-service
+          file: ./instrument-service/Dockerfile
+          push: true
+          tags: datdevv/instrument-service:latest
+
+      # MONITORING SERVICE
+      - name: Build Monitoring Service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./monitoring-service
+          file: ./monitoring-service/Dockerfile
+          push: true
+          tags: datdevv/monitoring-service:latest
+
+      # NOTIFICATION SERVICE
+      - name: Build Notification Service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./notification-service
+          file: ./notification-service/Dockerfile
+          push: true
+          tags: datdevv/notification-service:latest
+
+      # API GATEWAY
+      - name: Build API Gateway
+        uses: docker/build-push-action@v4
+        with:
+          context: ./api-gateway
+          file: ./api-gateway/Dockerfile
+          push: true
+          tags: datdevv/api-gateway:latest
+
+      # EUREKA SERVER
+      - name: Build Eureka Service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./discovery-server
+          file: ./discovery-server/Dockerfile
+          push: true
+          tags: datdevv/eureka-service:latest
