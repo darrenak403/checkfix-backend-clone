@@ -79,7 +79,7 @@ jobs:
 
       # TESTORDER SERVICE
       - name: Build TestOrder Service
-        if: steps.changes.outputs.testorder == 'true'
+        #if: steps.changes.outputs.testorder == 'true'
         uses: docker/build-push-action@v4
         with:
           context: ./testorder-services
