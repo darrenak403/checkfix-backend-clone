@@ -8,7 +8,8 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-RUN mvn -s /root/.m2/settings.xml clean package -DskipTests
+#RUN mvn -s /root/.m2/settings.xml clean package -DskipTests
+RUN mvn clean package -DskipTests
 
 
 FROM eclipse-temurin:21-jre-jammy
