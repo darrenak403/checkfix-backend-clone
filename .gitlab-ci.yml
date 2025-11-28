@@ -1,51 +1,230 @@
 stages:
   - build
-  - dockerize
-  - deploy
+  - push
 
 variables:
-  DOCKER_REPO: "$DOCKER_USERNAME"
-  TAG: "1.0"
+  DOCKER_DRIVER: overlay2
+  DOCKER_IMAGE_PREFIX: "datdevv"   # username Docker Hub của bạn
 
-# --- BUILD ---
-build:
-  stage: build
-  image: maven:3.9.9-amazoncorretto-21
-  script:
-    - echo "Building all microservices..."
-    - mvn clean package -DskipTests
-  artifacts:
-    paths:
-      - "**/target/*.jar"
-  only:
-    - main
+services:
+  - docker:27.0.3-dind
 
-# --- DOCKERIZE ---
-dockerize:
-  stage: dockerize
-  image: docker:25.0.3
-  services:
-    - docker:dind
-  variables:
-    DOCKER_TLS_CERTDIR: ""
-  script:
-    - echo "Logging in to DockerHub..."
+default:
+  image: docker:27.0.3
+  before_script:
+    # Login Docker Hub
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    - for service in api-gateway discovery-server iam-service patient-service testorder-services warehouse-service instrument-service monitoring-service; do
-        echo "Building image for $service ...";
-        docker build -t $DOCKER_REPO/$service:$TAG $service;
-        docker push $DOCKER_REPO/$service:$TAG;
-      done
-  only:
-    - main
+  tags:
+    - docker
 
-# --- DEPLOY ---
-deploy:
-  stage: deploy
-  image: curlimages/curl:latest
+
+# ================================
+# TEMPLATE JOB
+# ================================
+.build_template: &build_template
+  stage: build
   script:
-    - echo "Triggering Jenkins deploy job..."
-    - >
-      curl -X POST "http://13.251.35.36:8080/job/deploy-labman/build?token=datdevdeloy"
+    - docker build -t $IMAGE_NAME:latest $SERVICE_PATH
+
+.push_template: &push_template
+  stage: push
+  script:
+    - docker push $IMAGE_NAME:latest
+
+
+
+# ========================================
+# EUREKA SERVER
+# ========================================
+eureka-build:
+  extends: .build_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/eureka-service"
+    SERVICE_PATH: "./eureka-server"
   only:
-    - main
+    changes:
+      - eureka-server/**
+
+eureka-push:
+  extends: .push_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/eureka-service"
+  needs:
+    - job: eureka-build
+      optional: true
+
+
+
+# ========================================
+# API GATEWAY
+# ========================================
+gateway-build:
+  extends: .build_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/api-gateway"
+    SERVICE_PATH: "./api-gateway"
+  only:
+    changes:
+      - api-gateway/**
+
+gateway-push:
+  extends: .push_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/api-gateway"
+  needs:
+    - job: gateway-build
+      optional: true
+
+
+
+# ========================================
+# IAM SERVICE
+# ========================================
+iam-build:
+  extends: .build_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/iam-service"
+    SERVICE_PATH: "./iam-service"
+  only:
+    changes:
+      - iam-service/**
+
+iam-push:
+  extends: .push_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/iam-service"
+  needs:
+    - job: iam-build
+      optional: true
+
+
+
+# ========================================
+# PATIENT SERVICE
+# ========================================
+patient-build:
+  extends: .build_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/patient-service"
+    SERVICE_PATH: "./patient-service"
+  only:
+    changes:
+      - patient-service/**
+
+patient-push:
+  extends: .push_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/patient-service"
+  needs:
+    - job: patient-build
+      optional: true
+
+
+
+# ========================================
+# TESTORDER SERVICE
+# ========================================
+testorder-build:
+  extends: .build_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/testorder-service"
+    SERVICE_PATH: "./testorder-service"
+  only:
+    changes:
+      - testorder-service/**
+
+testorder-push:
+  extends: .push_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/testorder-service"
+  needs:
+    - job: testorder-build
+      optional: true
+
+
+
+# ========================================
+# WAREHOUSE SERVICE
+# ========================================
+warehouse-build:
+  extends: .build_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/warehouse-service"
+    SERVICE_PATH: "./warehouse-service"
+  only:
+    changes:
+      - warehouse-service/**
+
+warehouse-push:
+  extends: .push_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/warehouse-service"
+  needs:
+    - job: warehouse-build
+      optional: true
+
+
+
+# ========================================
+# INSTRUMENT SERVICE
+# ========================================
+instrument-build:
+  extends: .build_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/instrument-service"
+    SERVICE_PATH: "./instrument-service"
+  only:
+    changes:
+      - instrument-service/**
+
+instrument-push:
+  extends: .push_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/instrument-service"
+  needs:
+    - job: instrument-build
+      optional: true
+
+
+
+# ========================================
+# MONITORING SERVICE
+# ========================================
+monitoring-build:
+  extends: .build_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/monitoring-service"
+    SERVICE_PATH: "./monitoring-service"
+  only:
+    changes:
+      - monitoring-service/**
+
+monitoring-push:
+  extends: .push_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/monitoring-service"
+  needs:
+    - job: monitoring-build
+      optional: true
+
+
+
+# ========================================
+# NOTIFICATION SERVICE
+# ========================================
+notification-build:
+  extends: .build_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/notification-service"
+    SERVICE_PATH: "./notification-service"
+  only:
+    changes:
+      - notification-service/**
+
+notification-push:
+  extends: .push_template
+  variables:
+    IMAGE_NAME: "$DOCKER_IMAGE_PREFIX/notification-service"
+  needs:
+    - job: notification-build
+      optional: true
