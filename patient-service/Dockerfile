@@ -3,7 +3,7 @@ FROM maven:3.9.9-amazoncorretto-21 AS build
 WORKDIR /app
 
 # Copy Maven mirror config
-COPY settings.xml /root/.m2/settings.xml
+#COPY settings.xml /root/.m2/settings.xml
 
 COPY pom.xml .
 COPY src ./src
