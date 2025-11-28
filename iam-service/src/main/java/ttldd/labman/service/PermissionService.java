@@ -10,4 +10,5 @@ public interface PermissionService {
     List<PermissionResponse> getAllPermissions();
     PermissionResponse createPermission(PermissionRequest permissionResponse);
     void deletePermission(Long permissionId);
+    void deleteRolePermission(Long roleId, Long permissionId);
 }
