@@ -98,6 +98,7 @@ services:
   # ================================
   api-gateway:
     image: datdevv/api-gateway:latest
+    pull_policy: always
     ports:
       - "6789:6789"
     depends_on:
@@ -113,6 +114,7 @@ services:
   # ================================
   iam-service:
     image: datdevv/iam-service:latest
+    pull_policy: always
     ports:
       - "8081:8081"
     environment:
@@ -130,6 +132,7 @@ services:
 
   patient-service:
     image: datdevv/patient-service:latest
+    pull_policy: always
     ports:
       - "8082:8082"
     environment:
@@ -147,6 +150,7 @@ services:
 
   testorder-service:
     image: datdevv/testorder-service:latest
+    pull_policy: always
     ports:
       - "8083:8083"
     environment:
@@ -164,6 +168,7 @@ services:
 
   warehouse-service:
     image: datdevv/warehouse-service:latest
+    pull_policy: always
     ports:
       - "8084:8084"
     environment:
@@ -181,6 +186,7 @@ services:
 
   instrument-service:
     image: datdevv/instrument-service:latest
+    pull_policy: always
     ports:
       - "8085:8085"
     environment:
@@ -196,6 +202,7 @@ services:
 
   monitoring-service:
     image: datdevv/monitoring-service:latest
+    pull_policy: always
     ports:
       - "8088:8088"
     environment:
@@ -213,6 +220,7 @@ services:
 
   notification-service:
     image: datdevv/notification-service:latest
+    pull_policy: always
     ports:
       - "8086:8086"
     environment:
