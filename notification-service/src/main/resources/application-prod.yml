@@ -1,7 +1,7 @@
 
 spring:
   config:
-    import: file:./.env.properties
+    import: classpath:.env.properties
   kafka:
     bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVER:kafka:9092}
     producer:
