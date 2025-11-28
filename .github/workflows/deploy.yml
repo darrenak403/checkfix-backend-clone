@@ -13,6 +13,29 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
+      - name: Check for changes
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            iam:
+              - 'iam-service/**'
+            patient:
+              - 'patient-service/**'
+            testorder:
+              - 'testorder-services/**'
+            warehouse:
+              - 'warehouse-service/**'
+            instrument:
+              - 'instrument-service/**'
+            monitoring:
+              - 'monitoring-service/**'
+            notification:
+              - 'notification-service/**'
+            gateway:
+              - 'api-gateway/**'
+            eureka:
+              - 'discovery-server/**'
       - name: Create .env.properties from Secret
         run: |
           echo "${{ secrets.ENV_PROPERTIES_BASE64 }}" | base64 -d > env_temp.properties
@@ -36,6 +59,7 @@ jobs:
 
       # IAM SERVICE
       - name: Build IAM Service
+        if: steps.changes.outputs.iam == 'true'
         uses: docker/build-push-action@v4
         with:
           context: ./iam-service
@@ -45,6 +69,7 @@ jobs:
 
       # PATIENT SERVICE
       - name: Build Patient Service
+        if: steps.changes.outputs.patient == 'true'
         uses: docker/build-push-action@v4
         with:
           context: ./patient-service
@@ -54,6 +79,7 @@ jobs:
 
       # TESTORDER SERVICE
       - name: Build TestOrder Service
+        if: steps.changes.outputs.testorder == 'true'
         uses: docker/build-push-action@v4
         with:
           context: ./testorder-services
@@ -63,6 +89,7 @@ jobs:
 
       # WAREHOUSE SERVICE
       - name: Build Warehouse Service
+        if: steps.changes.outputs.warehouse == 'true'
         uses: docker/build-push-action@v4
         with:
           context: ./warehouse-service
@@ -72,6 +99,7 @@ jobs:
 
       # INSTRUMENT SERVICE
       - name: Build Instrument Service
+        if: steps.changes.outputs.instrument == 'true'
         uses: docker/build-push-action@v4
         with:
           context: ./instrument-service
@@ -81,6 +109,7 @@ jobs:
 
       # MONITORING SERVICE
       - name: Build Monitoring Service
+        if: steps.changes.outputs.monitoring == 'true'
         uses: docker/build-push-action@v4
         with:
           context: ./monitoring-service
@@ -90,6 +119,7 @@ jobs:
 
       # NOTIFICATION SERVICE
       - name: Build Notification Service
+        if: steps.changes.outputs.notification == 'true'
         uses: docker/build-push-action@v4
         with:
           context: ./notification-service
@@ -99,6 +129,7 @@ jobs:
 
       # API GATEWAY
       - name: Build API Gateway
+        if: steps.changes.outputs.gateway == 'true'
         uses: docker/build-push-action@v4
         with:
           context: ./api-gateway
@@ -108,6 +139,7 @@ jobs:
 
       # EUREKA SERVER
       - name: Build Eureka Service
+        if: steps.changes.outputs.eureka == 'true'
         uses: docker/build-push-action@v4
         with:
           context: ./discovery-server
