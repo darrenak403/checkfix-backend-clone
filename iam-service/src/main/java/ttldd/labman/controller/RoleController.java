@@ -45,9 +45,9 @@ public class RoleController {
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-    @PatchMapping
+    @PatchMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('UPDATE_ROLE')")
-    public ResponseEntity<RestResponse<RoleResponse>> updateRole(@RequestParam Long id, @RequestBody RoleUpdateRequest request) {
+    public ResponseEntity<RestResponse<RoleResponse>> updateRole(@PathVariable Long id, @RequestBody RoleUpdateRequest request) {
         RoleResponse updatedRole = roleService.updateRole(id, request);
         RestResponse<RoleResponse> response = RestResponse.<RoleResponse>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -85,6 +85,17 @@ public class RoleController {
                 .data(permission)
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @DeleteMapping("/permissions")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') and hasAnyAuthority('DELETE_ROLE')")
+    public ResponseEntity<RestResponse<Void>> deleteRolePermission(@RequestParam Long roleId, @RequestParam Long permissionId) {
+        permissionService.deleteRolePermission(roleId, permissionId);
+        RestResponse<Void> response = RestResponse.<Void>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Permission deleted from this role successfully")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }

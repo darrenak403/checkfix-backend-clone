@@ -64,5 +64,23 @@ public class PermissionServiceImpl implements PermissionService {
         permissionRepository.save(permission);
     }
 
+    @Override
+    public void deleteRolePermission(Long roleId, Long permissionId) {
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+
+        Permission permission = permissionRepository.findById(permissionId)
+                .orElseThrow(() -> new RuntimeException("Permission not found"));
+
+        // Nếu role có permission này thì xoá ra khỏi list
+        boolean removed = role.getPermissions().remove(permission);
+
+        if (!removed) {
+            throw new IllegalArgumentException("Role không chứa permission này");
+        }
+
+        roleRepository.save(role);
+    }
+
 
 }
