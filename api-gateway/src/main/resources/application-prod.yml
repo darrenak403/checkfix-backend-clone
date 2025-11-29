@@ -28,14 +28,12 @@ spring:
             - StripPrefix=2
 
         # TESTORDER SERVICE
-       - id: testorder-service
+        - id: testorder-service
           uri: lb://testorder-service
           predicates:
-            - Path=${app.prefix}/orders/**
-            - Path=${app.prefix}/comments/**
-            - Path=${app.prefix}/results/**
+            - Path=${app.prefix}/orders/**, ${app.prefix}/comments/**, ${app.prefix}/results/**
           filters:
-            - StripPrefix=3 
+            - StripPrefix=2
         # WAREHOUSE SERVICE
         - id: warehouse-service
           uri: lb://warehouse-service
@@ -172,7 +170,3 @@ management:
     metrics:
       export:
         enabled: true
-
-
-
-
