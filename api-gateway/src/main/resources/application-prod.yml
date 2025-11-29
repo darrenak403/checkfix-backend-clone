@@ -33,7 +33,7 @@ spring:
           predicates:
             - Path=${app.prefix}/orders/**
             - Path=${app.prefix}/comments/**
-            - Path=${app.prefix}/results/**
+            - Path=/v1/api/results/**
           filters:
             - StripPrefix=3
         # WAREHOUSE SERVICE
