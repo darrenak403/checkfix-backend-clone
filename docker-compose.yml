@@ -193,6 +193,8 @@ services:
       SPRING_PROFILES_ACTIVE: prod
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     depends_on:
+      mongodb:
+        condition: service_started
       kafka:
         condition: service_started
       eureka-server:
