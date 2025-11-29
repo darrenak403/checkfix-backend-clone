@@ -19,9 +19,9 @@ public class TestResultController {
     public ResponseEntity<RestResponse<?>> receiveHl7(@RequestBody String rawHl7) {
         return ResponseEntity.ok(resultService.receiveHl7(rawHl7));
     }
-    @GetMapping("/{accession}")
-    public ResponseEntity<RestResponse<?>> getResultByAccession(@PathVariable String accession) {
-        return ResponseEntity.ok(resultService.getResultByAccession(accession));
+    @GetMapping("/{accessionNumber}")
+    public ResponseEntity<RestResponse<?>> getResultByAccession(@PathVariable String accessionNumber) {
+        return ResponseEntity.ok(resultService.getResultByAccession(accessionNumber));
     }
 
 }
