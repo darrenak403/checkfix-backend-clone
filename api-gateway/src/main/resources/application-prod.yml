@@ -31,9 +31,11 @@ spring:
         - id: testorder-service
           uri: lb://testorder-service
           predicates:
-            - Path=${app.prefix}/orders/**, ${app.prefix}/comments/**, ${app.prefix}/results/**
+            - Path=${app.prefix}/orders/**
+            - Path=${app.prefix}/comments/**
+            - Path=${app.prefix}/results/**
           filters:
-            - StripPrefix=2
+            - StripPrefix=3
         # WAREHOUSE SERVICE
         - id: warehouse-service
           uri: lb://warehouse-service
