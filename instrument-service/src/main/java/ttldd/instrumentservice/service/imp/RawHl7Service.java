@@ -15,20 +15,11 @@ public class RawHl7Service {
 
     private final RawHL7TestResultRepo rawHL7TestResultRepo;
 
-    // Chạy mỗi 5 giây
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(cron = "0 0 2 * * ?")
     public void autoDelete() {
-        LocalDateTime oneMinuteAgo = LocalDateTime.now().minusMinutes(1);
+        LocalDateTime oneMinuteAgo = LocalDateTime.now().minusDays(30);
         long deletedCount = rawHL7TestResultRepo.deleteByCreatedAtBefore(oneMinuteAgo);
 
         log.info("Deleted {} RawHL7TestResult records older than 1 minute", deletedCount);
     }
-
-//    @Scheduled(cron = "0 0 2 * * ?")
-//    public void autoDelete() {
-//        LocalDateTime thirdTyDay = LocalDateTime.now().minusWeeks(1);
-//        long deletedCount = rawHL7TestResultRepo.deleteByCreatedAtBefore(thirdTyDay);
-//
-//        log.info("Deleted {} RawHL7TestResult records older than 1 minute", deletedCount);
-//    }
 }
