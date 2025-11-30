@@ -18,6 +18,7 @@ import ttldd.testorderservices.util.CryptoUtil;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -141,31 +142,76 @@ public class TestResultService {
             orderRepo.save(order);
             //send mail test result notification
 
-            String encryptedAccession = cryptoUtil.encryptForURL(order.getAccessionNumber());
-            String encryptedOrderId = cryptoUtil.encryptForURL(String.valueOf(order.getId()));
-            String resultLink = "http://localhost:3000/service/my-medical-records/"
-                    + encryptedOrderId
-                    + "/"
-                    + encryptedAccession;
+//            String encryptedAccession = cryptoUtil.encryptForURL(order.getAccessionNumber());
+//            String encryptedOrderId = cryptoUtil.encryptForURL(String.valueOf(order.getId()));
+//            String resultLink = "http://localhost:3000/service/my-medical-records/"
+//                    + encryptedOrderId
+//                    + "/"
+//                    + encryptedAccession;
+//
+//            String testName = params.isEmpty() ? "Xét nghiệm" : params.getFirst().getParamName();
+//            String safeFullName = (order.getPatientName() == null || order.getPatientName().trim().isEmpty())
+//                    ? "Bạn"
+//                    : order.getPatientName();
+//            notificationProducer.sendEmail(
+//                    "send-email",
+//                    order.getEmail(),
+//                    "Kết quả xét nghiệm của bạn đã sẵn sàng",
+//                    "TEST_RESULT_NOTIFICATION",
+//                    Map.of(
+//                            "userName", safeFullName,
+//                            "accession", order.getAccessionNumber(),
+//                            "patientName", safeFullName,
+//                            "testName", testName,
+//                            "completedDate", LocalDate.now().toString(),
+//                            "resultLink", resultLink
+//                    )
+//            );
+            log.info("DEBUG: Order saved. ID={}, Accession={}", order.getId(), order.getAccessionNumber());
 
-            String testName = params.isEmpty() ? "Xét nghiệm" : params.getFirst().getParamName();
-            String safeFullName = (order.getPatientName() == null || order.getPatientName().trim().isEmpty())
-                    ? "Bạn"
-                    : order.getPatientName();
-            notificationProducer.sendEmail(
-                    "send-email",
-                    order.getEmail(),
-                    "Kết quả xét nghiệm của bạn đã sẵn sàng",
-                    "TEST_RESULT_NOTIFICATION",
-                    Map.of(
-                            "userName", safeFullName,
-                            "accession", order.getAccessionNumber(),
-                            "patientName", safeFullName,
-                            "testName", testName,
-                            "completedDate", LocalDate.now().toString(),
-                            "resultLink", resultLink
-                    )
-            );
+            try {
+                if (cryptoUtil == null) log.error("DEBUG: cryptoUtil is NULL!");
+
+                log.info("DEBUG: Start encrypting...");
+                String encryptedAccession = cryptoUtil.encryptForURL(order.getAccessionNumber());
+                String encryptedOrderId = cryptoUtil.encryptForURL(String.valueOf(order.getId()));
+                log.info("DEBUG: Encrypted success. AccessionEnc={}, OrderIdEnc={}", encryptedAccession, encryptedOrderId);
+
+                String resultLink = "http://localhost:3000/service/my-medical-records/"
+                        + encryptedOrderId + "/" + encryptedAccession;
+                log.info("DEBUG: Link built: {}", resultLink);
+
+                String testName = params.isEmpty() ? "Xét nghiệm" : params.getFirst().getParamName();
+                String safeFullName = (order.getPatientName() == null || order.getPatientName().trim().isEmpty())
+                        ? "Bạn" : order.getPatientName();
+
+                if (order.getEmail() == null) log.warn("DEBUG: Email is NULL!");
+
+                log.info("DEBUG: Preparing to send email to {}", order.getEmail());
+
+                if (notificationProducer == null) log.error("DEBUG: notificationProducer is NULL!");
+
+                Map<String, Object> mailParams = new HashMap<>();
+                mailParams.put("userName", safeFullName);
+                mailParams.put("accession", order.getAccessionNumber());
+                mailParams.put("patientName", safeFullName);
+                mailParams.put("testName", testName);
+                mailParams.put("completedDate", LocalDate.now().toString());
+                mailParams.put("resultLink", resultLink);
+
+                notificationProducer.sendEmail(
+                        "send-email",
+                        order.getEmail(),
+                        "Kết quả xét nghiệm của bạn đã sẵn sàng",
+                        "TEST_RESULT_NOTIFICATION",
+                        mailParams
+                );
+
+                log.info("DEBUG: Email sent command executed.");
+
+            } catch (Exception e) {
+                log.error("DEBUG: Error inside Email Block: {}", e.getMessage(), e);
+            }
 
             log.info("send notification email to {}", order.getEmail());
 
