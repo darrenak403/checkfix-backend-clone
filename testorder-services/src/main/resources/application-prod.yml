@@ -33,6 +33,8 @@ spring:
 
 server:
   port: 8083
+  servlet:
+    context-path: /testorder
 
 app:
   patient-service:
