@@ -33,7 +33,7 @@ spring:
           predicates:
             - Path=/v1/api/testorder/**
           filters:
-            - StripPrefix=3
+            - StripPrefix=2
         # WAREHOUSE SERVICE
         - id: warehouse-service
           uri: lb://warehouse-service
