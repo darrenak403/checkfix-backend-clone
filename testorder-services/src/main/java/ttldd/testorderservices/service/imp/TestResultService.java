@@ -177,7 +177,7 @@ public class TestResultService {
                 String encryptedOrderId = cryptoUtil.encryptForURL(String.valueOf(order.getId()));
                 log.info("DEBUG: Encrypted success. AccessionEnc={}, OrderIdEnc={}", encryptedAccession, encryptedOrderId);
 
-                String resultLink = "http://localhost:3000/service/my-medical-records/"
+                String resultLink = "https://lab.dupssapp.id.vn/service/my-medical-records/"
                         + encryptedOrderId + "/" + encryptedAccession;
                 log.info("DEBUG: Link built: {}", resultLink);
 
