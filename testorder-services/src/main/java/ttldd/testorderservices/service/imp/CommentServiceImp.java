@@ -83,12 +83,11 @@ public class CommentServiceImp implements CommentService {
                 Comment parent = commentRepository.findById(commentRequest.getParentCommentId())
                         .orElseThrow(() -> new RuntimeException("Parent comment not found."));
 
-                // Validation: Parent comment phải cùng testResult
                 if (!parent.getTestResult().getId().equals(result.getId())) {
                     throw new RuntimeException("Cannot reply to comment from different test result.");
                 }
 
-                // Validation: Parent comment phải ACTIVE
+
                 if (parent.getStatus() != CommentStatus.ACTIVE) {
                     throw new RuntimeException("Cannot reply to inactive or deleted comment.");
                 }
