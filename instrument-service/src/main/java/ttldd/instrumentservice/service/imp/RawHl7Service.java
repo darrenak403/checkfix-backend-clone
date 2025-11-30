@@ -19,7 +19,5 @@ public class RawHl7Service {
     public void autoDelete() {
         LocalDateTime oneMinuteAgo = LocalDateTime.now().minusDays(30);
         long deletedCount = rawHL7TestResultRepo.deleteByCreatedAtBefore(oneMinuteAgo);
-
-        log.info("Deleted {} RawHL7TestResult records older than 1 minute", deletedCount);
     }
 }
