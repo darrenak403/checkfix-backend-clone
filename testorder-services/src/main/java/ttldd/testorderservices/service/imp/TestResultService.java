@@ -32,6 +32,7 @@ public class TestResultService {
     private final TestResultMapper mapper;
     private final NotificationProducer notificationProducer;
     private final CryptoUtil cryptoUtil;
+    private final TestResultRepository testResultRepository;
 
 
     @Transactional
@@ -122,6 +123,7 @@ public class TestResultService {
 
             order.setTestResult(result);
             order.setStatus(OrderStatus.COMPLETED);
+            testResultRepository.save(result);
             orderRepo.save(order);
             //send mail test result notification
 
