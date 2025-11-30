@@ -15,7 +15,7 @@ spring:
         - id: iam-service
           uri: lb://iam-service
           predicates:
-            - Path=${app.prefix}/iam/**
+            - Path=/v1/api/iam/**
           filters:
             - StripPrefix=2
 
@@ -23,7 +23,7 @@ spring:
         - id: patient-service
           uri: lb://patient-service
           predicates:
-            - Path=${app.prefix}/patient/**
+            - Path=/v1/api/patient/**
           filters:
             - StripPrefix=2
 
@@ -31,28 +31,28 @@ spring:
         - id: testorder-service
           uri: lb://testorder-service
           predicates:
-            - Path=${app.prefix}/testorder/**
+            - Path=/v1/api/testorder/**
           filters:
             - StripPrefix=3
         # WAREHOUSE SERVICE
         - id: warehouse-service
           uri: lb://warehouse-service
           predicates:
-            - Path=${app.prefix}/warehouse/**
+            - Path=/v1/api/warehouse/**
           filters:
             - StripPrefix=2
         # INSTRUMENT SERVICE
         - id: instrument-service
           uri: lb://instrument-service
           predicates:
-            - Path=${app.prefix}/instrument/**
+            - Path=/v1/api/instrument/**
           filters:
             - StripPrefix=2
         # MONITORING SERVICE
         - id: monitoring-service
           uri: lb://monitoring-service
           predicates:
-            - Path=${app.prefix}/monitoring/**
+            - Path=/v1/api/monitoring/**
           filters:
             - StripPrefix=2
 
