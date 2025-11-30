@@ -43,7 +43,7 @@ public class SwaggerConfig implements RewriteFunction<String, String> {
     static {
         SWAGGER_PATH_MAP.put("/iam/", "http://localhost:6789/v1/api/iam");
         SWAGGER_PATH_MAP.put("/patient/", "http://localhost:6789/v1/api");
-        SWAGGER_PATH_MAP.put("/testOrder/", "http://localhost:6789/v1/api");
+        SWAGGER_PATH_MAP.put("/testorder/", "http://localhost:6789/v1/api/testorder");
         SWAGGER_PATH_MAP.put("/warehouse/", "http://localhost:6789/v1/api/warehouse");
         SWAGGER_PATH_MAP.put("/instrument", "http://localhost:6789m/v1/api/instrument");
         SWAGGER_PATH_MAP.put("/monitoring", "http://localhost:6789/v1/api/monitoring");

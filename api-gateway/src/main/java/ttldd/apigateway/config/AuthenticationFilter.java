@@ -45,7 +45,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
             "/swagger-ui.html",
             "/iam/v3/api-docs",
             "/patient/v3/api-docs",
-            "/testOrder/v3/api-docs",
+            "/testorder/v3/api-docs",
             "/warehouse/v3/api-docs",
             "/instrument/v3/api-docs",
             "/monitoring/v3/api-docs"

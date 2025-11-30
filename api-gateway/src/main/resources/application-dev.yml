@@ -31,7 +31,7 @@ spring:
         - id: testorder-service
           uri: lb://testorder-service
           predicates:
-            - Path=${app.prefix}/orders/**, ${app.prefix}/comments/**, ${app.prefix}/results/**
+            - Path=${app.prefix}/testorder/**
           filters:
             - StripPrefix=2
         # WAREHOUSE SERVICE
@@ -83,9 +83,8 @@ spring:
         - id: testorder-openapi
           uri: http://localhost:8083
           predicates:
-            - Path=/testOrder/v3/api-docs
+            - Path=/testorder/v3/api-docs
           filters:
-            - StripPrefix=1
             - name: ModifyResponseBody
               args:
                 inClass: java.lang.String
@@ -138,7 +137,7 @@ springdoc:
       - name: Patient Service
         url: /patient/v3/api-docs
       - name: TestOrder Service
-        url: /testOrder/v3/api-docs
+        url: /testorder/v3/api-docs
       - name: Warehouse Service
         url: /warehouse/v3/api-docs
       - name: Instrument Service
