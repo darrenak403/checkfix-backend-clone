@@ -151,6 +151,8 @@ public class TestResultService {
                     )
             );
 
+            log.info("send notification email to {}", order.getEmail());
+
             log.info("HL7 parsed successfully for accession {} ({} params)", finalAccession, params.size());
             return RestResponse.success("HL7 parsed successfully", result);
 
