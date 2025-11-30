@@ -99,35 +99,17 @@ public class TestOrderService {
                 .filter(ord -> !Boolean.TRUE.equals(ord.getDeleted()))
                 .orElseThrow(() -> new IllegalArgumentException("Phiếu không tồn tại"));
 
-        // Chỉ lấy comment cha (level = 1), replies sẽ được load tự động qua mapper
         List<Comment> parentComments = commentRepo.findByTestOrderIdAndStatusAndLevelOrderByCreatedAtDesc(
                 o.getId(), CommentStatus.ACTIVE, 1);
 
         o.setComments(parentComments);
 
-        // Sử dụng CommentMapper để map, doctorName đã có sẵn trong entity
         List<CommentResponse> commentResponses = parentComments.stream()
                 .map(commentMapper::toResponse)
                 .toList();
 
         TestOrderDetailResponse resp = mapper.toTestOrderDetailResponse(o);
         resp.setComments(commentResponses);
-        // var dto = TestOrderDetailResponse.builder()
-        // .id(o.getId())
-        // .status(o.getStatus())
-        // .createdAt(o.getCreatedAt())
-        // .patientId(o.getPatientId())
-        // .runAt(o.getRunAt())
-        // .comments(commentRepo.findByUserId(o.getId()))
-        // .build();
-        //
-        // try {
-        // var p = getPatient(o.getPatientId());
-        // dto.setPatientName(p.getFullName());
-        // dto.setPatientGender(p.getGender());
-        // dto.setPatientEmail(p.getEmail());
-        // dto.setPatientAge(ageFrom(p.getYob()));
-        // } catch (Exception ignored) {}
 
         return resp;
     }
