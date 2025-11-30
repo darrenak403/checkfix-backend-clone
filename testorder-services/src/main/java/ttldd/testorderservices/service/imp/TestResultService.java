@@ -46,7 +46,7 @@ public class TestResultService {
     }
 
 
-//    @Transactional
+    @Transactional
     public RestResponse<?> receiveHl7(String rawHl7) {
         try {
             String hl7Formatted = formatHL7(rawHl7);
