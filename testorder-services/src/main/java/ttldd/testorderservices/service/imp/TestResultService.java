@@ -102,7 +102,7 @@ public class TestResultService {
             final String finalAccession = accession.trim();
             log.info(" Finding TestOrder by accession: {}", finalAccession);
 
-            TestOrder order = orderRepo.findByAccessionNumber(finalAccession)
+            TestOrder order = orderRepo.findByAccessionNumberWithFullData(finalAccession)
                     .orElseThrow(() -> new IllegalArgumentException(
                             " TestOrder not found for accession: " + finalAccession));
 

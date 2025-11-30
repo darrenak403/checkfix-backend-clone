@@ -1,5 +1,7 @@
 package ttldd.testorderservices.repository;
 
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ttldd.testorderservices.entity.TestOrder;
 import ttldd.testorderservices.entity.OrderStatus;
 
@@ -22,4 +24,9 @@ public interface TestOrderRepository extends JpaRepository<TestOrder, Long> {
 
     Optional<TestOrder> findByAccessionNumberAndDeletedFalse(String accessionNumber);
     Optional<TestOrder> findByAccessionNumber(String accessionNumber);
+    @Query("SELECT o FROM TestOrder o " +
+            "LEFT JOIN FETCH o.testResult r " +
+            "LEFT JOIN FETCH r.parameters " +
+            "WHERE o.accessionNumber = :accessionNumber")
+    Optional<TestOrder> findByAccessionNumberWithFullData(@Param("accessionNumber") String accessionNumber);
 }
