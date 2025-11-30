@@ -19,6 +19,11 @@ spring:
     #        spring.json.value.default.type: ttldd.event.dto.PatientUpdateEvent
     listener:
       missing-topics-fatal: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: true
   jpa:
     hibernate:
       ddl-auto: update
