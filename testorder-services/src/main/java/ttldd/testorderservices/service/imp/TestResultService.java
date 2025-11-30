@@ -106,24 +106,38 @@ public class TestResultService {
                             " TestOrder not found for accession: " + finalAccession));
 
 
-            TestResult result = TestResult.builder()
-                    .testOrder(order)
-                    .patientId(order.getPatientId())
-                    .accessionNumber(order.getAccessionNumber())
-                    .instrumentName(order.getInstrumentName())
-                    .parseHl7(rawHl7)
-                    .status("COMPLETE")
-                    .build();
+            TestResult result = order.getTestResult();
 
+            if (result == null) {
+                result = TestResult.builder()
+                        .testOrder(order)
+                        .patientId(order.getPatientId())
+                        .accessionNumber(order.getAccessionNumber())
+                        .instrumentName(order.getInstrumentName())
+                        .build();
+            }
+            result.setParseHl7(rawHl7);
+            result.setStatus("COMPLETE");
+
+//            for (TestResultParameter p : params) {
+//                p.setTestResult(result);
+//                p.setTestOrder(order);
+//            }
+//            result.setParameters(params);
             for (TestResultParameter p : params) {
                 p.setTestResult(result);
                 p.setTestOrder(order);
             }
-            result.setParameters(params);
+
+            if (result.getParameters() == null) {
+                result.setParameters(params);
+            } else {
+                result.getParameters().clear();
+                result.getParameters().addAll(params);
+            }
 
             order.setTestResult(result);
             order.setStatus(OrderStatus.COMPLETED);
-            testResultRepository.save(result);
             orderRepo.save(order);
             //send mail test result notification
 
