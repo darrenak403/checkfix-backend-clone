@@ -19,3 +19,16 @@ notification:
   email:
     brevo-url: https://api.brevo.com
     brevo-apikey: ${BREVO_API_KEY}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
