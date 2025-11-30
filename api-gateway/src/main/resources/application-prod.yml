@@ -11,93 +11,124 @@ spring:
   cloud:
     gateway:
       routes:
-        # ===========================
-        # IAM SERVICE
-        # ===========================
+        #IAM SERVICE
         - id: iam-service
           uri: lb://iam-service
           predicates:
-            - Path=/v1/api/iam/**
+            - Path=${app.prefix}/iam/**
           filters:
-            - StripPrefix=3
+            - StripPrefix=2
 
-        # ===========================
-        # PATIENT SERVICE
-        # ===========================
+        #  PATIENT SERVICE
         - id: patient-service
           uri: lb://patient-service
           predicates:
-            - Path=/v1/api/patient/**
+            - Path=${app.prefix}/patient/**
           filters:
-            - StripPrefix=3
+            - StripPrefix=2
 
-        # ===========================
-        # TESTORDER - RESULTS
-        # ===========================
-        - id: testorder-results
+        # TESTORDER SERVICE
+        - id: testorder-service
           uri: lb://testorder-service
           predicates:
-            - Path=/v1/api/results/**
+            - Path=${app.prefix}/testorder/**
           filters:
             - StripPrefix=3
-
-        # ===========================
-        # TESTORDER - ORDERS
-        # ===========================
-        - id: testorder-orders
-          uri: lb://testorder-service
-          predicates:
-            - Path=/v1/api/orders/**
-          filters:
-            - StripPrefix=3
-
-        # ===========================
-        # TESTORDER - COMMENTS
-        # ===========================
-        - id: testorder-comments
-          uri: lb://testorder-service
-          predicates:
-            - Path=/v1/api/comments/**
-          filters:
-            - StripPrefix=3
-
-        # ===========================
         # WAREHOUSE SERVICE
-        # ===========================
         - id: warehouse-service
           uri: lb://warehouse-service
           predicates:
-            - Path=/v1/api/warehouse/**
+            - Path=${app.prefix}/warehouse/**
           filters:
-            - StripPrefix=3
-
-        # ===========================
+            - StripPrefix=2
         # INSTRUMENT SERVICE
-        # ===========================
         - id: instrument-service
           uri: lb://instrument-service
           predicates:
-            - Path=/v1/api/instrument/**
+            - Path=${app.prefix}/instrument/**
           filters:
-            - StripPrefix=3
-
-        # ===========================
+            - StripPrefix=2
         # MONITORING SERVICE
-        # ===========================
         - id: monitoring-service
           uri: lb://monitoring-service
           predicates:
-            - Path=/v1/api/monitoring/**
+            - Path=${app.prefix}/monitoring/**
           filters:
-            - StripPrefix=3
+            - StripPrefix=2
 
+        # SWAGGER DOCS
+        - id: iam-openapi
+          uri: http://localhost:8081
+          predicates:
+            - Path=/iam/v3/api-docs
+          filters:
+            - name: ModifyResponseBody
+              args:
+                inClass: java.lang.String
+                outClass: java.lang.String
+                rewriteFunction: "#{@swaggerRewrite}"
+
+        - id: patient-openapi
+          uri: http://localhost:8082
+          predicates:
+            - Path=/patient/v3/api-docs
+          filters:
+            - StripPrefix=1
+            - name: ModifyResponseBody
+              args:
+                inClass: java.lang.String
+                outClass: java.lang.String
+                rewriteFunction: "#{@swaggerRewrite}"
+
+        - id: testorder-openapi
+          uri: http://localhost:8083
+          predicates:
+            - Path=/testOrder/v3/api-docs
+          filters:
+            - StripPrefix=1
+            - name: ModifyResponseBody
+              args:
+                inClass: java.lang.String
+                outClass: java.lang.String
+                rewriteFunction: "#{@swaggerRewrite}"
+
+        - id: warehouse-openapi
+          uri: http://localhost:8084
+          predicates:
+            - Path=/warehouse/v3/api-docs
+          filters:
+            - name: ModifyResponseBody
+              args:
+                inClass: java.lang.String
+                outClass: java.lang.String
+                rewriteFunction: "#{@swaggerRewrite}"
+
+        - id: instrument-openapi
+          uri: http://localhost:8085
+          predicates:
+            - Path=/instrument/v3/api-docs
+          filters:
+            - name: ModifyResponseBody
+              args:
+                inClass: java.lang.String
+                outClass: java.lang.String
+                rewriteFunction: "#{@swaggerRewrite}"
+        - id: monitoring-openapi
+          uri: http://localhost:8088
+          predicates:
+            - Path=/monitoring/v3/api-docs
+          filters:
+            - name: ModifyResponseBody
+              args:
+                inClass: java.lang.String
+                outClass: java.lang.String
+                rewriteFunction: "#{@swaggerRewrite}"
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
 
 springdoc:
   swagger-ui:
@@ -117,7 +148,6 @@ springdoc:
   api-docs:
     enabled: true
 
-
 eureka:
   client:
     service-url:
@@ -126,7 +156,6 @@ eureka:
     fetch-registry: true
   instance:
     prefer-ip-address: true
-
 
 management:
   endpoints:
@@ -141,3 +170,7 @@ management:
     metrics:
       export:
         enabled: true
+
+
+
+
