@@ -304,9 +304,7 @@ public  class UserServiceImp implements UserService {
         UserRequest userDTO = new UserRequest();
         // Lấy email của người dùng
         userDTO.setEmail(userInfo.get("email") != null ? userInfo.get("email").toString() : (userInfo.get("id") + "@facebook.com"));
-        // Lấy tên của người dùng
         userDTO.setFullName(userInfo.get("name") != null ? userInfo.get("name").toString() : "Facebook User");
-        // Lấy google_id hoặc facebook_id của người dùng
         userDTO.setSub(userInfo.get("sub") != null ? userInfo.get("sub").toString() : userInfo.get("id").toString());
 
         String accessToken;
