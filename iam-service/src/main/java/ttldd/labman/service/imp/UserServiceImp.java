@@ -302,20 +302,16 @@ public  class UserServiceImp implements UserService {
     @Override
     public AuthResponse loginOrSignup(Map<String, Object> userInfo, String role) {
         UserRequest userDTO = new UserRequest();
-        // Lấy email của người dùng
         userDTO.setEmail(userInfo.get("email") != null ? userInfo.get("email").toString() : (userInfo.get("id") + "@facebook.com"));
         userDTO.setFullName(userInfo.get("name") != null ? userInfo.get("name").toString() : "Facebook User");
         userDTO.setSub(userInfo.get("sub") != null ? userInfo.get("sub").toString() : userInfo.get("id").toString());
 
         String accessToken;
         String refreshToken;
-
-        // Kiểm tra googleId có tồn tại ở database chưa
         Optional<User> existingUser = userRepo.findByEmail(userDTO.getEmail());
         User userEntity;
 
         if (existingUser.isPresent()) {
-            // User đã tồn tại
             userEntity = existingUser.get();
             if(!userEntity.getLoginProvider().equalsIgnoreCase("google")){
                 throw new RuntimeException("Email đã được đăng ký bằng phương thức khác");
