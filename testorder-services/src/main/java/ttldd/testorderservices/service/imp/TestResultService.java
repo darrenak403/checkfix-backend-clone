@@ -140,33 +140,7 @@ public class TestResultService {
             order.setTestResult(result);
             order.setStatus(OrderStatus.COMPLETED);
             orderRepo.save(order);
-            //send mail test result notification
 
-//            String encryptedAccession = cryptoUtil.encryptForURL(order.getAccessionNumber());
-//            String encryptedOrderId = cryptoUtil.encryptForURL(String.valueOf(order.getId()));
-//            String resultLink = "http://localhost:3000/service/my-medical-records/"
-//                    + encryptedOrderId
-//                    + "/"
-//                    + encryptedAccession;
-//
-//            String testName = params.isEmpty() ? "Xét nghiệm" : params.getFirst().getParamName();
-//            String safeFullName = (order.getPatientName() == null || order.getPatientName().trim().isEmpty())
-//                    ? "Bạn"
-//                    : order.getPatientName();
-//            notificationProducer.sendEmail(
-//                    "send-email",
-//                    order.getEmail(),
-//                    "Kết quả xét nghiệm của bạn đã sẵn sàng",
-//                    "TEST_RESULT_NOTIFICATION",
-//                    Map.of(
-//                            "userName", safeFullName,
-//                            "accession", order.getAccessionNumber(),
-//                            "patientName", safeFullName,
-//                            "testName", testName,
-//                            "completedDate", LocalDate.now().toString(),
-//                            "resultLink", resultLink
-//                    )
-//            );
             log.info("DEBUG: Order saved. ID={}, Accession={}", order.getId(), order.getAccessionNumber());
 
             try {
