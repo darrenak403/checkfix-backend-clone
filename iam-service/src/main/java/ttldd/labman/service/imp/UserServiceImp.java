@@ -280,7 +280,6 @@ public  class UserServiceImp implements UserService {
                 }
                 break;
             case "google":
-                // Call Google API to get user profile
                 Map<String, String> request = Map.of(
                         "client_id", googleClientId, "redirect_uri", googleRedirectUri,
                         "client_secret", googleClientSecret, "code", code,
