@@ -427,6 +427,7 @@ public  class UserServiceImp implements UserService {
         try {
             // Mã hóa mật khẩu
             String rootPass = cryptoUtils.decrypt(userRequest.getPassword());
+            log.info("password: {}", rootPass);
             String encodedPassword = passwordEncoder.encode(rootPass);
 
             Role role = roleRepository.findById(userRequest.getRoleId())
