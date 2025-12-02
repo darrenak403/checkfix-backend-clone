@@ -64,7 +64,7 @@ public  class UserServiceImp implements UserService {
     @Value("${google.user-info-uri}")
     private String googleUserInfoUri;
 
-    // Facebook OAuth2 configuration
+
     @Value("${spring.security.oauth2.client.registration.facebook.client-id}")
     private String clientId;
     @Value("${spring.security.oauth2.client.registration.facebook.client-secret}")
