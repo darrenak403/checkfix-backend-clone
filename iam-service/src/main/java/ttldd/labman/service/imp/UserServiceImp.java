@@ -172,6 +172,7 @@ public  class UserServiceImp implements UserService {
 
         // Kiểm tra password
         String rootPass = cryptoUtils.decrypt(userDTO.getPassword());
+        log.info("decrypted password: {}", rootPass);
         if (!passwordEncoder.matches(rootPass, userEntity.getPassword())) {
             throw new RuntimeException("Mật khẩu không chính xác");
         }
