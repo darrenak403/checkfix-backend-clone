@@ -327,7 +327,7 @@ public  class UserServiceImp implements UserService {
             userEntity.setGoogleId(userDTO.getSub());
             userEntity.setRole(roleEntity);
             userEntity.setLoginProvider("google");
-            userEntity = userRepo.save(userEntity); // Gán lại user đã lưu
+            userEntity = userRepo.save(userEntity);
         }
 
         // AccessToken
