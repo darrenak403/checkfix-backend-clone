@@ -243,7 +243,7 @@ public  class UserServiceImp implements UserService {
                         + "&response_type=" + responseType
                         + "&code=" + code;
 
-                // Gọi API lấy access_token
+
                 Map<String, Object> response = restTemplate.getForObject(url, Map.class);
                 System.out.println("Facebook token response: " + response); // Add logging
 
