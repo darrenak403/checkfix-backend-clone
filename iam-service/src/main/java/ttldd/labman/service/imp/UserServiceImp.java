@@ -348,7 +348,6 @@ public  class UserServiceImp implements UserService {
                 .signWith(key)
                 .compact();
 
-        // Build response
         UserResponse us = new UserResponse();
         us.setId(userEntity.getId());
         us.setEmail(userEntity.getEmail());
