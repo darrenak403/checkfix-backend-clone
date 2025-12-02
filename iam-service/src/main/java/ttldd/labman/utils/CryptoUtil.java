@@ -20,10 +20,19 @@ public class CryptoUtil {
 
     public String decrypt(String encryptedBase64) {
         try {
+            if (encryptedBase64.startsWith("ENCRYPTED:")) {
+                encryptedBase64 = encryptedBase64.substring("ENCRYPTED:".length());
+            }
             byte[] cipherData = Base64.getDecoder().decode(encryptedBase64);
-
+            if (cipherData.length < 16) {
+                throw new RuntimeException("Invalid encrypted data - too short");
+            }
             byte[] salted = "Salted__".getBytes(StandardCharsets.UTF_8);
             byte[] salt = Arrays.copyOfRange(cipherData, 8, 16);
+            if (SECRET_KEY == null || SECRET_KEY.isEmpty()) {
+                throw new RuntimeException("CRYPTO_SECRET_KEY is not configured. Please set the environment variable.");
+            }
+
 
             byte[][] keyAndIV = generateKeyAndIV(
                     SECRET_KEY.getBytes(StandardCharsets.UTF_8),
@@ -41,7 +50,13 @@ public class CryptoUtil {
 
             byte[] decrypted = cipher.doFinal(encrypted);
 
-            return new String(decrypted, StandardCharsets.UTF_8);
+            String result = new String(decrypted, StandardCharsets.UTF_8);
+
+            if (result.startsWith("ENCRYPTED:")) {
+                result = result.substring("ENCRYPTED:".length());
+            }
+
+            return result;
 
         } catch (Exception e) {
             throw new RuntimeException("Error decrypting: " + e.getMessage(), e);
