@@ -171,8 +171,13 @@ public  class UserServiceImp implements UserService {
                 .orElseThrow(() -> new RuntimeException("Email không tồn tại"));
 
         // Kiểm tra password
-        String rootPass = cryptoUtils.decrypt(userDTO.getPassword());
-        log.info("decrypted password: {}", rootPass);
+        String rootPass;
+        try{
+            rootPass = cryptoUtils.decrypt(userDTO.getPassword());
+        }catch (Exception e){
+            log.error("failed decrypted password:", e);
+            throw new RuntimeException("Error giải mã mật khẩu: " + e.getMessage(), e);
+        }
         if (!passwordEncoder.matches(rootPass, userEntity.getPassword())) {
             throw new RuntimeException("Mật khẩu không chính xác");
         }

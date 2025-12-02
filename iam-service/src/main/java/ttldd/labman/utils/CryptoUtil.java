@@ -23,16 +23,18 @@ public class CryptoUtil {
             if (encryptedBase64.startsWith("ENCRYPTED:")) {
                 encryptedBase64 = encryptedBase64.substring("ENCRYPTED:".length());
             }
+
             byte[] cipherData = Base64.getDecoder().decode(encryptedBase64);
+
             if (cipherData.length < 16) {
                 throw new RuntimeException("Invalid encrypted data - too short");
             }
-            byte[] salted = "Salted__".getBytes(StandardCharsets.UTF_8);
+
             byte[] salt = Arrays.copyOfRange(cipherData, 8, 16);
+
             if (SECRET_KEY == null || SECRET_KEY.isEmpty()) {
                 throw new RuntimeException("CRYPTO_SECRET_KEY is not configured. Please set the environment variable.");
             }
-
 
             byte[][] keyAndIV = generateKeyAndIV(
                     SECRET_KEY.getBytes(StandardCharsets.UTF_8),
@@ -47,7 +49,6 @@ public class CryptoUtil {
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, "AES"), new IvParameterSpec(iv));
 
             byte[] encrypted = Arrays.copyOfRange(cipherData, 16, cipherData.length);
-
             byte[] decrypted = cipher.doFinal(encrypted);
 
             String result = new String(decrypted, StandardCharsets.UTF_8);
