@@ -338,7 +338,7 @@ public  class UserServiceImp implements UserService {
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
-        calendar.add(Calendar.DAY_OF_WEEK, 7); // Hết hạn sau 7 ngày
+        calendar.add(Calendar.DAY_OF_WEEK, 7);
         Date refreshExpiration = calendar.getTime();
 
         refreshToken = Jwts.builder()
