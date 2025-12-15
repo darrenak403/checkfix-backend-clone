@@ -61,7 +61,7 @@ public class WebClientConfiguration {
     @Bean
     CorsWebFilter corsWebFilter(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5174" , "http://localhost:6001", "http://localhost:6002", "https://lab.dupssapp.id.vn", "https://dupssapp.id.vn" , "https://labadmin.dupssapp.id.vn" , "https://api.dupssapp.id.vn"));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5174" , "http://localhost:6001", "http://localhost:6002", "https://lab.darrenak.id.vn", "https://darrenak.id.vn" , "https://labadmin.darrenak.id.vn" , "https://api.darrenak.id.vn"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
 
