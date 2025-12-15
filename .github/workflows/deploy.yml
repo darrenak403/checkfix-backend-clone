@@ -65,7 +65,7 @@ jobs:
           context: ./iam-service
           file: ./iam-service/Dockerfile
           push: true
-          tags: datdevv/iam-service:latest
+          tags: ngothanhdatak/iam-service:latest
 
       # PATIENT SERVICE
       - name: Build Patient Service
@@ -75,7 +75,7 @@ jobs:
           context: ./patient-service
           file: ./patient-service/Dockerfile
           push: true
-          tags: datdevv/patient-service:latest
+          tags: ngothanhdatak/patient-service:latest
 
       # TESTORDER SERVICE
       - name: Build TestOrder Service
@@ -85,7 +85,7 @@ jobs:
           context: ./testorder-services
           file: ./testorder-services/Dockerfile
           push: true
-          tags: datdevv/testorder-service:latest
+          tags: ngothanhdatak/testorder-service:latest
 
       # WAREHOUSE SERVICE
       - name: Build Warehouse Service
@@ -95,7 +95,7 @@ jobs:
           context: ./warehouse-service
           file: ./warehouse-service/Dockerfile
           push: true
-          tags: datdevv/warehouse-service:latest
+          tags: ngothanhdatak/warehouse-service:latest
 
       # INSTRUMENT SERVICE
       - name: Build Instrument Service
@@ -105,7 +105,7 @@ jobs:
           context: ./instrument-service
           file: ./instrument-service/Dockerfile
           push: true
-          tags: datdevv/instrument-service:latest
+          tags: ngothanhdatak/instrument-service:latest
 
       # MONITORING SERVICE
       - name: Build Monitoring Service
@@ -115,7 +115,7 @@ jobs:
           context: ./monitoring-service
           file: ./monitoring-service/Dockerfile
           push: true
-          tags: datdevv/monitoring-service:latest
+          tags: ngothanhdatak/monitoring-service:latest
 
       # NOTIFICATION SERVICE
       - name: Build Notification Service
@@ -125,7 +125,7 @@ jobs:
           context: ./notification-service
           file: ./notification-service/Dockerfile
           push: true
-          tags: datdevv/notification-service:latest
+          tags: ngothanhdatak/notification-service:latest
 
       # API GATEWAY
       - name: Build API Gateway
@@ -135,7 +135,7 @@ jobs:
           context: ./api-gateway
           file: ./api-gateway/Dockerfile
           push: true
-          tags: datdevv/api-gateway:latest
+          tags: ngothanhdatak/api-gateway:latest
 
       # EUREKA SERVER
       - name: Build Eureka Service
@@ -145,4 +145,4 @@ jobs:
           context: ./discovery-server
           file: ./discovery-server/Dockerfile
           push: true
-          tags: datdevv/eureka-service:latest
+          tags: ngothanhdatak/eureka-service:latest
