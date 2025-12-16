@@ -36,6 +36,7 @@ jobs:
               - 'api-gateway/**'
             eureka:
               - 'discovery-server/**'
+
       - name: Create .env.properties from Secret
         run: |
           echo "${{ secrets.ENV_PROPERTIES_BASE64 }}" | base64 -d > env_temp.properties
