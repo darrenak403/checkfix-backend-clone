@@ -84,7 +84,7 @@ services:
   # EUREKA
   # ================================
   eureka-server:
-    image: datdevv/eureka-service:latest
+    image: ngothanhdatak/eureka-service:latest
     ports:
       - "8761:8761"
     networks:
@@ -97,7 +97,7 @@ services:
   # API GATEWAY
   # ================================
   api-gateway:
-    image: datdevv/api-gateway:latest
+    image: ngothanhdatak/api-gateway:latest
     pull_policy: always
     ports:
       - "6789:6789"
@@ -113,7 +113,7 @@ services:
   # MICROSERVICES
   # ================================
   iam-service:
-    image: datdevv/iam-service:latest
+    image: ngothanhdatak/iam-service:latest
     pull_policy: always
     ports:
       - "8081:8081"
@@ -131,7 +131,7 @@ services:
       - app_network
 
   patient-service:
-    image: datdevv/patient-service:latest
+    image: ngothanhdatak/patient-service:latest
     pull_policy: always
     ports:
       - "8082:8082"
@@ -149,7 +149,7 @@ services:
       - app_network
 
   testorder-service:
-    image: datdevv/testorder-service:latest
+    image: ngothanhdatak/testorder-service:latest
     pull_policy: always
     ports:
       - "8083:8083"
@@ -167,7 +167,7 @@ services:
       - app_network
 
   warehouse-service:
-    image: datdevv/warehouse-service:latest
+    image: ngothanhdatak/warehouse-service:latest
     pull_policy: always
     ports:
       - "8084:8084"
@@ -185,7 +185,7 @@ services:
       - app_network
 
   instrument-service:
-    image: datdevv/instrument-service:latest
+    image: ngothanhdatak/instrument-service:latest
     pull_policy: always
     ports:
       - "8085:8085"
@@ -203,7 +203,7 @@ services:
       - app_network
 
   monitoring-service:
-    image: datdevv/monitoring-service:latest
+    image: ngothanhdatak/monitoring-service:latest
     pull_policy: always
     ports:
       - "8088:8088"
@@ -221,7 +221,7 @@ services:
       - app_network
 
   notification-service:
-    image: datdevv/notification-service:latest
+    image: ngothanhdatak/notification-service:latest
     pull_policy: always
     ports:
       - "8086:8086"
